@@ -1,0 +1,29 @@
+import type { Testimonial } from "@/types";
+
+/**
+ * Testimonios. NO inventar: estos son espacios reservados hasta recibir testimonios reales
+ * (con autorización de quien los firma).
+ */
+export const testimonials: Testimonial[] = [
+  {
+    id: "t1",
+    quote: "[TESTIMONIO PENDIENTE] Aquí irá el testimonio de un padre o madre de familia.",
+    author: "[NOMBRE Y APELLIDO]",
+    role: "Padre de familia",
+    isPlaceholder: true,
+  },
+  {
+    id: "t2",
+    quote: "[TESTIMONIO PENDIENTE] Aquí irá el testimonio de un estudiante.",
+    author: "[NOMBRE Y APELLIDO]",
+    role: "Estudiante",
+    isPlaceholder: true,
+  },
+  {
+    id: "t3",
+    quote: "[TESTIMONIO PENDIENTE] Aquí irá el testimonio de un docente.",
+    author: "[NOMBRE Y APELLIDO]",
+    role: "Docente",
+    isPlaceholder: true,
+  },
+];

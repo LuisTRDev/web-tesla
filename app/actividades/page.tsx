@@ -1,0 +1,31 @@
+import type { Metadata } from "next";
+import Activities from "@/components/sections/Activities";
+import ButtonLink from "@/components/ui/ButtonLink";
+import ModuleHeader from "@/components/ui/ModuleHeader";
+import NextModule from "@/components/ui/NextModule";
+import { getModule } from "@/data/modules";
+import { getActivities } from "@/lib/data";
+
+const mod = getModule("actividades");
+
+export const metadata: Metadata = {
+  title: mod.label,
+  description: "Talleres y actividades de la Institución Educativa Privada “Nikola Tesla”: ciencia, tecnología, arte, deporte, cultura y más.",
+  alternates: { canonical: mod.href },
+};
+
+export default async function ActivitiesPage() {
+  const activities = await getActivities();
+
+  return (
+    <>
+      <ModuleHeader module={mod}>
+        <ButtonLink href="/galeria" variant="outline-light" className="hero-in mt-10">
+          Ver las actividades en la galería
+        </ButtonLink>
+      </ModuleHeader>
+      <Activities activities={activities} showIntro={false} />
+      <NextModule current={mod.id} />
+    </>
+  );
+}
