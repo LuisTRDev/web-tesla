@@ -42,12 +42,13 @@ export default function Activities({ activities, showIntro = true }: { activitie
 
         <ul className="mt-10 grid grid-flow-dense auto-rows-[150px] grid-cols-2 gap-3 md:auto-rows-[200px] lg:mt-20 lg:auto-rows-[230px] lg:grid-cols-12 lg:gap-4">
           {activities.map((activity, index) => (
-            <li key={activity.id} className={cn("group relative overflow-hidden rounded-3xl text-white", layout[index % layout.length])}>
+            <li key={activity.id} data-spark className={cn("group relative overflow-hidden rounded-3xl text-white", layout[index % layout.length])}>
               <SchoolImage
                 cover
                 src={activity.image}
                 alt={`Actividad: ${activity.title}`}
                 label={`Foto de ${activity.title}`}
+                illustration={activity.id}
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 imgClassName="transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
                 labelClassName="items-start justify-start"

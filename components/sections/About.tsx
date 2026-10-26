@@ -1,3 +1,4 @@
+import CountUp from "@/components/ui/CountUp";
 import DraftBadge from "@/components/ui/DraftBadge";
 import Reveal from "@/components/ui/Reveal";
 import SchoolImage from "@/components/ui/SchoolImage";
@@ -67,7 +68,7 @@ export default function About() {
             <Reveal key={stat.id} delay={index * 0.08} className="flex flex-col-reverse border-b border-noche/15 py-7 sm:border-b-0 sm:border-r sm:px-8 sm:first:pl-0 sm:last:border-r-0">
               <dt className="mt-3 text-[15px] font-medium text-niebla">{stat.label}</dt>
               <dd className="font-display text-[clamp(2.4rem,5vw,4rem)] font-extrabold leading-none tracking-[-0.03em] text-noche">
-                {stat.value ?? <span className="text-noche/30">[DATO]</span>}
+                {stat.value ? <CountUp value={stat.value} /> : <span className="text-noche/30">[DATO]</span>}
               </dd>
             </Reveal>
           ))}

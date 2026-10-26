@@ -15,6 +15,8 @@ export const settings: SiteSettings = {
   description:
     "Institución Educativa Privada “Nikola Tesla”, ubicada en Nuevo Imperial, Cañete, Lima. Conoce nuestra propuesta educativa, actividades, comunidad y proceso de admisión.",
   admissionYear: 2027,
+  // Fecha PROVISIONAL del contador regresivo. Reemplazar por el cierre oficial de inscripciones (o null para ocultarlo).
+  admissionDeadline: "2027-02-26",
 
   // TODO: reemplazar por el dominio real antes de publicar.
   siteUrl: "https://www.example.com",

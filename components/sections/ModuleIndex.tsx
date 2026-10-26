@@ -24,6 +24,7 @@ export default function ModuleIndex() {
               <Reveal delay={(index % 4) * 0.06} className="h-full">
                 <Link
                   href={module.href}
+                  data-spark
                   className={cn(
                     "group relative flex h-full min-h-[240px] flex-col justify-between overflow-hidden rounded-panel p-6 transition-transform duration-500 hover:-translate-y-1 md:min-h-[300px] md:p-7",
                     module.theme.bg,

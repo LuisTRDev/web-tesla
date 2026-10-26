@@ -2,8 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import type { ReactNode } from "react";
 import Analytics from "@/components/layout/Analytics";
+import ClickTracker from "@/components/layout/ClickTracker";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import ScrollProgress from "@/components/ui/ScrollProgress";
+import SparkTrail from "@/components/ui/SparkTrail";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 import { settings } from "@/data/settings";
 import "./globals.css";
@@ -51,6 +54,7 @@ export const viewport: Viewport = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "School",
+  "@id": `${settings.siteUrl}/#school`,
   name: settings.name,
   url: settings.siteUrl,
   logo: `${settings.siteUrl}/images/logo-escudo.png`,
@@ -63,6 +67,9 @@ const jsonLd = {
     addressCountry: "PE",
   },
   ...(settings.contact.whatsapp[0] ? { telephone: `+${settings.contact.whatsapp[0]}` } : {}),
+  image: `${settings.siteUrl}/opengraph-image`,
+  areaServed: [settings.location.district, settings.location.province],
+  hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.location.mapQuery)}`,
   sameAs: Object.values(settings.social).filter(Boolean),
 };
 
@@ -76,11 +83,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Saltar al contenido
         </a>
+        <ScrollProgress />
         <Navbar />
         <main id="contenido">{children}</main>
         <Footer />
         <WhatsAppFloat />
         <Analytics />
+        <ClickTracker />
+        <SparkTrail />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>

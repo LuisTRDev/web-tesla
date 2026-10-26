@@ -30,3 +30,31 @@ Las entradas más recientes van al final.
   - Lista de lo que hay que pedirle al colegio en `PENDIENTES_COLEGIO.md`.
   - Pendiente: convertir las fotos PNG a JPG o WebP. No hay ninguna herramienta instalada para hacerlo; mientras tanto, Next.js las optimiza al servirlas.
 - Se quitaron el teléfono y el correo de toda la web (tipos, settings, Contacto, pie de página, datos para Google y documentación) porque por ahora el colegio no los tendrá. Se mantiene el horario de atención. Si más adelante los tienen, hay que volver a añadirlos.
+
+## 2026-10-13
+
+- Se subió el proyecto a GitHub: https://github.com/LuisTRDev/web-tesla (rama `main`). El commit tiene como único autor a Luisillo <job.soft.1995@gmail.com>, sin la línea `Co-Authored-By: Claude`.
+- Recuerda: en los próximos commits no se añade la línea de Claude.
+
+## 2026-10-14
+
+- Pediste un formato para que el administrador del colegio envíe las fotos y los textos de la web. Se crearon:
+  - `fotos-web-nikola-tesla.zip` (ignorado en git): carpetas vacías con la misma estructura de `public/images/` (generales/portada, generales/nosotros, generales/admision, logo, equipo, pilares/<id>, niveles/<nivel>, experiencia/<id>, actividades/<tipo>, galeria/<año>/<mes-evento>, noticias), con un `LEEME.txt` en cada carpeta e `INSTRUCCIONES.txt` en la raíz. El admin las llena y devuelve un ZIP o RAR, que se copia directo a `public/images/`. Sustituye a la primera versión en Markdown (`FORMATO_FOTOS_COLEGIO.md`, ya borrada).
+  - `FORMATO_TEXTOS_COLEGIO.md`: preguntas con códigos (`[GEN-01]`, `[NOS-01]`, `[PRO-01]`…) y el texto actual, para que respondan "OK" o escriban su versión.
+- Cuando lleguen las respuestas, cada código indica el archivo de `data/` donde va: GEN → `settings.ts`, NOS → `philosophy.ts` y `settings.ts` (stats), EQU → `team.ts`, PRO → `pillars.ts`, NIV → `levels.ts`, ACT → `activities.ts`, LOG → `achievements.ts`, TES → `testimonials.ts`, ADM → `admission.ts`, FAQ → `faq.ts`, GAL → `gallery.ts`, NOT → `news.ts`.
+- Se piden dos códigos modulares (Primaria y Secundaria), pero `settings.legal.modularCode` admite uno solo; habrá que ajustarlo cuando lleguen.
+
+## 2026-10-25
+
+- Preguntaste qué más mejorar y añadir de cara a la campaña de Admisión 2027, y qué hacer sin fotos, videos ni textos. Dijiste "hazlo todo" y se implementó lo que no depende de material del colegio:
+  - **Página de campaña** `/admision-2027` (`app/admision-2027/page.tsx`): cabecera animada, contador regresivo, cifras animadas (solo las que tengan dato), "Por qué elegirnos" (sale de `data/pillars.ts`), pasos, formulario "Agenda tu visita" y preguntas frecuentes. Tiene su propia imagen para compartir. El hero y el sitemap ya apuntan a ella. La ruta lleva el año: si cambia `admissionYear`, hay que renombrar la carpeta.
+  - **Contador regresivo** (`components/ui/Countdown.tsx`) con `settings.admissionDeadline`. La fecha `2027-02-26` es PROVISIONAL y lleva etiqueta "Fecha por confirmar"; con `null` se oculta. También aparece en el bloque amarillo de Admisión de la portada.
+  - **Cifras animadas con resplandor** (`CountUp.tsx`), usadas en Nosotros y en la página de campaña.
+  - **Hero**: sin foto muestra un fondo de aurora animado (en vez del marco "[FOTO PENDIENTE]") y, cada 4 a 9 segundos, un rayo breve dibujado en el canvas.
+  - **Chispas** al pasar el cursor sobre elementos con `data-spark` (botones, tarjetas de módulos y actividades): `SparkTrail.tsx`. Solo en pantallas con ratón y sin `prefers-reduced-motion`.
+  - **Barra de progreso de scroll** (`ScrollProgress.tsx`).
+  - **Ilustraciones de línea SVG** (`Illustration.tsx`) para pilares, actividades y experiencia. `SchoolImage` recibe `illustration="id"` y las muestra mientras no haya foto; al poner la foto real desaparecen solas.
+  - **Seguimiento de campañas** (`lib/track.ts`, `ClickTracker.tsx`): guarda `utm_source/medium/campaign`, registra `whatsapp_click`, `contact_form_submit` y `visit_request` en GA4 (si hay `NEXT_PUBLIC_GA_ID`) y añade "(vía facebook)" al mensaje de WhatsApp. Los anuncios deben enlazar con `?utm_source=facebook&utm_campaign=...`.
+  - **Datos para Google**: `School` con `@id`, `image`, `areaServed` y `hasMap`.
+- No se hizo: modo oscuro (toca todos los colores de la web), línea de tiempo de historia, tour 360, video del hero y galería en mosaico (necesitan material real).
+- `tsc`, `next lint` y `next build` pasan sin errores. No se revisó visualmente en el navegador.

@@ -21,19 +21,20 @@ interface ButtonLinkProps {
 /** Botón-enlace. Detecta enlaces externos y los abre en otra pestaña. */
 export default function ButtonLink({ href, children, variant = "accent", className }: ButtonLinkProps) {
   const classes = cn(
+    "relative",
     "inline-flex min-h-[48px] items-center justify-center rounded-full px-6 text-[15px] font-semibold transition-colors duration-300",
     variants[variant],
     className,
   );
   if (/^https?:\/\//.test(href)) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={classes} data-spark>
         {children}
       </a>
     );
   }
   return (
-    <Link href={href} className={classes}>
+    <Link href={href} className={classes} data-spark>
       {children}
     </Link>
   );

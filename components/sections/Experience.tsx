@@ -25,6 +25,7 @@ export default function Experience() {
               src={main.image}
               alt={main.caption}
               label={`Gran fotografía horizontal: ${main.label}`}
+              illustration={main.id}
               className="aspect-[4/5] rounded-panel sm:aspect-[16/9] lg:aspect-[21/9]"
               sizes="100vw"
               labelClassName="items-start justify-start"
@@ -44,6 +45,7 @@ export default function Experience() {
                   src={shot.image}
                   alt={shot.caption}
                   label={`Foto: ${shot.label}`}
+                  illustration={shot.id}
                   className="aspect-[4/3] rounded-3xl md:aspect-[4/5]"
                   sizes="(min-width: 768px) 33vw, 100vw"
                   labelClassName="items-start justify-start"

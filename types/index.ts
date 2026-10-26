@@ -12,6 +12,8 @@ export interface SiteSettings {
   footerPhrase: string;
   description: string;
   admissionYear: number;
+  /** Último día de inscripciones (AAAA-MM-DD). null oculta el contador regresivo. */
+  admissionDeadline: string | null;
   /** Dominio final del sitio (para SEO, sitemap y Open Graph). */
   siteUrl: string;
   location: {

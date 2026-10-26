@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
+    { url: `${base}/admision-${settings.admissionYear}`, changeFrequency: "weekly" as const, priority: 0.9 },
     ...levels.map((level) => ({ url: `${base}/niveles/${level.slug}`, changeFrequency: "yearly" as const, priority: 0.6 })),
     // Las publicaciones de ejemplo no se envían a los buscadores.
     ...news

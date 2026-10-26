@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Illustration, { hasIllustration } from "@/components/ui/Illustration";
 import { cn } from "@/lib/utils";
 
 interface SchoolImageProps {
@@ -16,6 +17,8 @@ interface SchoolImageProps {
   labelClassName?: string;
   sizes?: string;
   priority?: boolean;
+  /** Ilustración de línea que se muestra en lugar del placeholder mientras no hay foto (ver Illustration.tsx). */
+  illustration?: string;
 }
 
 /**
@@ -34,6 +37,7 @@ export default function SchoolImage({
   labelClassName = "items-end justify-start",
   sizes = "(min-width: 1024px) 50vw, 100vw",
   priority = false,
+  illustration,
 }: SchoolImageProps) {
   return (
     <div
@@ -46,6 +50,8 @@ export default function SchoolImage({
     >
       {src ? (
         <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={cn("object-cover", imgClassName)} />
+      ) : hasIllustration(illustration) ? (
+        <Illustration name={illustration} tone={tone} />
       ) : (
         <div
           role="img"

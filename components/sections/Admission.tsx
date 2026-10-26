@@ -1,4 +1,5 @@
 import ButtonLink from "@/components/ui/ButtonLink";
+import Countdown from "@/components/ui/Countdown";
 import DraftBadge from "@/components/ui/DraftBadge";
 import Reveal from "@/components/ui/Reveal";
 import { admissionIntro, admissionSteps } from "@/data/admission";
@@ -35,6 +36,12 @@ export default function Admission({ showProcessLink = true, showIntro = true }: 
               ¿Listos para comenzar esta historia?
             </h2>
             <p className="mt-8 max-w-xl text-xl leading-relaxed text-noche/85">{admissionIntro}</p>
+          </Reveal>
+        )}
+
+        {showIntro && (
+          <Reveal delay={0.05} className="mb-10">
+            <Countdown tone="light" />
           </Reveal>
         )}
 

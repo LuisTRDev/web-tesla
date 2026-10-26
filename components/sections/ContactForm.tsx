@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { levels } from "@/data/levels";
 import { settings } from "@/data/settings";
+import { campaignTag, trackEvent } from "@/lib/track";
 import { whatsappLink } from "@/lib/utils";
 
 /**
@@ -27,7 +28,8 @@ export default function ContactForm() {
     ]
       .filter(Boolean)
       .join(" ");
-    const url = whatsappLink(settings.contact.whatsapp[0] ?? null, text);
+    const url = whatsappLink(settings.contact.whatsapp[0] ?? null, `${text}${campaignTag()}`);
+    trackEvent("contact_form_submit", { level });
     if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
 

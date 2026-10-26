@@ -16,24 +16,28 @@ const delay = (seconds: number) => ({ "--d": `${seconds}s` }) as CSSProperties;
 export default function Hero() {
   return (
     <section id="inicio" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-noche text-white">
-      <SchoolImage
-        cover
-        priority
-        src={settings.images.hero}
-        alt="Estudiantes de la Institución Educativa Privada Nikola Tesla"
-        label="Fotografía o video principal: estudiantes del colegio"
-        sizes="100vw"
-        className="-z-30"
-        imgClassName="hero-zoom"
-        labelClassName="items-start justify-end pt-24 text-right"
-      />
+      {settings.images.hero ? (
+        <SchoolImage
+          cover
+          priority
+          src={settings.images.hero}
+          alt="Estudiantes de la Institución Educativa Privada Nikola Tesla"
+          label="Fotografía o video principal: estudiantes del colegio"
+          sizes="100vw"
+          className="-z-30"
+          imgClassName="hero-zoom"
+        />
+      ) : (
+        // Mientras no hay fotografía, un fondo animado de aurora en lugar de un marco vacío.
+        <div aria-hidden="true" className="hero-aurora absolute inset-0 -z-30" />
+      )}
       <div aria-hidden="true" className="absolute inset-0 -z-20 bg-gradient-to-t from-noche via-noche/75 to-noche/35" />
       <FieldCanvas className="absolute inset-0 -z-10 h-full w-full" />
 
       <div className="mx-auto w-full max-w-site px-5 pb-10 pt-36 md:px-10 md:pb-14">
         {/* Aviso de campaña: lleva directo a Admisión. */}
         <Link
-          href="/admision"
+          href={`/admision-${settings.admissionYear}`}
           className="hero-in mb-8 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 py-1.5 pl-1.5 pr-4 text-[14px] font-medium backdrop-blur-sm transition-colors hover:border-filamento hover:bg-white/15 md:mb-10"
           style={delay(0.1)}
         >
@@ -69,7 +73,7 @@ export default function Hero() {
           </p>
           <div className="hero-in flex flex-col gap-3 sm:flex-row" style={delay(0.95)}>
             <ButtonLink href="/propuesta">Conoce nuestra propuesta</ButtonLink>
-            <ButtonLink href="/admision" variant="outline-light">
+            <ButtonLink href={`/admision-${settings.admissionYear}`} variant="outline-light">
               Admisión {settings.admissionYear}
             </ButtonLink>
           </div>

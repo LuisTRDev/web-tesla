@@ -85,6 +85,7 @@ export default function Proposal({ showIntro = true }: { showIntro?: boolean }) 
                             src={pillar.image}
                             alt={pillar.title}
                             label={`Foto que represente: ${pillar.title}`}
+                            illustration={pillar.id}
                             className="mt-5 aspect-[16/10] rounded-2xl"
                             sizes="90vw"
                           />
@@ -110,7 +111,7 @@ export default function Proposal({ showIntro = true }: { showIntro?: boolean }) 
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <SchoolImage cover src={current.image} alt={current.title} label={`Foto que represente: ${current.title}`} sizes="38vw" labelClassName="items-start justify-start" />
+                    <SchoolImage cover src={current.image} alt={current.title} label={`Foto que represente: ${current.title}`} illustration={current.id} sizes="38vw" labelClassName="items-start justify-start" />
                   </motion.div>
                 </AnimatePresence>
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-noche via-noche/80 to-transparent p-7 pt-24">
