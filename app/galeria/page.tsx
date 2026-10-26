@@ -4,14 +4,11 @@ import ModuleHeader from "@/components/ui/ModuleHeader";
 import NextModule from "@/components/ui/NextModule";
 import { getModule } from "@/data/modules";
 import { getGalleryEvents } from "@/lib/data";
+import { moduleMetadata } from "@/lib/seo";
 
 const mod = getModule("galeria");
 
-export const metadata: Metadata = {
-  title: mod.label,
-  description: mod.seoDescription,
-  alternates: { canonical: mod.href },
-};
+export const metadata: Metadata = moduleMetadata(mod);
 
 export default async function GalleryPage() {
   const events = await getGalleryEvents();

@@ -2,12 +2,13 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { palette } from "@/data/appearance";
 
 /**
  * La "línea de energía": el gesto gráfico de la marca.
  * Una onda fina que se dibuja al entrar en pantalla. Usar con moderación.
  */
-export default function WaveLine({ className, color = "#FFB627" }: { className?: string; color?: string }) {
+export default function WaveLine({ className, color = palette.filamento }: { className?: string; color?: string }) {
   const reduce = useReducedMotion();
   return (
     <svg viewBox="0 0 600 40" fill="none" preserveAspectRatio="none" aria-hidden="true" className={cn("h-6 w-full", className)}>

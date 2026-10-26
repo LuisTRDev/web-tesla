@@ -353,6 +353,12 @@
       <h2 class="sec">¿Qué quieres hacer hoy?</h2>
       <div class="actions" id="actions"></div>
 
+      <section id="first-wrap" hidden>
+        <h2 class="sec">Tu primer día en el panel</h2>
+        <p class="sub">Cinco pasos cortos para sentirte segura. Se marcan solos a medida que los haces.</p>
+        <div class="card" id="first-day"></div>
+      </section>
+
       <section id="next-wrap" hidden>
         <h2 class="sec">Lo siguiente que haría</h2>
         <div class="next">
@@ -394,6 +400,7 @@
           } catch (e) {}
           var top = window.top;
           if (page) top.location.hash = "#/page/" + page;
+          else if (to === "medios") top.location.hash = "#/media";
           else top.location.hash = "#/collections/" + to;
         }
         window.teslaGo = go;
@@ -407,6 +414,9 @@
           { e: "✏️", t: "Cambiar un texto", d: "Frases, horarios, datos de contacto…", run: function () { $("q").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); } },
           { e: "🖼️", t: "Cambiar una foto", d: "Portada, niveles, equipo, actividades…", href: "#fotos" },
           { e: "📰", t: "Publicar una noticia", d: "Un comunicado o una novedad.", run: function () { go("noticias/new"); } },
+          { e: "📅", t: "Agregar un evento", d: "Reuniones y fechas para el calendario.", run: function () { go("calendario/new"); } },
+          { e: "📎", t: "Subir un documento", d: "Reglamento, lista de útiles, fichas…", run: function () { go("documentos/entries/documentos"); } },
+          { e: "🎨", t: "Colores, menú y portada", d: "Personaliza cómo se ve y se ordena la web.", run: function () { go("personalizar"); } },
           { e: "📣", t: "Preparar la campaña", d: "QR, afiches y enlaces de anuncios.", run: function () { go("", null, "campana"); } },
           { e: "🌐", t: "Ver cómo está la web", d: "Ábrela como la ven las familias.", href: "/", blank: true },
           { e: "🆘", t: "Pedir ayuda", d: "Tutoriales paso a paso.", run: function () { go("", null, "ayuda"); } },
@@ -485,9 +495,41 @@
           2: "Da confianza a las familias y completa la información del colegio.",
           3: "Mejora el aspecto de la web; se puede hacer poco a poco.",
         };
+        /* ───────── "Tu primer día": pasos que se marcan solos ───────── */
+        function flag(k) { try { return localStorage.getItem(k) === "1"; } catch (e) { return false; } }
+        function renderFirstDay(items) {
+          var wrap = $("first-wrap");
+          if (flag("tesla-first-hidden")) return;
+          function pend(re) { var it = items.filter(function (i) { return re.test(i.label); })[0]; return it || null; }
+          var steps = [
+            { t: "Ver el recorrido de bienvenida", d: "1 minuto: las partes del panel.", done: flag("tesla-recorrido-v1"), run: function () { if (window.top.TeslaTour) window.top.TeslaTour.start(); } },
+            { t: "Practicar sin miedo", d: "Escribe y prueba: en modo práctica nada se publica.", done: flag("tesla-practiced"), run: function () { try { sessionStorage.setItem("tesla-practice", "1"); localStorage.setItem("tesla-practiced", "1"); } catch (e) {} go("colegio/entries/settings"); } },
+            { t: "Escribir el WhatsApp del colegio", d: "Es lo primero que necesitan las familias.", item: pend(/WhatsApp/) },
+            { t: "Subir la foto o el video de la portada", d: "Es lo primero que ven al entrar a la web.", item: pend(/portada/) },
+            { t: "Poner la fecha de cierre de inscripciones", d: "Activa el contador de la página de campaña.", item: pend(/fecha de cierre/) },
+          ];
+          steps.forEach(function (st) { if (st.item) st.done = st.item.done; });
+          var done = steps.filter(function (st) { return st.done; }).length;
+          if (done === steps.length) return;
+          wrap.hidden = false;
+          $("first-day").innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px"><strong>' + done + " de " + steps.length + ' listos</strong><button class="btn ghost small" id="first-hide" type="button">Ocultar esta ayuda</button></div>' +
+            '<ul style="list-style:none;margin:0;padding:0">' + steps.map(function (st, i) {
+              return '<li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(13,18,48,.08)"><span class="dot ' + (st.done ? "ok" : "todo") + '">' + (st.done ? "✓" : i + 1) + '</span><span style="flex:1"><strong>' + esc(st.t) + '</strong><br><span class="muted">' + esc(st.d) + "</span></span>" +
+                (st.done ? '<span class="pill ok">Listo</span>' : '<button class="btn small accent" data-f="' + i + '" type="button">Hacerlo ahora</button>') + "</li>";
+            }).join("") + "</ul>";
+          $("first-day").onclick = function (ev) {
+            var hide = ev.target.closest("#first-hide");
+            if (hide) { try { localStorage.setItem("tesla-first-hidden", "1"); } catch (e) {} wrap.hidden = true; return; }
+            var b = ev.target.closest("[data-f]");
+            if (!b) return;
+            var st = steps[b.dataset.f];
+            if (st.run) st.run(); else if (st.item) go(st.item.to, st.item.field);
+          };
+        }
         fetch("/admin/api/pendientes")
           .then(function (r) { return r.json(); })
           .then(function (data) {
+            renderFirstDay(data.items);
             $("ring").style.setProperty("--p", data.percent);
             $("percent").textContent = data.percent + "%";
             var todo = data.items.filter(function (i) { return !i.done; });
@@ -517,7 +559,7 @@
               var lv = LEVELS[p];
               var rows = list.map(function (i) {
                 var idx = data.items.indexOf(i);
-                return '<li><span class="dot ' + (i.done ? "ok" : "todo") + '">' + (i.done ? "✓" : "") + '</span><span class="grow ' + (i.done ? "done-label" : "") + '">' + esc(i.label) + (i.detail && !i.done ? ' <span class="muted">(' + i.detail + ")</span>" : "") + "</span>" + (i.done ? '<span class="pill ok">Listo</span>' : '<button class="btn small accent" data-p="' + idx + '" type="button">Completar</button>') + "</li>";
+                return '<li><span class="dot ' + (i.done ? "ok" : "todo") + '">' + (i.done ? "✓" : "") + '</span><span class="grow ' + (i.done ? "done-label" : "") + '">' + esc(i.label) + (i.detail && !i.done ? ' <span class="muted">(' + esc(i.detail) + ")</span>" : "") + "</span>" + (i.done ? '<span class="pill ok">Listo</span>' : '<button class="btn small accent" data-p="' + idx + '" type="button">Completar</button>') + "</li>";
               }).join("");
               return '<details class="card group"' + (lv.open && pending ? " open" : "") + "><summary>" + lv.title + '<span class="count" style="background:' + (pending ? lv.color : "#dff5e6") + ";color:" + (pending ? lv.text : "#17683a") + '">' + (pending ? pending + " por hacer" : "Todo listo") + '</span><span class="caret">▾</span></summary><ul>' + rows + "</ul></details>";
             }).join("");
@@ -561,7 +603,8 @@
           var m = msg.match(/^Panel: (crear|actualizar|borrar) (\w+) “(.+)”/);
           var verbs = { crear: "Creaste", actualizar: "Actualizaste", borrar: "Borraste" };
           if (m) {
-            var name = m[2] === "noticias" ? "la noticia “" + m[3] + "”" : (T.fileNames["content/" + m[3] + ".json"] || m[3]);
+            var one = { noticias: "la noticia", calendario: "el evento", extra: "la página" }[m[2]];
+            var name = one ? one + " “" + m[3] + "”" : (T.fileNames["content/" + m[3] + ".json"] || m[3]);
             return verbs[m[1]] + " " + name;
           }
           var up = msg.match(/^Panel: (subir|borrar) imagen/);

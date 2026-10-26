@@ -49,6 +49,15 @@
     input.dispatchEvent(new Event("input", { bubbles: true }));
   }
 
+  /* ───────── recargar sin que el navegador pregunte "¿Salir del sitio?" (ya se pidió confirmación aquí) ───────── */
+  var leaving = false;
+  window.addEventListener("beforeunload", function (e) { if (leaving) { e.stopImmediatePropagation(); } }, true);
+  function reloadWithoutAsking() {
+    leaving = true;
+    window.onbeforeunload = null;
+    window.location.reload();
+  }
+
   /* ───────── ventanas (modales) ───────── */
   var modal = null;
   function closeModal() {
@@ -104,7 +113,8 @@
       def.forEach(function (tab, i) {
         bar.appendChild(el("button", { type: "button", class: "tesla-tab", role: "tab", "data-i": String(i), text: tab.icon + "  " + tab.label, on: { click: function () { showTab(key, i); } } }));
       });
-      holder.insertBefore(bar, holder.firstChild);
+      var crumbs = $("#tesla-crumbs");
+      holder.insertBefore(bar, crumbs && crumbs.parentElement === holder ? crumbs.nextSibling : holder.firstChild);
     }
     tops.forEach(function (c) {
       var idx = tabIndexFor(def, labelOfContainer(c));
@@ -239,6 +249,7 @@
     return true;
   }
   function reviewAndPublish() {
+    if (window.TeslaGuide && window.TeslaGuide.isPractice()) return window.TeslaGuide.practiceNotice();
     var list = changes();
     var warn = list.filter(function (c) { return c.placeholder; });
     var body = "<p>Esto es lo que vas a cambiar en la web:</p>";
@@ -264,7 +275,7 @@
       body: "<p>Se perderá lo que escribiste desde la última vez que publicaste. <strong>La web no cambia.</strong></p>",
       buttons: [
         { text: "No, seguir editando", kind: "ghost" },
-        { text: "Sí, descartar", kind: "danger", run: function () { discarding = true; window.onbeforeunload = null; window.location.reload(); } },
+        { text: "Sí, descartar", kind: "danger", run: function () { discarding = true; reloadWithoutAsking(); } },
       ],
     });
   }
@@ -305,8 +316,9 @@
     if (!bar) {
       bar = el("div", { id: "tesla-bar", role: "status" }, [
         el("span", { class: "tesla-bar-text", text: "✏️ Tienes cambios sin publicar" }),
-        el("button", { type: "button", class: "tesla-btn ghost-dark", text: "Descartar", on: { click: discard } }),
-        el("button", { type: "button", class: "tesla-btn primary", text: "Revisar y publicar", on: { click: reviewAndPublish } }),
+        el("button", { type: "button", class: "tesla-btn ghost-dark when-dirty", text: "Descartar", on: { click: discard } }),
+        el("button", { type: "button", class: "tesla-btn primary when-dirty", text: "Revisar y publicar", on: { click: reviewAndPublish } }),
+        el("button", { type: "button", class: "tesla-btn ghost-dark when-clean", text: "Ver mi web ↗", title: "Abrir esta página en la web real", on: { click: function () { window.open(webUrl(), "_blank", "noopener"); } } }),
       ]);
       document.body.appendChild(bar);
     }
@@ -420,7 +432,12 @@
     ensureChip();
     ensureDock();
     var b = ensureBar();
-    b.classList.toggle("show", dirty && inEntry());
+    b.classList.toggle("show", inEntry());
+    b.classList.toggle("is-clean", !dirty);
+    var label = b.querySelector(".tesla-bar-text");
+    var isNew = /^#\/collections\/[^/]+\/new/.test(location.hash);
+    var text = dirty ? "✏️ Tienes cambios sin publicar" : isNew ? "📝 Entrada nueva: se publica al terminar" : "✓ Todo publicado · nada pendiente";
+    if (label && label.textContent !== text) label.textContent = text;
     if (dirty) dirtyHash = location.hash;
     if (wasDirty && !dirty && inEntry() && !discarding && dirtyHash === location.hash) {
       publishing = false;
@@ -436,5 +453,6 @@
     setTimeout(tick, 200);
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
   window.addEventListener("hashchange", function () { activeTab = {}; setTimeout(tick, 300); });
+  window.TeslaUX = { openModal: openModal, closeModal: closeModal, reviewAndPublish: reviewAndPublish, isDirty: isDirty, reloadWithoutAsking: reloadWithoutAsking };
   setInterval(tick, 1500);
 })();

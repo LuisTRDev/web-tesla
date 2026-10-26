@@ -6,14 +6,11 @@ import NextModule from "@/components/ui/NextModule";
 import { getModule } from "@/data/modules";
 import { settings } from "@/data/settings";
 import { getFaq } from "@/lib/data";
+import { moduleMetadata } from "@/lib/seo";
 
 const mod = getModule("contacto");
 
-export const metadata: Metadata = {
-  title: mod.label,
-  description: mod.seoDescription,
-  alternates: { canonical: mod.href },
-};
+export const metadata: Metadata = moduleMetadata(mod);
 
 export default async function ContactPage() {
   const faq = await getFaq();

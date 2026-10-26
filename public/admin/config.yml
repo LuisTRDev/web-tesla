@@ -76,6 +76,38 @@ collections:
                 hint: 'El primero es el principal (botón flotante y formularios). Solo números con el código del país. Ejemplo: 51960209798.'
                 field: { label: Número, name: number, widget: string, pattern: ['^51\d{9}$', 'Escribe solo números: 51 seguido de los 9 dígitos del celular.'] }
               - { label: Horario de atención, name: hours, widget: string, required: false, hint: 'Ejemplo: Lunes a viernes, 7:30 a. m. – 3:00 p. m.' }
+              - label: Botón flotante de WhatsApp
+                name: whatsappButton
+                widget: object
+                hint: 'El botón verde que acompaña a las visitas en toda la web. Cambia su texto, su lado y el mensaje que se envía según la página.'
+                fields:
+                  - { label: Texto del botón, name: label, widget: string, required: false, default: '¿Consultas? Escríbenos', hint: 'Se ve en computadora. Déjalo vacío para mostrar solo el ícono.' }
+                  - { label: Lado de la pantalla, name: side, widget: select, default: derecha, options: [{ label: Derecha, value: derecha }, { label: Izquierda, value: izquierda }] }
+                  - { label: Mensaje general, name: defaultMessage, widget: string, default: 'Hola, quisiera información sobre la I.E.P. Nikola Tesla.', hint: 'Es lo que escribe la familia al tocar el botón. En el texto puedes usar {año} para poner el año de admisión.' }
+                  - label: Mensajes según la página
+                    name: messages
+                    widget: list
+                    required: false
+                    summary: '{{fields.path}} → {{fields.message}}'
+                    hint: 'Así sabrás desde qué página escribió cada familia. Ejemplo: en Admisión, “Quisiera información sobre la Admisión {año}”.'
+                    fields:
+                      - label: Página
+                        name: path
+                        widget: select
+                        options: &sitePages
+                          - { label: Portada, value: / }
+                          - { label: Admisión (todas las páginas de admisión), value: /admision }
+                          - { label: Página de campaña (Admisión 2027), value: /admision-2027 }
+                          - { label: Nosotros, value: /nosotros }
+                          - { label: Propuesta educativa, value: /propuesta }
+                          - { label: Niveles, value: /niveles }
+                          - { label: Actividades, value: /actividades }
+                          - { label: Galería, value: /galeria }
+                          - { label: Noticias, value: /noticias }
+                          - { label: Calendario, value: /calendario }
+                          - { label: Documentos, value: /documentos }
+                          - { label: Contacto, value: /contacto }
+                      - { label: Mensaje, name: message, widget: string }
           - label: Respaldo oficial
             name: legal
             widget: object
@@ -98,7 +130,7 @@ collections:
             hint: 'Recomendado: fotos horizontales, de menos de 2 MB, sin logo ni texto encima.'
             fields:
               - { label: Foto de la portada, name: hero, widget: image, required: false }
-              - { label: Video de la portada (opcional), name: heroVideo, widget: file, required: false, hint: 'Archivo .mp4 de 10 a 15 segundos y menos de 8 MB. Si lo pones, reemplaza a la foto.' }
+              - { label: Video de la portada, name: heroVideo, widget: file, required: false, hint: 'Archivo .mp4 de 10 a 15 segundos y menos de 8 MB. Si lo pones, reemplaza a la foto.' }
               - { label: Foto de Nosotros, name: about, widget: image, required: false }
               - { label: Foto de detalle de Nosotros, name: aboutDetail, widget: image, required: false }
               - { label: Foto de Admisión, name: admission, widget: image, required: false }
@@ -137,8 +169,10 @@ collections:
               - { label: Título grande de la página, name: title, widget: string }
               - { label: Introducción, name: intro, widget: text }
               - { label: Resumen en la portada, name: teaser, widget: string }
-              - { label: Rótulo sobre el título (opcional), name: kicker, widget: string, required: false }
+              - { label: Rótulo sobre el título, name: kicker, widget: string, required: false }
               - { label: Descripción para Google, name: seoDescription, widget: seo-descripcion, hint: 'Entre 120 y 160 caracteres.' }
+              - { label: Título para Google, name: seoTitle, widget: string, required: false, hint: 'Lo que se ve como título azul en Google. Si lo dejas vacío, se usa el nombre del menú.' }
+              - { label: Imagen al compartir esta página, name: shareImage, widget: image, required: false, hint: 'Se ve al enviar el enlace por WhatsApp o Facebook. Medida ideal: 1200 × 630 px.' }
       - name: pages
         label: Portada y página de campaña
         file: content/pages.json
@@ -164,39 +198,57 @@ collections:
                 fields:
                   - { label: Título, name: title, widget: string }
                   - { label: Descripción, name: description, widget: text }
-                  - label: Ilustración
+                  - label: Dibujo que acompaña el texto
                     name: illustration
                     widget: select
                     default: tecnologia
                     options: &illustrations
-                      - { label: Libro (formación académica), value: academica }
-                      - { label: Foco (pensamiento crítico), value: critico }
-                      - { label: Chip (tecnología), value: tecnologia }
-                      - { label: Persona y corazón (desarrollo personal), value: personal }
-                      - { label: Escudo (valores), value: valores }
-                      - { label: Paleta (creatividad), value: creatividad }
-                      - { label: Matraz (ciencia), value: ciencia }
-                      - { label: Notas musicales (arte), value: arte }
-                      - { label: Balón (deportes), value: deportes }
-                      - { label: Cohete (proyectos), value: proyectos }
-                      - { label: Estrella (eventos), value: eventos }
-                      - { label: Pizarra (aulas), value: aulas }
-                      - { label: Carita feliz (recreos), value: recreo }
-                      - { label: Manzana (docentes), value: docentes }
+                      - { label: '📚 Libro (formación académica)', value: academica }
+                      - { label: '💡 Foco (pensamiento crítico)', value: critico }
+                      - { label: '💻 Chip (tecnología)', value: tecnologia }
+                      - { label: '🧑‍🤝‍🧑 Persona y corazón (desarrollo personal)', value: personal }
+                      - { label: '🛡️ Escudo (valores)', value: valores }
+                      - { label: '🎨 Paleta (creatividad)', value: creatividad }
+                      - { label: '🧪 Matraz (ciencia)', value: ciencia }
+                      - { label: '🎵 Notas musicales (arte)', value: arte }
+                      - { label: '⚽ Balón (deportes)', value: deportes }
+                      - { label: '🚀 Cohete (proyectos)', value: proyectos }
+                      - { label: '⭐ Estrella (eventos)', value: eventos }
+                      - { label: '🧑‍🏫 Pizarra (aulas)', value: aulas }
+                      - { label: '😀 Carita feliz (recreos)', value: recreo }
+                      - { label: '🍎 Manzana (docentes)', value: docentes }
               - { label: Título de los pasos, name: stepsTitle, widget: string }
               - { label: Título de “Agenda tu visita”, name: visitTitle, widget: string }
               - { label: Texto de “Agenda tu visita”, name: visitText, widget: text }
 
       - name: banner
-        label: Aviso destacado (barra sobre el menú)
+        label: Avisos destacados (barra sobre el menú)
         file: content/banner.json
         fields:
-          - { label: Mostrar el aviso, name: enabled, widget: boolean, default: false, hint: 'Actívalo para que aparezca la barra amarilla sobre el menú de toda la web.' }
-          - { label: Mensaje, name: text, widget: string, hint: 'Corto y claro. Ejemplo: Inscripciones abiertas · Admisión 2027.' }
-          - { label: Texto del botón, name: linkText, widget: string, required: false, hint: 'Ejemplo: Infórmate aquí.' }
-          - { label: A dónde lleva el botón, name: linkUrl, widget: string, required: false, hint: 'Una página de la web (ejemplo: /admision-2027) o un enlace completo (https://…).' }
-          - { label: Mostrar desde el día, name: startDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Vacío = desde ahora.' }
-          - { label: Mostrar hasta el día, name: endDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Vacío = sin fecha de fin. Pasado ese día, el aviso desaparece solo.' }
+          - label: Avisos
+            name: items
+            widget: list
+            required: false
+            summary: '{{fields.text}}'
+            hint: 'Puedes preparar varios avisos con sus fechas. Si hay más de uno visible a la vez, se van alternando cada pocos segundos.'
+            fields:
+              - { label: Mostrar este aviso, name: enabled, widget: boolean, default: true, hint: 'Apágalo para guardarlo sin que se vea.' }
+              - { label: Mensaje, name: text, widget: string, hint: 'Corto y claro. Ejemplo: Inscripciones abiertas · Admisión 2027.' }
+              - { label: Texto del botón, name: linkText, widget: string, required: false, hint: 'Ejemplo: Infórmate aquí.' }
+              - { label: A dónde lleva el botón, name: linkUrl, widget: string, required: false, hint: 'Una página de la web (ejemplo: /admision-2027, /calendario, /p/reglamento) o un enlace completo (https://…).' }
+              - { label: Color de la barra, name: color, widget: select, default: amarillo, options: [{ label: Amarillo, value: amarillo }, { label: Rojo, value: rojo }, { label: Azul, value: azul }, { label: Oscuro, value: oscuro }] }
+              - label: Dónde se muestra
+                name: where
+                widget: select
+                default: todas
+                options:
+                  - { label: En todas las páginas, value: todas }
+                  - { label: Solo en la portada, value: portada }
+                  - { label: Solo en Admisión, value: admision }
+                  - { label: Nosotros, Propuesta, Niveles y Actividades, value: nosotros-propuesta }
+                  - { label: Noticias, Calendario y Galería, value: noticias-calendario }
+              - { label: Mostrar desde el día, name: startDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Vacío = desde ahora.' }
+              - { label: Mostrar hasta el día, name: endDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Vacío = sin fecha de fin. Pasado ese día, el aviso desaparece solo.' }
 
   # ───────────────────────── NOSOTROS ─────────────────────────
   - name: nosotros
@@ -292,7 +344,7 @@ collections:
               - { label: Título, name: title, widget: string }
               - { label: Descripción, name: description, widget: text }
               - { label: Foto, name: image, widget: image, required: false, hint: 'Si no hay foto se muestra la ilustración.' }
-              - { label: Ilustración (mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
+              - { label: Dibujo (se ve mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
               - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
       - name: levels
         label: Niveles
@@ -329,7 +381,7 @@ collections:
               - { label: Título, name: title, widget: string }
               - { label: Descripción, name: description, widget: string }
               - { label: Foto, name: image, widget: image, required: false }
-              - { label: Ilustración (mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
+              - { label: Dibujo (se ve mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
               - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
       - name: experience
         label: Así se vive Nikola Tesla
@@ -343,7 +395,7 @@ collections:
               - { label: Rótulo, name: label, widget: string, hint: 'Ejemplo: Clases' }
               - { label: Frase, name: caption, widget: string }
               - { label: Foto, name: image, widget: image, required: false }
-              - { label: Ilustración (mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
+              - { label: Dibujo (se ve mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
           - label: Palabras que se desplazan
             name: words
             widget: list
@@ -449,3 +501,222 @@ collections:
       - { label: Texto completo, name: body, widget: text, hint: 'Deja una línea en blanco entre un párrafo y el siguiente.' }
       - { label: Foto, name: image, widget: image, required: false }
       - { label: Es una noticia de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando la noticia sea real. Las de ejemplo no aparecen en Google.' }
+
+  # ───────────────────────── CALENDARIO ─────────────────────────
+  - name: calendario
+    label: Calendario de eventos
+    label_singular: Evento
+    description: Reuniones, actividades y fechas importantes. Aparecen en /calendario y, si quieres, en la portada. Las familias pueden agregarlos a su calendario.
+    folder: content/eventos
+    extension: json
+    format: json
+    create: true
+    slug: '{{year}}-{{month}}-{{slug}}'
+    media_folder: /public/images/eventos
+    public_folder: /images/eventos
+    summary: '{{date}} · {{title}}'
+    sortable_fields: [date, title]
+    fields:
+      - { label: Nombre del evento, name: title, widget: string, hint: 'Ejemplo: Reunión de padres de familia.' }
+      - { label: Fecha, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: 'Cuando pasa la fecha, el evento sale solo de “Próximos eventos” y queda en “Eventos pasados”.' }
+      - { label: Fecha de fin si dura varios días, name: endDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false }
+      - { label: Hora, name: time, widget: string, required: false, hint: 'Texto libre. Ejemplo: 6:00 p. m.' }
+      - { label: Lugar, name: place, widget: string, required: false, hint: 'Si lo dejas vacío se usa la dirección del colegio.' }
+      - { label: Tipo, name: category, widget: select, options: [Reunión, Académico, Cultural, Deportivo, Admisión, Feriado, Otro], default: Reunión, hint: 'Define el color de la fecha.' }
+      - { label: Descripción, name: description, widget: text, required: false }
+      - { label: Foto, name: image, widget: image, required: false }
+      - { label: Enlace para más información, name: link, widget: string, required: false, hint: 'Una página de la web (/admision-2027) o un enlace completo (https://…).' }
+      - { label: Texto del enlace, name: linkText, widget: string, required: false, hint: 'Ejemplo: Ver el programa.' }
+      - { label: Es un evento de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando el evento sea real. Los de ejemplo no se envían a Google.' }
+
+  # ───────────────────────── DOCUMENTOS ─────────────────────────
+  - name: documentos
+    label: Documentos para descargar
+    label_singular: Documento
+    description: Reglamento, lista de útiles, ficha de inscripción, calendario escolar… Las familias los descargan desde /documentos y desde Admisión.
+    media_folder: /public/documentos
+    public_folder: /documentos
+    files:
+      - name: documentos
+        label: Documentos para descargar
+        file: content/documentos.json
+        fields:
+          - label: Documentos
+            name: items
+            widget: list
+            required: false
+            summary: '{{fields.category}} · {{fields.title}}'
+            hint: 'Sube el archivo (PDF es lo mejor, de menos de 5 MB) y ponle un nombre claro. El orden del panel es el orden en la web.'
+            fields:
+              - { label: Nombre del documento, name: title, widget: string, hint: 'Ejemplo: Lista de útiles 2027.' }
+              - { label: Archivo, name: file, widget: file, hint: 'Elige o sube el archivo PDF, Word o Excel.' }
+              - label: Categoría
+                name: category
+                widget: select
+                default: General
+                options: [Admisión, Reglamento, Útiles, Formatos, Calendario, General]
+                hint: 'Agrupa los documentos en /documentos. Los de “Admisión” también se muestran en la página de Admisión.'
+              - { label: Descripción corta, name: description, widget: string, required: false }
+              - { label: Fecha del documento, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false }
+              - { label: Mostrar también en Admisión, name: featured, widget: boolean, default: false }
+
+  # ───────────────────────── PÁGINAS NUEVAS ─────────────────────────
+  - name: extra
+    label: Páginas nuevas
+    label_singular: Página
+    description: Crea páginas propias (reglamento, convivencia, convenios, bolsa de trabajo…). Se publican en /p/nombre y puedes añadirlas al menú.
+    folder: content/paginas
+    extension: json
+    format: json
+    create: true
+    slug: '{{slug}}'
+    media_folder: /public/images/paginas
+    public_folder: /images/paginas
+    summary: '{{title}}'
+    sortable_fields: [title]
+    fields:
+      - { label: Título, name: title, widget: string, hint: 'El nombre de la página es también su dirección: “Reglamento interno” → /p/reglamento-interno.' }
+      - { label: Publicada, name: published, widget: boolean, default: true, hint: 'Desmárcala para guardarla como borrador: nadie la verá hasta que la actives.' }
+      - { label: Rótulo sobre el título, name: kicker, widget: string, required: false, hint: 'Ejemplo: Convivencia escolar.' }
+      - { label: Introducción, name: intro, widget: text, required: false }
+      - label: Texto
+        name: body
+        widget: text
+        required: false
+        hint: 'Deja una línea en blanco entre un párrafo y otro. Para un subtítulo empieza la línea con ## (ejemplo: ## Horario). Para una lista empieza cada línea con - (guion y espacio).'
+      - { label: Foto, name: image, widget: image, required: false }
+      - { label: Texto bajo la foto, name: imageCaption, widget: string, required: false }
+      - { label: Texto del botón, name: buttonText, widget: string, required: false, hint: 'Ejemplo: Escríbenos por WhatsApp.' }
+      - { label: A dónde lleva el botón, name: buttonUrl, widget: string, required: false, hint: 'Una página de la web (/contacto) o un enlace completo (https://…).' }
+      - label: Archivos para descargar
+        name: documents
+        widget: list
+        required: false
+        summary: '{{fields.title}}'
+        fields:
+          - { label: Nombre, name: title, widget: string }
+          - { label: Archivo, name: file, widget: file }
+      - { label: Descripción para Google, name: seoDescription, widget: seo-descripcion, required: false, hint: 'Entre 120 y 160 caracteres.' }
+      - { label: Imagen al compartir en redes, name: shareImage, widget: image, required: false, hint: 'Si la dejas vacía se usa la foto de la página.' }
+      - { label: Fecha de actualización, name: updated, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Se muestra al final: “Actualizado el …”.' }
+
+  # ───────────────────────── PERSONALIZAR LA WEB ─────────────────────────
+  - name: personalizar
+    label: Personalizar la web
+    label_singular: Personalizar
+    description: El orden de la portada, el menú y el pie de página, los colores y los efectos.
+    media_folder: /public/images/generales
+    public_folder: /images/generales
+    files:
+      - name: portada
+        label: Orden de la portada
+        file: content/portada.json
+        fields:
+          - label: Secciones de la portada
+            name: sections
+            widget: list
+            allow_add: false
+            summary: '{{fields.id}} · {{fields.show}}'
+            hint: 'Arrastra para cambiar el orden. Desmarca “Mostrar” para ocultar una sección sin borrar su contenido. La presentación del colegio (arriba de todo) siempre se muestra.'
+            fields:
+              - label: Sección
+                name: id
+                widget: select
+                options:
+                  - { label: 'Explora el colegio (índice de secciones)', value: modulos }
+                  - { label: Próximos eventos (calendario), value: eventos }
+                  - { label: Noticias, value: noticias }
+                  - { label: Testimonios, value: testimonios }
+                  - { label: Logros, value: logros }
+                  - { label: Documentos para descargar, value: documentos }
+                  - { label: Preguntas frecuentes, value: preguntas }
+                  - { label: Invitación a la admisión, value: admision }
+              - { label: Mostrar en la portada, name: show, widget: boolean, default: true }
+
+      - name: navegacion
+        label: Menú y pie de página
+        file: content/navegacion.json
+        fields:
+          - label: Secciones que se ocultan del menú
+            name: hiddenModules
+            widget: select
+            multiple: true
+            required: false
+            hint: 'Marca las que no quieres mostrar (la página sigue existiendo si alguien tiene el enlace). Útil mientras una sección no tiene contenido.'
+            options:
+              - { label: Nosotros, value: nosotros }
+              - { label: Propuesta educativa, value: propuesta }
+              - { label: Niveles, value: niveles }
+              - { label: Actividades, value: actividades }
+              - { label: Galería, value: galeria }
+              - { label: Noticias, value: noticias }
+              - { label: Admisión, value: admision }
+              - { label: Contacto, value: contacto }
+          - label: Enlaces extra en el menú
+            name: extraLinks
+            widget: list
+            required: false
+            summary: '{{fields.label}}'
+            hint: 'Añade páginas nuevas, el calendario, los documentos o un enlace externo. Con muchos enlaces el menú se llena: usa pocos.'
+            fields:
+              - { label: Texto, name: label, widget: string, hint: 'Ejemplo: Calendario.' }
+              - { label: Enlace, name: href, widget: string, hint: 'Ejemplos: /calendario · /documentos · /p/reglamento-interno · https://…' }
+          - label: Botón destacado del menú
+            name: cta
+            widget: object
+            fields:
+              - { label: Mostrar el botón, name: show, widget: boolean, default: true }
+              - { label: Texto, name: label, widget: string, default: Admisiones, hint: 'Ejemplo: Admisión 2027.' }
+              - { label: Enlace, name: href, widget: string, default: /admision }
+          - label: Pie de página
+            name: footer
+            widget: object
+            fields:
+              - { label: Mostrar la columna “Explorar”, name: showExplore, widget: boolean, default: true }
+              - { label: Mostrar el nombre grande de fondo, name: showWatermark, widget: boolean, default: true }
+              - label: Enlaces de interés
+                name: links
+                widget: list
+                required: false
+                summary: '{{fields.label}}'
+                hint: 'Ejemplo: Libro de reclamaciones, Política de privacidad, Reglamento.'
+                fields:
+                  - { label: Texto, name: label, widget: string }
+                  - { label: Enlace, name: href, widget: string }
+              - { label: Texto legal o aviso, name: legalText, widget: text, required: false, hint: 'Se muestra al final del pie de página.' }
+
+      - name: apariencia
+        label: Colores y efectos
+        file: content/apariencia.json
+        fields:
+          - label: Colores
+            name: colors
+            widget: object
+            hint: 'Elige una paleta lista, o cambia colores sueltos. Los colores sueltos tienen prioridad sobre la paleta. Después de publicar, revisa la web: el texto debe leerse bien sobre cada color.'
+            fields:
+              - label: Paleta
+                name: preset
+                widget: select
+                default: tesla
+                options:
+                  - { label: 'Tesla (azul noche y amarillo, la oficial)', value: tesla }
+                  - { label: 'Océano (azul petróleo)', value: oceano }
+                  - { label: 'Bosque (verde profundo)', value: bosque }
+                  - { label: 'Vino (granate)', value: vino }
+                  - { label: 'Grafito (sobrio)', value: grafito }
+              - { label: 'Color de fondo oscuro', name: noche, widget: color, required: false, allowInput: true, enableAlpha: false, hint: 'Cabeceras, menú y pie de página. Elige un color oscuro.' }
+              - { label: 'Color de acento', name: filamento, widget: color, required: false, allowInput: true, enableAlpha: false, hint: 'Botones y detalles. Elige un color vivo y claro (el texto encima es oscuro).' }
+              - { label: 'Color rojo', name: rojo, widget: color, required: false, allowInput: true, enableAlpha: false }
+              - { label: 'Color azul marino', name: marino, widget: color, required: false, allowInput: true, enableAlpha: false }
+              - { label: 'Color de líneas y detalles fríos', name: arco, widget: color, required: false, allowInput: true, enableAlpha: false }
+          - label: Efectos
+            name: effects
+            widget: object
+            hint: 'Apaga los que no quieras. Quien tiene activada la opción “reducir movimiento” en su aparato ya no los ve.'
+            fields:
+              - { label: Línea de energía y animación de la portada, name: fieldAnimation, widget: boolean, default: true }
+              - { label: Rayos en la portada, name: lightning, widget: boolean, default: true }
+              - { label: Chispas al pasar el cursor, name: sparks, widget: boolean, default: true }
+              - { label: Línea de progreso bajo el menú, name: scrollProgress, widget: boolean, default: true }
+              - { label: Cortina de color al cambiar de sección, name: pageTransitions, widget: boolean, default: true }
+              - { label: Botón flotante de WhatsApp, name: whatsappFloat, widget: boolean, default: true }

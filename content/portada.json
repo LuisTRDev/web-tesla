@@ -1,0 +1,12 @@
+{
+  "sections": [
+    { "id": "modulos", "show": true },
+    { "id": "eventos", "show": false },
+    { "id": "noticias", "show": true },
+    { "id": "testimonios", "show": false },
+    { "id": "logros", "show": false },
+    { "id": "documentos", "show": false },
+    { "id": "preguntas", "show": false },
+    { "id": "admision", "show": true }
+  ]
+}

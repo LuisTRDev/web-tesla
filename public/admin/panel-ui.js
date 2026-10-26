@@ -238,6 +238,7 @@
     return best;
   }
   function reveal(container, tries) {
+    if (window.TeslaGuide) window.TeslaGuide.reveal(container);
     if (window.TeslaTabs) window.TeslaTabs.reveal(container);
     // si el campo está dentro de un elemento de lista plegado, se despliega
     if (container.offsetParent !== null || tries <= 0) return Promise.resolve();
@@ -347,6 +348,8 @@
       help.setAttribute("aria-label", "Abrir la ayuda de esta sección");
       help.style.cssText = "position:fixed;right:20px;bottom:20px;z-index:99998;border:0;border-radius:999px;padding:12px 20px;background:#0D1230;color:#fff;font:700 15px Figtree,Arial,sans-serif;cursor:pointer;box-shadow:0 10px 30px -8px rgba(13,18,48,.6)";
       help.addEventListener("click", function () {
+        // Dentro de un formulario, la ayuda se abre a un lado para no perder lo que se está editando.
+        if (window.TeslaGuide && /^#\/collections\/[^/]+\/(entries|new)/.test(window.location.hash)) { window.TeslaGuide.openHelp(); return; }
         try { sessionStorage.setItem("tesla-ayuda-tema", topic()); } catch (e) {}
         currentPage = "";
         window.location.hash = "#/page/ayuda";

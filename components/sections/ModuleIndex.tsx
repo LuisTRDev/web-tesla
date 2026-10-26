@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
-import { modules } from "@/data/modules";
+import { navModules } from "@/data/modules";
 import { cn } from "@/lib/utils";
 
 /**
@@ -19,7 +19,7 @@ export default function ModuleIndex() {
         </Reveal>
 
         <ul className="mt-14 grid gap-3 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-4">
-          {modules.map((module, index) => (
+          {navModules.map((module, index) => (
             <li key={module.id}>
               <Reveal delay={(index % 4) * 0.06} className="h-full">
                 <Link

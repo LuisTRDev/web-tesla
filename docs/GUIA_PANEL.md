@@ -16,14 +16,32 @@ Lo que publiques aparece en la web en **1 o 2 minutos**.
 
 Arriba, en la barra oscura, tienes: **Contenido**, **Medios** (tus fotos), **Inicio**, **Nueva noticia**, **Campaña y QR**, **Resultados**, **Ayuda** y **Ver la web**.
 
-**Inicio** es tu punto de partida: un saludo, un buscador (“¿qué quieres cambiar?”), seis acciones grandes, **“lo siguiente que haría”**, lo que falta para la campaña (primero lo más importante), el **mapa de la web** y tus últimos cambios. Si escribes “WhatsApp” en el buscador, te lleva directo a ese campo.
+**Inicio** es tu punto de partida: un saludo, un buscador (“¿qué quieres cambiar?”), las acciones grandes (cambiar un texto o una foto, publicar una noticia, agregar un evento, subir un documento, personalizar la web…), **“lo siguiente que haría”**, lo que falta para la campaña (primero lo más importante), el **mapa de la web** y tus últimos cambios. Si escribes “WhatsApp” en el buscador, te lleva directo a ese campo.
 
 En el menú de la izquierda (**Secciones de la web**) cada sección tiene su ícono y, al abrirla, tarjetas que explican qué puedes cambiar. Los formularios largos se dividen en **pestañas** (por ejemplo, *Nombre y frases · Admisión · Contacto y ubicación · Redes y fotos · Cifras*). En los campos con 💡 **Ver ejemplos** puedes elegir un texto de muestra con un clic. La primera vez verás un recorrido de bienvenida de 1 minuto (puedes repetirlo desde Ayuda).
 
 - **A la izquierda**, la lista de secciones: Datos del colegio, Páginas y textos, Nosotros, Propuesta niveles y actividades, Admisión y preguntas frecuentes, Galería y Noticias.
 - **En el centro**, los campos que puedes cambiar.
 - **A la derecha**, la **vista previa**: va mostrando cómo quedará mientras escribes. Si no la ves, pulsa el ícono del ojo. **Haz clic en cualquier texto o foto de la vista previa** y el formulario de la izquierda te lleva hasta su campo, resaltado en amarillo (así no tienes que buscarlo desplazándote). Con el botón **“📱 Ver en celular”** compruebas cómo se verá en un teléfono.
-- **Abajo a la derecha**, el botón **“? Ayuda”** abre el tutorial de la sección donde estás.
+- **Abajo a la derecha**, el botón **“? Ayuda”** abre el tutorial de la sección donde estás (dentro de un formulario, se abre a un lado sin que pierdas lo que escribes).
+
+### Moverte por un formulario sin perderte
+
+Cuando abres un formulario, arriba ves siempre **dónde estás** y tus herramientas:
+
+- **← Volver** y las migas **🏠 › Sección › Formulario**: tócalas para regresar. Si tienes cambios sin publicar, te avisamos antes de salir.
+- **Pestañas** o botones **“Ir a:”**: saltan directo a cada parte del formulario. Se quedan fijos mientras bajas.
+- **Listas** (preguntas, equipo, razones…): cada elemento muestra su **número y título**. **Toca la barra** para abrirlo; solo uno queda abierto a la vez, así no te pierdes. Arrastra el ≡ para ordenar y usa la ✕ para quitar (te pedimos confirmación). Si una lista está vacía, verás un botón grande para añadir el primero.
+- **⚙️ Avanzado:** los datos que casi nunca se tocan (descripción para Google, colores sueltos…) están ocultos. Si los necesitas, pulsa el botón.
+- **🧭 Guía:** te explica la pantalla paso a paso con globos (la primera vez sale sola).
+- **❓ Ayuda:** abre el tutorial de esa pantalla **a un lado, sin salir del formulario**. Puedes elegir otros tutoriales de la lista.
+- **⋯ Más:** letra más grande, **modo práctica** y atajos del teclado.
+- **Abajo** siempre ves el estado: **“Todo publicado”** o **“Tienes cambios sin publicar”**, con el botón para revisar y publicar. Atajo: **Ctrl + S**.
+- Los campos de texto con largo recomendado muestran un contador (por ejemplo **21 / 40**) y avisan si te pasas.
+
+### Practicar sin miedo (modo práctica)
+
+En cualquier formulario pulsa **⋯ → 🧪 Modo práctica**. Verás una franja amarilla: puedes escribir, cambiar fotos, añadir y quitar elementos, y **nada se publica**. Para terminar, **Salir y descartar**. En **Inicio → Tu primer día en el panel** hay una lista corta de pasos que se marcan solos.
 
 ## 3. Cambiar un texto
 
@@ -95,12 +113,14 @@ Orden recomendado:
 6. **Fotos principales:** portada, nosotros, niveles, equipo, actividades.
 7. Cuando todo esté confirmado, en **Datos del colegio** desmarca **“Mostrar etiquetas Por confirmar”**.
 
-## 9. Aviso destacado (barra sobre el menú)
+## 9. Avisos destacados (barra sobre el menú)
 
-1. Entra a **Páginas y textos → Aviso destacado**.
+1. Entra a **Títulos, portada y aviso → Avisos sobre el menú** y pulsa **Añadir avisos**.
 2. Escribe el mensaje (corto), el texto del botón y a qué página lleva (por ejemplo `/admision-2027`).
-3. Si quieres, elige desde y hasta qué día se muestra: pasado ese día, el aviso desaparece solo.
-4. Marca **Mostrar el aviso** y publica. Las visitas pueden cerrarlo con la X.
+3. Elige el **color** de la barra y **dónde se muestra**: todas las páginas, solo la portada, solo Admisión…
+4. Si quieres, elige desde y hasta qué día se muestra: pasado ese día, el aviso desaparece solo.
+5. Puedes preparar **varios avisos**. Si coinciden en fechas y página, se alternan solos cada 7 segundos. Apaga **Mostrar este aviso** para guardar uno sin publicarlo.
+6. Publica. Las visitas pueden cerrarlo con la X.
 
 ## 10. Noticias programadas
 
@@ -139,15 +159,61 @@ En **Resultados** verás cómo medir cuántos escaneos y mensajes llegan desde c
 
 **Todo lo que puedes cambiar en el afiche:** formato (volante A5 completo, afiche A4, historia 9:16, cuadrado, tarjeta 4:5, banner 16:9, banda para el pie del volante o solo el QR), color de fondo (azul noche, azul marino, rojo del escudo, amarillo o claro), color de acento, **foto de fondo**, alineación, escudo y nombre, título en 2 líneas y su tamaño, frase, etiquetas (por ejemplo, los niveles), lista de beneficios, fecha límite, WhatsApp, dirección, textos extra, texto bajo el QR, tamaño del QR, color de sus esquinas, enlace escrito y texto al pie. Con **Mis diseños** guardas, abres, duplicas y exportas tus diseños. Para la imprenta, descarga el **PDF** (A5 y A4 salen en tamaño exacto).
 
-## 12. Qué NO se puede cambiar desde el panel
+## 12. Calendario de eventos
 
-- Los colores, el diseño y las animaciones.
-- Crear páginas nuevas o mover bloques de lugar.
+1. Entra a **Calendario de eventos → Nuevo evento**.
+2. Escribe el nombre, la **fecha** (y la fecha de fin si dura varios días), la hora, el lugar y el **tipo** (el tipo define el color de la fecha).
+3. Publica. El evento aparece en **/calendario**. Cada familia puede **agregarlo a Google Calendar** o descargarlo (.ics) para el calendario de su celular.
+4. Cuando pasa la fecha, el evento sale solo de “Próximos eventos” y queda en “Eventos pasados”.
+5. Para mostrar los próximos eventos también en la portada: **Personalizar la web → Orden de la portada** y marca “Próximos eventos”.
+
+> Los eventos de ejemplo llevan la etiqueta “Ejemplo”. Bórralos o desmarca “Es un evento de ejemplo” cuando pongas los reales.
+
+## 13. Documentos para descargar
+
+1. Entra a **Documentos para descargar** y pulsa **Añadir documentos**.
+2. Escribe el nombre (por ejemplo “Lista de útiles 2027”) y sube el archivo. **PDF de menos de 5 MB** es lo mejor.
+3. Elige la **categoría**: Admisión, Reglamento, Útiles, Formatos, Calendario o General.
+4. Publica. Los verás en **/documentos**. Los de categoría **Admisión** (o con “Mostrar también en Admisión”) salen además en la página de Admisión.
+5. Para reemplazar un documento, sube el archivo nuevo en el mismo documento.
+
+## 14. Páginas nuevas
+
+Para el reglamento, la convivencia, convenios o cualquier tema que no tenga página:
+
+1. Entra a **Páginas nuevas → Nueva página**.
+2. Escribe el título: será su dirección. “Reglamento interno” se publica en `/p/reglamento-interno`.
+3. Escribe la introducción y el texto. Deja una línea en blanco entre párrafos; empieza una línea con `## ` para un **subtítulo** y con `- ` para una **lista**.
+4. Si quieres, añade una foto, un botón y archivos para descargar.
+5. Publica. Para ponerla en el menú: **Personalizar la web → Menú y pie de página → Enlaces extra** y escribe `/p/reglamento-interno`.
+
+Desmarca **Publicada** para guardarla como borrador: nadie la verá hasta que la actives.
+
+## 15. Personalizar la web
+
+En **Personalizar la web** hay tres formularios:
+
+- **Orden de la portada:** arrastra las secciones para ordenarlas y desmarca “Mostrar” para ocultar las que aún no tienen contenido (testimonios, logros, documentos, preguntas, eventos).
+- **Menú y pie de página:** oculta secciones del menú, añade enlaces extra (calendario, documentos, tus páginas nuevas, un enlace externo), cambia el texto y el enlace del botón destacado y agrega los enlaces del pie (Libro de reclamaciones, Política de privacidad…) y un texto legal. Con más de 10 enlaces el menú se llena: Inicio te avisa.
+- **Colores y efectos:** elige una paleta lista (**Tesla**, Océano, Bosque, Vino o Grafito) o cambia colores sueltos. Apaga los efectos que no quieras: rayos, chispas, línea de progreso, cortina de color o el botón de WhatsApp.
+
+> Después de cambiar colores, publica y revisa la web en el celular. Si algo no se lee bien, vuelve a la paleta **Tesla** y borra los colores sueltos.
+
+## 16. Botón de WhatsApp y vista previa en Google y redes
+
+- **Botón flotante de WhatsApp:** en **Datos del colegio → Contacto → Botón flotante de WhatsApp** cambias el texto, el lado de la pantalla y el mensaje que se envía. Puedes poner un mensaje distinto por página (por ejemplo, en Admisión: “Quisiera información sobre la Admisión {año}”) y así saber desde dónde escribió cada familia.
+- **Título e imagen en Google y redes:** en **Títulos, portada y aviso → Títulos de cada página** cada sección tiene un **título para Google** y una **imagen al compartir** (la que se ve al enviar el enlace por WhatsApp o Facebook). Las páginas nuevas tienen los mismos campos.
+
+## 17. Qué NO se puede cambiar desde el panel
+
+- El diseño de cada sección y las animaciones (los colores y los efectos sí, en **Personalizar la web**).
+- Mover bloques dentro de una página (el orden de la **portada** sí se puede cambiar).
 - Las ilustraciones (solo puedes elegir cuál se muestra mientras no hay foto).
+- Las solicitudes de visita llegan por WhatsApp: la web no guarda una bandeja de solicitudes.
 
 Para eso, escribe a quien administra la web.
 
-## 13. Si algo sale mal
+## 18. Si algo sale mal
 
 | Problema | Qué hacer |
 |---|---|

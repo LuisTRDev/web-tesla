@@ -12,8 +12,8 @@
     @apply bg-tiza font-sans text-tinta antialiased;
   }
   ::selection {
-    background: #ffb627;
-    color: #0d1230;
+    background: rgb(var(--c-filamento, 255 182 39));
+    color: rgb(var(--c-noche, 13 18 48));
   }
   :focus-visible {
     outline: 2px solid currentColor;
@@ -120,10 +120,10 @@
 }
 .hero-aurora {
   background:
-    radial-gradient(60% 55% at 78% 30%, rgba(255, 182, 39, 0.22), transparent 70%),
-    radial-gradient(55% 60% at 12% 75%, rgba(169, 173, 255, 0.28), transparent 70%),
-    radial-gradient(50% 50% at 50% 100%, rgba(42, 51, 115, 0.9), transparent 75%),
-    #0d1230;
+    radial-gradient(60% 55% at 78% 30%, rgb(var(--c-filamento, 255 182 39) / 0.22), transparent 70%),
+    radial-gradient(55% 60% at 12% 75%, rgb(var(--c-arco, 169 173 255) / 0.28), transparent 70%),
+    radial-gradient(50% 50% at 50% 100%, rgb(var(--c-noche-600, 42 51 115) / 0.9), transparent 75%),
+    rgb(var(--c-noche, 13 18 48));
   background-size: 140% 140%;
   animation: aurora 18s ease-in-out infinite alternate;
 }

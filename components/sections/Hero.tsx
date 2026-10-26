@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import ButtonLink from "@/components/ui/ButtonLink";
 import FieldCanvas from "@/components/ui/FieldCanvas";
+import { appearance } from "@/data/appearance";
 import SchoolImage from "@/components/ui/SchoolImage";
 import { homePage } from "@/data/pages";
 import { settings } from "@/data/settings";
@@ -46,7 +47,7 @@ export default function Hero() {
         <div aria-hidden="true" className="hero-aurora absolute inset-0 -z-30" />
       )}
       <div aria-hidden="true" className="absolute inset-0 -z-20 bg-gradient-to-t from-noche via-noche/75 to-noche/35" />
-      <FieldCanvas className="absolute inset-0 -z-10 h-full w-full" />
+      {appearance.effects.fieldAnimation && <FieldCanvas className="absolute inset-0 -z-10 h-full w-full" lightning={appearance.effects.lightning} />}
 
       <div className="mx-auto w-full max-w-site px-5 pb-10 pt-36 md:px-10 md:pb-14">
         {/* Aviso de campaña: lleva directo a Admisión. */}

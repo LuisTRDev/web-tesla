@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { appearance } from "@/data/appearance";
 import { themeForPath } from "@/data/modules";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +25,7 @@ export default function Template({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {withCurtain && !reduce && (
+      {withCurtain && !reduce && appearance.effects.pageTransitions && (
         <motion.div
           aria-hidden="true"
           className={cn("pointer-events-none fixed inset-0 z-[60] origin-top", themeForPath(pathname).bg)}

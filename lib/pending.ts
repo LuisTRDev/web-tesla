@@ -21,6 +21,10 @@ import { settings } from "@/data/settings";
 import { team } from "@/data/team";
 import { testimonials } from "@/data/testimonials";
 import { news } from "@/data/news";
+import { documents } from "@/data/documents";
+import { events } from "@/data/events";
+import { navLinks } from "@/data/navigation";
+import { findBrokenLinks, heavyFiles, missingDocuments } from "@/lib/health";
 
 export type Priority = 1 | 2 | 3;
 
@@ -51,6 +55,9 @@ function all(section: string, to: string, priority: Priority, label: string, cou
 
 export function getPending() {
   const S = "colegio/entries/settings";
+  const broken = findBrokenLinks();
+  const missingFiles = missingDocuments();
+  const heavy = heavyFiles();
   const items: PendingItem[] = [
     // ── Bloquean la campaña
     item("Datos del colegio", S, 1, "Poner la dirección real de la web", !settings.siteUrl.includes("example.com"), ["Dirección de la web"]),
@@ -76,6 +83,11 @@ export function getPending() {
     item("Noticias", "noticias", 2, "Publicar al menos una noticia real", news.some((post) => !post.isPlaceholder)),
     item("Galería", "galeria/entries/gallery", 2, "Crear al menos un evento real en la galería", galleryEvents.some((event) => !event.isPlaceholder)),
 
+    // ── Salud del sitio (se rompe sin querer al editar)
+    item("Salud del sitio", "personalizar/entries/navegacion", 2, "Arreglar los enlaces que llevan a una página que no existe", broken.length === 0, undefined, broken.length ? broken.map((entry) => entry.where + " → " + entry.href + " (" + entry.reason + ")").join(" · ") : undefined),
+    item("Salud del sitio", "documentos/entries/documentos", 2, "Subir el archivo de los documentos que lo tienen vacío o borrado", missingFiles.length === 0, undefined, missingFiles.length ? missingFiles.join(", ") : undefined),
+    item("Documentos", "documentos/entries/documentos", 2, "Subir al menos un documento (reglamento, lista de útiles, ficha)", documents.length > 0),
+
     // ── Cuando puedas
     all("Propuesta", "propuesta/entries/pillars", 3, "Confirmar los pilares", pillars.filter((entry) => entry.confirmed).length, pillars.length),
     all("Propuesta", "propuesta/entries/pillars", 3, "Subir foto de cada pilar", pillars.filter((entry) => entry.image).length, pillars.length),
@@ -88,6 +100,10 @@ export function getPending() {
     item("Nosotros", "nosotros/entries/testimonials", 3, "Cambiar los testimonios de ejemplo por reales", testimonials.length > 0 && testimonials.every((entry) => !entry.isPlaceholder)),
     item("Noticias", "noticias", 3, "Borrar las noticias de ejemplo", news.every((post) => !post.isPlaceholder)),
     item("Galería", "galeria/entries/gallery", 3, "Borrar los eventos de ejemplo", galleryEvents.every((event) => !event.isPlaceholder)),
+    item("Calendario", "calendario", 3, "Agregar al menos un evento real al calendario", events.some((event) => !event.isPlaceholder)),
+    item("Calendario", "calendario", 3, "Borrar los eventos de ejemplo del calendario", events.every((event) => !event.isPlaceholder)),
+    item("Salud del sitio", "medios", 3, "Reducir las fotos de más de 2 MB", heavy.length === 0, undefined, heavy.length ? heavy.join(", ") : undefined),
+    item("Salud del sitio", "personalizar/entries/navegacion", 3, "Mantener el menú corto (10 enlaces o menos)", navLinks.length <= 10, undefined, `${navLinks.length} enlaces`),
   ];
 
   const done = items.filter((entry) => entry.done).length;

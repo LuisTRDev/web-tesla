@@ -9,9 +9,9 @@ import Navbar from "@/components/layout/Navbar";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import SparkTrail from "@/components/ui/SparkTrail";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
-import { banner, isBannerActive } from "@/data/banner";
+import { appearance, cssVariables, palette } from "@/data/appearance";
+import { banners, hasGlobalBanner } from "@/data/banner";
 import { settings } from "@/data/settings";
-import { todayISO } from "@/lib/utils";
 import "./globals.css";
 
 // Títulos: Bricolage Grotesque (con carácter, cálida). Texto: Figtree (clara y amable).
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0D1230",
+  themeColor: palette.noche,
   width: "device-width",
   initialScale: 1,
 };
@@ -79,7 +79,11 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es-PE" className={`${display.variable} ${body.variable}`} style={{ "--bar-h": isBannerActive() ? "40px" : "0px" } as CSSProperties}>
+    <html lang="es-PE" className={`${display.variable} ${body.variable}`} style={{ "--bar-h": hasGlobalBanner() ? "40px" : "0px" } as CSSProperties}>
+      <head>
+        {/* Paleta elegida en el panel (Personalizar la web → Colores y efectos). */}
+        <style dangerouslySetInnerHTML={{ __html: cssVariables() }} />
+      </head>
       <body>
         <a
           href="#contenido"
@@ -87,17 +91,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Saltar al contenido
         </a>
-        <ScrollProgress />
-        {banner.enabled && banner.text && !(banner.endDate && todayISO() > banner.endDate) && (
-          <AnnouncementBar text={banner.text} linkText={banner.linkText} linkUrl={banner.linkUrl} startDate={banner.startDate} endDate={banner.endDate} initialVisible={isBannerActive()} />
-        )}
+        {appearance.effects.scrollProgress && <ScrollProgress />}
+        {banners.length > 0 && <AnnouncementBar items={banners} initialVisible={hasGlobalBanner()} />}
         <Navbar />
         <main id="contenido">{children}</main>
         <Footer />
         <WhatsAppFloat />
         <Analytics />
         <ClickTracker />
-        <SparkTrail />
+        {appearance.effects.sparks && <SparkTrail />}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>

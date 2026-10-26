@@ -15,9 +15,12 @@
  *     return data.map(mapGalleryEvent);
  *   }
  */
-import type { Achievement, Activity, FaqItem, GalleryEvent, Level, NewsPost, TeamMember, Testimonial } from "@/types";
+import type { Achievement, Activity, ExtraPage, FaqItem, GalleryEvent, Level, NewsPost, SchoolDocument, SchoolEvent, TeamMember, Testimonial } from "@/types";
 import { achievements } from "@/data/achievements";
 import { activities } from "@/data/activities";
+import { documents } from "@/data/documents";
+import { events } from "@/data/events";
+import { extraPages } from "@/data/pages-extra";
 import { faq } from "@/data/faq";
 import { team } from "@/data/team";
 import { galleryEvents } from "@/data/gallery";
@@ -70,4 +73,33 @@ export async function getTeam(): Promise<TeamMember[]> {
 
 export async function getAchievements(): Promise<Achievement[]> {
   return achievements;
+}
+
+/** Eventos que todavía no terminaron, del más cercano al más lejano. */
+export async function getUpcomingEvents(limit?: number): Promise<SchoolEvent[]> {
+  const today = todayISO();
+  const upcoming = events.filter((event) => (event.endDate ?? event.date) >= today).sort((a, b) => a.date.localeCompare(b.date));
+  return typeof limit === "number" ? upcoming.slice(0, limit) : upcoming;
+}
+
+/** Eventos ya terminados, del más reciente al más antiguo. */
+export async function getPastEvents(): Promise<SchoolEvent[]> {
+  const today = todayISO();
+  return events.filter((event) => (event.endDate ?? event.date) < today).sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export async function getEventBySlug(slug: string): Promise<SchoolEvent | null> {
+  return events.find((event) => event.slug === slug) ?? null;
+}
+
+export async function getDocuments(): Promise<SchoolDocument[]> {
+  return documents;
+}
+
+export async function getExtraPages(): Promise<ExtraPage[]> {
+  return extraPages;
+}
+
+export async function getExtraPage(slug: string): Promise<ExtraPage | null> {
+  return extraPages.find((page) => page.slug === slug) ?? null;
 }

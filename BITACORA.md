@@ -128,3 +128,36 @@ Las entradas más recientes van al final.
 - **Problema real encontrado en el contenido**: "Dirección de la web" quedó escrita sin `https://` (`colegionikolatesla.netlify.app`) y **rompía el build**. Ahora `webUrl()` (`lib/content.ts`) la corrige o usa un valor de respaldo.
 - **No se hizo**: EPS y CMYK (el navegador no los produce; para imprenta usar PDF/SVG o la versión de una tinta), contador de escaneos dentro del panel (se mide en Google Analytics por `utm_source`), contraseña/aviso previo al abrir el QR, color por zonas y puntos de dos tamaños, rayos como forma de los puntos (no se leen).
 - Estos cambios **todavía no están en un commit**.
+
+## 2026-10-26 · Panel: personalización completa (sin base de datos)
+
+- Pediste "todo lo que sea sin Supabase ni base de datos". Todo vive en `content/*.json` y se edita desde el panel:
+  - **Colores y efectos** (`content/apariencia.json`, `data/appearance.ts`): 5 paletas (Tesla, Océano, Bosque, Vino, Grafito) y 5 colores sueltos opcionales. Tailwind ahora lee variables CSS (`--c-noche`…) que `app/layout.tsx` escribe en `<head>`; los hex del código pasan por `palette`. Efectos apagables: animación y rayos de la portada, chispas, línea de progreso, cortina entre secciones, botón de WhatsApp.
+  - **Orden de la portada** (`content/portada.json`, `data/home.ts`): ordenar y mostrar/ocultar índice, eventos, noticias, testimonios, logros, documentos, preguntas y admisión.
+  - **Menú y pie** (`content/navegacion.json`, `data/navigation.ts`): ocultar secciones del menú, enlaces extra, botón destacado editable, enlaces y texto legal en el pie, nombre grande de fondo opcional.
+  - **Avisos múltiples** (`content/banner.json`): color, fechas, páginas donde se muestra y rotación; se migró el aviso único a la lista `items`.
+  - **Calendario** (`content/eventos/*.json`, `/calendario`): evento con tipo/fecha/hora/lugar, "Agregar a Google Calendar", descarga `.ics` (`/calendario/<slug>/ics`), "Próximos eventos" en la portada y datos estructurados `Event` para Google. Hay 2 eventos de ejemplo.
+  - **Documentos** (`content/documentos.json`, `public/documentos/`, `/documentos`): categorías, tamaño leído del archivo, y los de "Admisión" salen también en esa página. Si falta el archivo no se muestra.
+  - **Páginas nuevas** (`content/paginas/*.json`, `/p/<nombre>`): texto con `## ` y `- `, foto, botón, archivos, borrador/publicada, SEO. Hay un borrador de ejemplo ("Reglamento interno").
+  - **WhatsApp por página** (`settings.contact.whatsappButton`): texto, lado y mensaje según la página (`{año}` se reemplaza).
+  - **SEO por página**: `seoTitle` y `shareImage` en cada sección (`lib/seo.ts`).
+  - **Salud del sitio** (`lib/health.ts` → Inicio): enlaces rotos del menú/pie/avisos/eventos, documentos sin archivo y fotos de más de 2 MB. Ya detectó 2 PNG pesados en `public/images/actividades/`.
+- Panel: nuevas secciones en el menú (Calendario, Documentos, Páginas nuevas, Personalizar la web), vistas previas de cada una, buscador, mapa de la web, acciones de Inicio y 4 tutoriales en Ayuda. Guías (`docs/GUIA_PANEL.md`, `docs/CONFIGURAR_PANEL.md`) y README actualizados.
+- **Verificación**: `tsc`, `next build` (31 páginas) y validación de `config.yml` contra los JSON. Prueba real con otro contenido (paleta Bosque + acento propio, 3 avisos —uno vencido—, galería oculta, orden de portada cambiado, WhatsApp a la izquierda con mensaje por página, documento con archivo y otro sin archivo, página publicada con subtítulo y lista): todo se reflejó en el HTML y en el sitemap; después se restauró el contenido original.
+- **No se hizo (necesita base de datos o servicio externo)**: bandeja de solicitudes de visita, estadísticas dentro del panel. **Límite**: el tema de la barra y de la cortina para `/p/*` es fijo (oscuro); las vistas previas del panel siempre usan la paleta Tesla.
+- Estos cambios **todavía no están en un commit**.
+
+## 2026-10-26 · Panel: orientación y facilidad de uso
+
+- Pediste que el panel fuera menos caótico (listas desplegables tapadas por los bloques, difícil ubicarse) y más intuitivo. **Causa de las listas tapadas**: cada elemento de lista tenía `overflow: hidden`, que recortaba el menú; ahora los menús se abren por encima de todo.
+- Capa nueva `public/admin/panel-guide.js` + `guide.css` + `tutoriales.js` (cargadas en `app/admin/route.ts`):
+  - **Migas y Volver** (🏠 › Sección › Formulario) que avisan si hay cambios sin publicar, **índice "Ir a:"** en formularios sin pestañas y pestañas pegadas bajo la barra; pestañas nuevas en Menú/pie y Colores/efectos.
+  - **Listas tipo acordeón**: título y número visibles en cada elemento, un solo elemento abierto a la vez, plegadas al abrir la lista, tocar la barra abre o cierra, **tarjeta de lista vacía** con botón grande. Se quitó la barra gris vacía de los grupos.
+  - **Contadores** de caracteres, ejemplo como texto de muestra dentro del campo, **⚙️ Avanzado** (oculta lo que casi nunca se toca: Google, colores sueltos…), etiquetas más claras ("Dibujo que acompaña el texto" con emojis) y sin "(opcional)" repetido.
+  - **❓ Ayuda lateral** con el tutorial de la pantalla (sin salir del formulario, con video si está en `panel-config.js`), **🧭 Guía** con globos (sale sola la primera vez por formulario), **modo práctica** (nada se publica) y **Ctrl + S**, letra grande.
+  - **Barra inferior siempre visible**: "Todo publicado · Ver mi web" o "Tienes cambios sin publicar".
+  - Inicio: acciones nuevas y tarjeta **"Tu primer día en el panel"** que se marca sola. Dos tutoriales nuevos ("Moverte por un formulario", "Practicar sin miedo") y los demás ahora viven en `tutoriales.js`. Guiones para grabar videos en `docs/VIDEOS_TUTORIALES.md`.
+- **Se probó en un navegador real** (Edge controlado por script contra `npm run panel`): menú desplegable sobre los bloques vecinos, acordeón (abrir uno cierra los demás, plegado automático), galería con 9 eventos anidados, lista vacía, ayuda lateral, guía de 6 pasos, modo práctica (bloquea "Publicar ahora"), Ctrl + S, Volver con cambios, descartar sin diálogo del navegador, formulario nuevo, ancho de 1000 y 1280 px. Sin errores de consola.
+- **Lo que la prueba descubrió**: Decap abre los elementos con retraso y pierde clics si se piden varios a la vez (se pliega de uno en uno esperando a que las alturas se estabilicen); y recargar con cambios hacía aparecer el "¿Salir del sitio?" del navegador (ya no).
+- **No se hizo**: "deshacer" el borrado de un elemento de una lista (Decap no lo permite; se mantiene la confirmación y salir sin publicar) y grabar los videos (están los guiones). La capa depende de los nombres de clase de Decap: repasar al cambiar `DECAP_VERSION`.
+- Estos cambios **todavía no están en un commit**.

@@ -1,6 +1,6 @@
 import raw from "@/content/settings.json";
 import type { SiteSettings } from "@/types";
-import { bool, list, num, rec, str, strings, text, webUrl } from "@/lib/content";
+import { bool, list, num, oneOf, rec, str, strings, text, webUrl } from "@/lib/content";
 
 /**
  * CONFIGURACIÓN CENTRAL DEL SITIO
@@ -13,6 +13,7 @@ const location = rec(r.location);
 const contact = rec(r.contact);
 const legal = rec(r.legal);
 const social = rec(r.social);
+const whatsappButton = rec(contact.whatsappButton);
 const images = rec(r.images);
 
 export const settings: SiteSettings = {
@@ -40,6 +41,14 @@ export const settings: SiteSettings = {
       .map((number) => number.replace(/\D/g, ""))
       .filter(Boolean),
     hours: text(contact.hours),
+    whatsappButton: {
+      label: str(whatsappButton.label, "¿Consultas? Escríbenos"),
+      side: oneOf(whatsappButton.side, ["derecha", "izquierda"] as const, "derecha"),
+      defaultMessage: str(whatsappButton.defaultMessage, "Hola, quisiera información sobre la I.E.P. Nikola Tesla."),
+      messages: list(whatsappButton.messages)
+        .map((entry) => ({ path: str(entry.path).trim(), message: str(entry.message).trim() }))
+        .filter((entry) => entry.path && entry.message),
+    },
   },
   legal: {
     resolution: text(legal.resolution),

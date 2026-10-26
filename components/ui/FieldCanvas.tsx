@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
  * - Se pausa fuera de pantalla y con la pestaña oculta.
  * - Con prefers-reduced-motion dibuja un único cuadro estático.
  */
-export default function FieldCanvas({ className }: { className?: string }) {
+export default function FieldCanvas({ className, lightning = true }: { className?: string; lightning?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function FieldCanvas({ className }: { className?: string }) {
     const loop = () => {
       if (visible && !document.hidden) {
         time += 0.016;
-        if (time > nextBolt) {
+        if (lightning && time > nextBolt) {
           spawnBolt();
           nextBolt = time + 4 + Math.random() * 5;
         }
@@ -170,7 +170,7 @@ export default function FieldCanvas({ className }: { className?: string }) {
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointer);
     };
-  }, []);
+  }, [lightning]);
 
   return <canvas ref={ref} className={className} aria-hidden="true" />;
 }

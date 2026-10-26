@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Logo from "@/components/ui/Logo";
-import { modules, themeForPath } from "@/data/modules";
-import { navLinks } from "@/data/navigation";
+import { navModules, themeForPath } from "@/data/modules";
+import { extraLinks, menuCta, navLinks } from "@/data/navigation";
 import { settings } from "@/data/settings";
 import { cn } from "@/lib/utils";
+import { palette } from "@/data/appearance";
 
 const isCurrent = (href: string, pathname: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`));
 
@@ -79,7 +80,7 @@ export default function Navbar() {
                     >
                       {link.label}
                       {current && (
-                        <span aria-hidden="true" className="absolute inset-x-0 -bottom-0.5 h-[3px] rounded-full" style={{ background: scrolled ? "#FFB627" : theme.accent }} />
+                        <span aria-hidden="true" className="absolute inset-x-0 -bottom-0.5 h-[3px] rounded-full" style={{ background: scrolled ? palette.filamento : theme.accent }} />
                       )}
                     </Link>
                   </li>
@@ -89,15 +90,17 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
+            {menuCta.show && (
             <Link
-              href="/admision"
+              href={menuCta.href}
               className={cn(
                 "hidden min-h-[42px] items-center rounded-full px-5 text-[14px] font-semibold transition-colors sm:inline-flex",
                 onLight ? "bg-noche text-white hover:bg-noche-600" : "bg-filamento text-noche hover:bg-white",
               )}
             >
-              Admisiones
+              {menuCta.label}
             </Link>
+            )}
             <button
               type="button"
               aria-expanded={open}
@@ -128,7 +131,7 @@ export default function Navbar() {
           >
             <nav aria-label="Menú móvil" className="flex min-h-full flex-col px-5 pb-10 pt-[104px] md:px-10">
               <ul className="flex-1">
-                {[{ id: "inicio", number: "00", label: "Inicio", href: "/", accent: "#FFB627" }, ...modules.map((module) => ({ ...module, accent: module.theme.accent }))].map(
+                {[{ id: "inicio", number: "00", label: "Inicio", href: "/", accent: palette.filamento }, ...navModules.map((module) => ({ ...module, accent: module.theme.accent })), ...extraLinks.map((link, position) => ({ id: `extra-${position}`, number: "+", label: link.label, href: link.href, accent: palette.arco }))].map(
                   (item, index) => {
                     const current = isCurrent(item.href, pathname);
                     return (
@@ -153,7 +156,7 @@ export default function Navbar() {
                             aria-hidden="true"
                             className="h-3 w-3 shrink-0 rounded-full"
                             // Los acentos oscuros (admisión) no se ven sobre el fondo del menú: se usa el amarillo.
-                            style={{ background: item.accent === "#0D1230" ? "#FFB627" : item.accent }}
+                            style={{ background: item.accent === palette.noche ? palette.filamento : item.accent }}
                           />
                           {item.label}
                         </Link>
@@ -163,13 +166,15 @@ export default function Navbar() {
                 )}
               </ul>
               <div className="mt-8">
-                <Link
-                  href="/admision"
-                  onClick={() => setOpen(false)}
-                  className="flex min-h-[54px] items-center justify-center rounded-full bg-filamento text-base font-semibold text-noche"
-                >
-                  Admisión {settings.admissionYear}
-                </Link>
+                {menuCta.show && (
+                  <Link
+                    href={menuCta.href}
+                    onClick={() => setOpen(false)}
+                    className="flex min-h-[54px] items-center justify-center rounded-full bg-filamento text-base font-semibold text-noche"
+                  >
+                    {menuCta.label}
+                  </Link>
+                )}
                 <p className="mt-6 text-sm text-white/60">
                   {settings.location.address}, {settings.location.district}, {settings.location.province}
                 </p>

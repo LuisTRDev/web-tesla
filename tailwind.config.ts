@@ -9,21 +9,27 @@ import type { Config } from "tailwindcss";
  * escudo    → rojo y azul del escudo oficial; dan personalidad a módulos concretos.
  * Los temas de cada módulo (color de cabecera, acento) viven en data/modules.ts.
  */
+/**
+ * Los colores salen de variables CSS (--c-noche, …) que escribe app/layout.tsx según la paleta elegida en el panel
+ * (data/appearance.ts). El segundo valor es el respaldo: la paleta oficial, por si la variable no existe.
+ */
+const v = (name: string, fallback: string) => `rgb(var(--c-${name}, ${fallback}) / <alpha-value>)`;
+
 const config: Config = {
   // data/ también se escanea porque los temas de los módulos declaran clases de Tailwind.
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./data/**/*.ts"],
   theme: {
     extend: {
       colors: {
-        noche: { DEFAULT: "#0D1230", 900: "#070A1C", 800: "#141A42", 700: "#1D2558", 600: "#2A3373" },
-        tiza: { DEFAULT: "#EEF0F7", 200: "#E2E5F0", 300: "#D3D7E6" },
-        tinta: "#1B2040",
-        niebla: "#646B8C",
-        filamento: { DEFAULT: "#FFB627", 600: "#E89B00" },
-        arco: { DEFAULT: "#A9ADFF", 100: "#E8E9FF" },
+        noche: { DEFAULT: v("noche", "13 18 48"), 900: v("noche-900", "7 10 28"), 800: v("noche-800", "20 26 66"), 700: v("noche-700", "29 37 88"), 600: v("noche-600", "42 51 115") },
+        tiza: { DEFAULT: v("tiza", "238 240 247"), 200: v("tiza-200", "226 229 240"), 300: v("tiza-300", "211 215 230") },
+        tinta: v("tinta", "27 32 64"),
+        niebla: v("niebla", "100 107 140"),
+        filamento: { DEFAULT: v("filamento", "255 182 39"), 600: v("filamento-600", "232 155 0") },
+        arco: { DEFAULT: v("arco", "169 173 255"), 100: v("arco-100", "232 233 255") },
         // Rojo: DEFAULT para acentos; 700 para fondos con texto blanco (contraste AA).
-        rojo: { DEFAULT: "#E03C26", 700: "#B42D1B" },
-        marino: { DEFAULT: "#1F3557", 800: "#172843" },
+        rojo: { DEFAULT: v("rojo", "224 60 38"), 700: v("rojo-700", "180 45 27") },
+        marino: { DEFAULT: v("marino", "31 53 87"), 800: v("marino-800", "23 40 67") },
       },
       fontFamily: {
         sans: ["var(--font-body)", "system-ui", "sans-serif"],

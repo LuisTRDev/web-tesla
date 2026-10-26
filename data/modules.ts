@@ -1,5 +1,7 @@
 import raw from "@/content/modules.json";
-import { list, rec, str, text } from "@/lib/content";
+import navigationRaw from "@/content/navegacion.json";
+import { palette } from "@/data/appearance";
+import { list, rec, str, strings, text } from "@/lib/content";
 
 /**
  * MÓDULOS DEL SITIO
@@ -41,6 +43,12 @@ export interface SiteModule {
   teaser: string;
   /** Descripción que muestran Google y las redes al compartir la página. */
   seoDescription: string;
+  /** Título para Google (opcional); por defecto, el nombre del menú. */
+  seoTitle?: string;
+  /** Imagen al compartir la página en redes (opcional). */
+  shareImage?: string;
+  /** false = oculta del menú y de la portada (la página sigue existiendo). */
+  inMenu: boolean;
   motif: Motif;
   theme: ModuleTheme;
 }
@@ -50,80 +58,95 @@ const design: Array<{ id: string; motif: Motif; theme: ModuleTheme; fallback: { 
   {
     id: "nosotros",
     motif: "escudo",
-    theme: { tone: "light", bg: "bg-tiza", text: "text-noche", muted: "text-tinta/75", accent: "#E03C26" },
+    theme: { tone: "light", bg: "bg-tiza", text: "text-noche", muted: "text-tinta/75", accent: palette.rojo },
     fallback: { label: "Nosotros", title: "Pasión por educar." },
   },
   {
     id: "propuesta",
     motif: "plano",
-    theme: { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/70", accent: "#A9ADFF" },
+    theme: { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/70", accent: palette.arco },
     fallback: { label: "Propuesta educativa", title: "Una educación pensada para el futuro." },
   },
   {
     id: "niveles",
     motif: "escalones",
-    theme: { tone: "dark", bg: "bg-marino", text: "text-white", muted: "text-white/75", accent: "#FFB627" },
+    theme: { tone: "dark", bg: "bg-marino", text: "text-white", muted: "text-white/75", accent: palette.filamento },
     fallback: { label: "Niveles", title: "Cada etapa, un descubrimiento." },
   },
   {
     id: "actividades",
     motif: "chispas",
-    theme: { tone: "dark", bg: "bg-rojo-700", text: "text-white", muted: "text-white/85", accent: "#FFB627" },
+    theme: { tone: "dark", bg: "bg-rojo-700", text: "text-white", muted: "text-white/85", accent: palette.filamento },
     fallback: { label: "Actividades", title: "Aprender también ocurre fuera del aula." },
   },
   {
     id: "galeria",
     motif: "pelicula",
-    theme: { tone: "dark", bg: "bg-noche-900", text: "text-white", muted: "text-white/70", accent: "#FFB627" },
+    theme: { tone: "dark", bg: "bg-noche-900", text: "text-white", muted: "text-white/70", accent: palette.filamento },
     fallback: { label: "Galería", title: "El año, en imágenes." },
   },
   {
     id: "noticias",
     motif: "periodico",
-    theme: { tone: "light", bg: "bg-white", text: "text-noche", muted: "text-tinta/75", accent: "#E03C26" },
+    theme: { tone: "light", bg: "bg-white", text: "text-noche", muted: "text-tinta/75", accent: palette.rojo },
     fallback: { label: "Noticias", title: "Lo que está pasando en Nikola Tesla." },
   },
   {
     id: "admision",
     motif: "ondas",
-    theme: { tone: "light", bg: "bg-filamento", text: "text-noche", muted: "text-noche/80", accent: "#0D1230" },
+    theme: { tone: "light", bg: "bg-filamento", text: "text-noche", muted: "text-noche/80", accent: palette.noche },
     fallback: { label: "Admisión", title: "¿Listos para comenzar esta historia?" },
   },
   {
     id: "contacto",
     motif: "relieve",
-    theme: { tone: "light", bg: "bg-arco-100", text: "text-noche", muted: "text-tinta/75", accent: "#E03C26" },
+    theme: { tone: "light", bg: "bg-arco-100", text: "text-noche", muted: "text-tinta/75", accent: palette.rojo },
     fallback: { label: "Contacto", title: "Conversemos." },
   },
 ];
 
 const texts = list(rec(raw).items);
 
-export const modules: SiteModule[] = design.map((item, index) => {
-  const copy = texts.find((entry) => entry.id === item.id) ?? {};
-  const label = str(copy.label, item.fallback.label);
-  return {
-    id: item.id,
-    number: String(index + 1).padStart(2, "0"),
-    label,
-    href: `/${item.id}`,
-    kicker: text(copy.kicker) ?? undefined,
-    title: str(copy.title, item.fallback.title),
-    intro: str(copy.intro),
-    teaser: str(copy.teaser),
-    seoDescription: str(copy.seoDescription),
-    motif: item.motif,
-    theme: item.theme,
-  };
-});
+/** Secciones que la clienta quitó del menú y de la portada (Personalizar la web → Menú y pie de página). */
+const hidden = strings(rec(navigationRaw).hiddenModules);
+
+/** Todas las secciones (todas tienen página); el número sigue el orden de las visibles. */
+export const modules: SiteModule[] = (() => {
+  let visible = 0;
+  return design.map((item, index) => {
+    const copy = texts.find((entry) => entry.id === item.id) ?? {};
+    const label = str(copy.label, item.fallback.label);
+    const inMenu = !hidden.includes(item.id);
+    if (inMenu) visible += 1;
+    return {
+      id: item.id,
+      number: String(inMenu ? visible : design.length - index).padStart(2, "0"),
+      label,
+      href: `/${item.id}`,
+      kicker: text(copy.kicker) ?? undefined,
+      title: str(copy.title, item.fallback.title),
+      intro: str(copy.intro),
+      teaser: str(copy.teaser),
+      seoDescription: str(copy.seoDescription),
+      seoTitle: text(copy.seoTitle) ?? undefined,
+      shareImage: text(copy.shareImage) ?? undefined,
+      inMenu,
+      motif: item.motif,
+      theme: item.theme,
+    };
+  });
+})();
+
+/** Las que aparecen en el menú, la portada y el "siguiente". */
+export const navModules: SiteModule[] = modules.filter((module) => module.inMenu);
 
 /** Tema de la portada y de páginas sin módulo (por ejemplo, 404). */
-export const homeTheme: ModuleTheme = { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/70", accent: "#FFB627" };
+export const homeTheme: ModuleTheme = { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/70", accent: palette.filamento };
 
 /** Cada nivel tiene su propio color dentro del módulo Niveles. */
 export const levelThemes: Record<string, ModuleTheme> = {
-  primaria: { tone: "dark", bg: "bg-rojo-700", text: "text-white", muted: "text-white/85", accent: "#FFB627" },
-  secundaria: { tone: "dark", bg: "bg-marino", text: "text-white", muted: "text-white/75", accent: "#A9ADFF" },
+  primaria: { tone: "dark", bg: "bg-rojo-700", text: "text-white", muted: "text-white/85", accent: palette.filamento },
+  secundaria: { tone: "dark", bg: "bg-marino", text: "text-white", muted: "text-white/75", accent: palette.arco },
 };
 
 export function getModule(id: string): SiteModule {
@@ -132,19 +155,37 @@ export function getModule(id: string): SiteModule {
   return found;
 }
 
-/** Módulo siguiente en el recorrido (el último vuelve al primero). */
+/** Módulo siguiente en el recorrido, saltando los ocultos (el último vuelve al primero). */
 export function getNextModule(id: string): SiteModule {
-  const index = modules.findIndex((module) => module.id === id);
-  return modules[(index + 1) % modules.length];
+  const total = modules.length;
+  const start = Math.max(0, modules.findIndex((module) => module.id === id));
+  for (let step = 1; step <= total; step++) {
+    const candidate = modules[(start + step) % total];
+    if (candidate.inMenu) return candidate;
+  }
+  return modules[(start + 1) % total];
 }
 
 export function moduleForPath(pathname: string): SiteModule | null {
   return modules.find((module) => pathname === module.href || pathname.startsWith(`${module.href}/`)) ?? null;
 }
 
+/** Páginas que no son un módulo del menú (calendario, documentos y páginas nuevas): su cabecera y su tema. */
+export const calendarTheme: ModuleTheme = { tone: "dark", bg: "bg-marino", text: "text-white", muted: "text-white/75", accent: palette.filamento };
+export const documentsTheme: ModuleTheme = { tone: "light", bg: "bg-arco-100", text: "text-noche", muted: "text-tinta/75", accent: palette.rojo };
+export const customPageTheme: ModuleTheme = { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/75", accent: palette.filamento };
+
+/** Crea la "cabecera de módulo" de una página que no está en el menú (por ejemplo, /calendario). */
+export function pageModule(page: Pick<SiteModule, "id" | "label" | "title" | "intro" | "seoDescription"> & Partial<SiteModule> & { motif: Motif; theme: ModuleTheme }): SiteModule {
+  return { number: "+", href: `/${page.id}`, teaser: "", inMenu: false, ...page };
+}
+
 /** Tema visual de una ruta: lo usan la barra de navegación y la cortina de transición. */
 export function themeForPath(pathname: string): ModuleTheme {
   const level = pathname.match(/^\/niveles\/([^/]+)/);
   if (level && levelThemes[level[1]]) return levelThemes[level[1]];
+  if (pathname === "/calendario" || pathname.startsWith("/calendario/")) return calendarTheme;
+  if (pathname === "/documentos") return documentsTheme;
+  if (pathname.startsWith("/p/")) return customPageTheme;
   return moduleForPath(pathname)?.theme ?? homeTheme;
 }

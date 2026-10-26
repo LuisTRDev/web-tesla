@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type { Motif } from "@/data/modules";
 import { cn } from "@/lib/utils";
 import escudo from "@/public/images/logo-escudo.png";
+import { palette } from "@/data/appearance";
 
 /**
  * Motivo gráfico de cada módulo: decoración de fondo que le da carácter a su cabecera.
@@ -80,8 +81,8 @@ export default function ModuleMotif({ motif, accent, highlight }: { motif: Motif
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute bottom-0 right-[4%] hidden h-[78%] w-[24%] items-end gap-3 md:flex">
             {[
-              { height: "55%", color: "#E03C26" },
-              { height: "90%", color: "#A9ADFF" },
+              { height: "55%", color: palette.rojo },
+              { height: "90%", color: palette.arco },
             ].map((step, index) => {
               const dimmed = highlight !== undefined && highlight !== index;
               return (

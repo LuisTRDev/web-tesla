@@ -2,7 +2,7 @@ import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import SecretAdminTrigger from "@/components/ui/SecretAdminTrigger";
 import SocialIcon from "@/components/ui/SocialIcon";
-import { navLinks } from "@/data/navigation";
+import { footerConfig, navLinks } from "@/data/navigation";
 import { settings } from "@/data/settings";
 import { formatPhone, whatsappLink } from "@/lib/utils";
 
@@ -32,6 +32,7 @@ export default function Footer() {
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/65">{settings.name}</p>
           </div>
 
+          {footerConfig.showExplore && (
           <nav aria-label="Pie de página">
             <h2 className="text-sm font-semibold text-white/55">Explorar</h2>
             <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 text-[15px] lg:grid-cols-1">
@@ -44,6 +45,7 @@ export default function Footer() {
               ))}
             </ul>
           </nav>
+          )}
 
           <div>
             <h2 className="text-sm font-semibold text-white/55">Contacto</h2>
@@ -104,9 +106,26 @@ export default function Footer() {
           </div>
         </div>
 
+        {footerConfig.links.length > 0 && (
+          <nav aria-label="Enlaces de interés" className="mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/[0.12] pt-8 text-[14px]">
+            {footerConfig.links.map((item) =>
+              /^https?:\/\//.test(item.href) ? (
+                <a key={item.href + item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="text-white/80 transition-colors hover:text-filamento">
+                  {item.label}
+                </a>
+              ) : (
+                <Link key={item.href + item.label} href={item.href} className="text-white/80 transition-colors hover:text-filamento">
+                  {item.label}
+                </Link>
+              ),
+            )}
+          </nav>
+        )}
+
         <p className="mt-14 text-[13px] text-white/50">
           © {new Date().getFullYear()} {settings.name}. Todos los derechos reservados.
         </p>
+        {footerConfig.legalText && <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-white/50">{footerConfig.legalText}</p>}
         {(legal.resolution || legal.modularCode || settings.showDraftBadges) && (
           <p className="mt-2 text-[13px] text-white/50">
             {legal.resolution ?? "[RESOLUCIÓN DE FUNCIONAMIENTO – UGEL]"} · Código modular {legal.modularCode ?? "[CÓDIGO MODULAR]"}
@@ -115,9 +134,11 @@ export default function Footer() {
       </div>
 
       {/* Marca de agua tipográfica */}
-      <p aria-hidden="true" className="pointer-events-none select-none whitespace-nowrap px-2 text-center font-display text-[17.5vw] font-extrabold uppercase leading-[0.78] tracking-[-0.04em] text-white/[0.055]">
-        {settings.shortName}
-      </p>
+      {footerConfig.showWatermark && (
+        <p aria-hidden="true" className="pointer-events-none select-none whitespace-nowrap px-2 text-center font-display text-[17.5vw] font-extrabold uppercase leading-[0.78] tracking-[-0.04em] text-white/[0.055]">
+          {settings.shortName}
+        </p>
+      )}
     </footer>
   );
 }

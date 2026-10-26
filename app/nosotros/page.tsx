@@ -9,14 +9,11 @@ import ModuleHeader from "@/components/ui/ModuleHeader";
 import NextModule from "@/components/ui/NextModule";
 import { getModule } from "@/data/modules";
 import { getAchievements, getTeam, getTestimonials } from "@/lib/data";
+import { moduleMetadata } from "@/lib/seo";
 
 const mod = getModule("nosotros");
 
-export const metadata: Metadata = {
-  title: mod.label,
-  description: mod.seoDescription,
-  alternates: { canonical: mod.href },
-};
+export const metadata: Metadata = moduleMetadata(mod);
 
 /** Los valores del escudo oficial. */
 const crestValues = ["Disciplina", "Liderazgo", "Excelencia"];

@@ -19,6 +19,7 @@ const html = `<!doctype html>
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <link rel="stylesheet" href="/admin/admin-theme.css" />
     <link rel="stylesheet" href="/admin/admin-ux.css" />
+    <link rel="stylesheet" href="/admin/guide.css" />
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@${DECAP_VERSION}/dist/decap-cms.js"></script>
@@ -26,7 +27,9 @@ const html = `<!doctype html>
     <script src="/admin/previews.js"></script>
     <script src="/admin/secciones.js"></script>
     <script src="/admin/panel-ui.js"></script>
+    <script src="/admin/tutoriales.js"></script>
     <script src="/admin/panel-ux.js"></script>
+    <script src="/admin/panel-guide.js"></script>
     <script src="/admin/photo-optimizer.js"></script>
     <script src="/admin/tour.js"></script>
     <script src="/admin/es-fixes.js"></script>

@@ -1,0 +1,15 @@
+{
+  "hiddenModules": [],
+  "extraLinks": [],
+  "cta": {
+    "show": true,
+    "label": "Admisiones",
+    "href": "/admision"
+  },
+  "footer": {
+    "showExplore": true,
+    "links": [],
+    "legalText": "",
+    "showWatermark": true
+  }
+}

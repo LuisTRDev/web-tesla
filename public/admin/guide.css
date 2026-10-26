@@ -1,0 +1,616 @@
+/* Estilos de la guía y orientación del panel (panel-guide.js). Solo cambia el aspecto; no toca los datos. */
+
+/* ───────── menús desplegables: se abren por encima de todo y no se recortan ───────── */
+[class*="ControlPaneContainer"] [class*="-menu"] {
+  z-index: 1000 !important;
+}
+[class*="ControlPaneContainer"] [class*="-menu"] [class*="-option"] {
+  font-size: 16px !important;
+  padding: 12px 16px !important;
+}
+[class*="ControlPaneContainer"] {
+  padding-bottom: 120px !important;
+}
+
+/* ───────── barra "dónde estoy" ───────── */
+#tesla-crumbs {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 10px 0;
+  margin-bottom: 6px;
+  background: #fff;
+  border-bottom: 1px solid rgba(13, 18, 48, 0.1);
+  font-family: Figtree, Arial, sans-serif;
+}
+.tesla-crumbs-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.tesla-crumbs-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+.tesla-back {
+  border: 1px solid rgba(13, 18, 48, 0.25);
+  background: #fff;
+  color: #0d1230;
+  border-radius: 999px;
+  min-height: 38px;
+  padding: 0 14px;
+  font: 700 14px Figtree, sans-serif;
+  cursor: pointer;
+}
+.tesla-back:hover {
+  background: #fff4d9;
+  border-color: #ffb627;
+}
+.tesla-trail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #646b8c;
+  min-width: 0;
+  flex: 1 1 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tesla-trail a,
+.tesla-trail strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tesla-trail strong {
+  flex: 0 1 auto;
+}
+.tesla-trail a {
+  color: #1f3557;
+  text-decoration: none;
+  font-weight: 600;
+  flex: 0 1 auto;
+}
+.tesla-trail a:first-child {
+  flex: none;
+}
+.tesla-trail a:hover {
+  text-decoration: underline;
+}
+.tesla-trail strong {
+  color: #0d1230;
+  font-weight: 800;
+}
+.tesla-tool,
+.tesla-adv-pill {
+  border: 1px solid rgba(13, 18, 48, 0.2);
+  background: #fff;
+  color: #0d1230;
+  border-radius: 999px;
+  min-height: 38px;
+  padding: 0 12px;
+  font: 700 14px Figtree, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tesla-tool:hover,
+.tesla-adv-pill:hover {
+  background: #fff4d9;
+  border-color: #ffb627;
+}
+.tesla-tool.strong {
+  background: #0d1230;
+  border-color: #0d1230;
+  color: #fff;
+}
+.tesla-tool.strong:hover {
+  background: #1d2558;
+}
+.tesla-adv-pill {
+  background: #eef0f7;
+  border-style: dashed;
+}
+.tesla-adv-pill.on {
+  background: #fff4d9;
+  border-color: #ffb627;
+  border-style: solid;
+}
+.tesla-adv-pill[hidden] {
+  display: none;
+}
+#tesla-more-menu {
+  position: fixed;
+  z-index: 99999;
+  min-width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 6px;
+  box-shadow: 0 24px 50px -16px rgba(13, 18, 48, 0.55);
+  border: 1px solid rgba(13, 18, 48, 0.12);
+}
+#tesla-more-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: 600 15px Figtree, sans-serif;
+  color: #0d1230;
+  cursor: pointer;
+}
+#tesla-more-menu button:hover {
+  background: #fff4d9;
+}
+
+/* las pestañas quedan pegadas justo debajo de la barra */
+#tesla-crumbs ~ #tesla-tabs {
+  top: var(--tesla-crumbs-h, 59px);
+  padding-top: 10px;
+}
+
+/* ───────── índice de saltos ───────── */
+#tesla-jump {
+  position: sticky;
+  top: var(--tesla-crumbs-h, 59px);
+  z-index: 8;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  overflow-x: auto;
+  padding: 10px 0 12px;
+  margin-bottom: 8px;
+  background: linear-gradient(#fff 85%, rgba(255, 255, 255, 0));
+  scrollbar-width: thin;
+}
+.tesla-jump-label {
+  flex: none;
+  font: 700 13.5px Figtree, sans-serif;
+  color: #646b8c;
+}
+.tesla-jump-chip {
+  flex: none;
+  border: 1px solid rgba(13, 18, 48, 0.2);
+  background: #fff;
+  color: #0d1230;
+  border-radius: 999px;
+  min-height: 36px;
+  padding: 0 14px;
+  font: 600 14px Figtree, sans-serif;
+  cursor: pointer;
+}
+.tesla-jump-chip:hover {
+  border-color: #0d1230;
+}
+.tesla-jump-chip.on {
+  background: #0d1230;
+  border-color: #0d1230;
+  color: #fff;
+}
+
+/* ───────── grupos de campos: sin barra gris vacía ───────── */
+[data-tesla-empty="1"] {
+  display: none !important;
+}
+
+/* ───────── elementos de lista: título visible, abiertos de uno en uno ───────── */
+[class*="StyledListItemTopBar"] {
+  cursor: pointer;
+}
+[class*="StyledListItemTopBar"]:hover {
+  background: #eceefa !important;
+}
+[class*="NestedObjectLabel"] {
+  display: none !important;
+}
+.tesla-item-title {
+  position: absolute;
+  top: 0;
+  left: 58px;
+  right: 120px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+  overflow: hidden;
+  font-family: Figtree, sans-serif;
+}
+.tesla-item-title .n {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0d1230;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font: 800 13px Figtree, sans-serif;
+}
+.tesla-item-title .t {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #0d1230;
+}
+.tesla-item-title .t.empty {
+  font-weight: 500;
+  font-style: italic;
+  color: #7a7fa0;
+}
+[class*="SortableListItem"].tesla-open {
+  border-color: #ffb627 !important;
+  box-shadow: 0 0 0 3px rgba(255, 182, 39, 0.28), 0 14px 30px -22px rgba(13, 18, 48, 0.6) !important;
+}
+/* el botón de quitar se distingue mejor */
+[class*="StyledListItemTopBar"] button:last-of-type {
+  border-radius: 0 17px 0 0 !important;
+}
+
+/* ───────── lista vacía ───────── */
+.tesla-empty {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  padding: 18px 20px;
+  border: 2px dashed rgba(13, 18, 48, 0.22);
+  border-radius: 18px;
+  background: #fafbff;
+  font-family: Figtree, sans-serif;
+}
+.tesla-empty .ico {
+  font-size: 34px;
+}
+.tesla-empty .txt {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #464c6b;
+  font-size: 15px;
+}
+.tesla-empty .txt strong {
+  color: #0d1230;
+  font-size: 16.5px;
+}
+
+/* ───────── contadores ───────── */
+.tesla-count {
+  margin-top: 6px;
+  text-align: right;
+  font: 600 13px Figtree, sans-serif;
+  color: #646b8c;
+}
+.tesla-count.near {
+  color: #8a5a00;
+}
+.tesla-count.over {
+  color: #b42d1b;
+}
+
+/* ───────── opciones avanzadas ───────── */
+body:not(.tesla-adv-on) [data-tesla-adv="1"] {
+  display: none !important;
+}
+body.tesla-adv-on [data-tesla-adv="1"] {
+  background: rgba(238, 240, 247, 0.55);
+  border-radius: 14px;
+  padding: 8px 12px 12px;
+  margin-top: 8px;
+  outline: 1px dashed rgba(13, 18, 48, 0.2);
+}
+
+/* ───────── letra más grande ───────── */
+body.tesla-big [class*="ControlPaneContainer"] input[type="text"],
+body.tesla-big [class*="ControlPaneContainer"] input[type="number"],
+body.tesla-big [class*="ControlPaneContainer"] textarea {
+  font-size: 19px !important;
+}
+body.tesla-big [class*="ControlContainer"] > [class*="ControlTopbar"] label {
+  font-size: 18px !important;
+}
+body.tesla-big [class*="ControlHint"] {
+  font-size: 16px !important;
+}
+body.tesla-big .tesla-item-title .t {
+  font-size: 18.5px;
+}
+
+/* ───────── barra inferior: dos estados ───────── */
+#tesla-bar.is-clean {
+  background: #fff;
+  color: #17683a;
+  box-shadow: 0 14px 34px -14px rgba(13, 18, 48, 0.5), 0 0 0 1px rgba(13, 18, 48, 0.1);
+  padding: 8px 10px 8px 22px;
+}
+#tesla-bar.is-clean .tesla-btn.ghost-dark {
+  color: #0d1230;
+  box-shadow: inset 0 0 0 1.5px rgba(13, 18, 48, 0.3);
+}
+#tesla-bar.is-clean .when-dirty,
+#tesla-bar:not(.is-clean) .when-clean {
+  display: none;
+}
+
+/* ───────── aviso de modo práctica ───────── */
+#tesla-practice {
+  position: fixed;
+  left: 16px;
+  bottom: 22px;
+  z-index: 99996;
+  max-width: min(420px, calc(100vw - 32px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffb627;
+  color: #0d1230;
+  border-radius: 20px;
+  padding: 10px 12px 10px 18px;
+  font: 600 14.5px/1.3 Figtree, sans-serif;
+  box-shadow: 0 16px 36px -14px rgba(13, 18, 48, 0.55);
+}
+#tesla-practice .tesla-btn {
+  flex: none;
+  background: #0d1230;
+  color: #fff;
+  min-height: 38px;
+}
+body.tesla-practicing [class*="ToolbarContainer"] {
+  box-shadow: inset 0 -4px 0 #ffb627;
+}
+
+/* ───────── aviso breve ───────── */
+#tesla-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 99999;
+  background: #0d1230;
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font: 600 15px Figtree, sans-serif;
+  box-shadow: 0 18px 40px -14px rgba(13, 18, 48, 0.7);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+  max-width: calc(100vw - 32px);
+}
+#tesla-toast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* ───────── ayuda lateral ───────── */
+#tesla-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  width: min(440px, 94vw);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: -24px 0 60px -20px rgba(13, 18, 48, 0.55);
+  font-family: Figtree, Arial, sans-serif;
+  color: #1b2040;
+  animation: teslaSlide 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes teslaSlide {
+  from { transform: translateX(40px); opacity: 0; }
+}
+#tesla-drawer header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 12px;
+  background: #0d1230;
+  color: #fff;
+}
+#tesla-drawer header div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#tesla-drawer header strong {
+  font: 800 19px "Bricolage Grotesque", Figtree, sans-serif;
+}
+#tesla-drawer header span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+#tesla-drawer .close {
+  border: 0;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 17px;
+  cursor: pointer;
+}
+#tesla-drawer .close:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+#tesla-drawer .pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(13, 18, 48, 0.1);
+  background: #f4f5fa;
+}
+#tesla-drawer .pick label {
+  font-weight: 700;
+  font-size: 14px;
+}
+#tesla-drawer .pick select {
+  flex: 1;
+  min-height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(13, 18, 48, 0.25);
+  padding: 0 10px;
+  font: 600 14.5px Figtree, sans-serif;
+  background: #fff;
+}
+.tesla-drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 18px 22px;
+}
+.tesla-drawer-body h3 {
+  margin: 0 0 4px;
+  font: 800 24px/1.1 "Bricolage Grotesque", Figtree, sans-serif;
+  color: #0d1230;
+  letter-spacing: -0.02em;
+}
+.tesla-drawer-body .meta {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  color: #646b8c;
+}
+.tesla-drawer-body .video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0d1230;
+}
+.tesla-drawer-body .video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.tesla-drawer-body .steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: paso;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tesla-drawer-body .steps li {
+  counter-increment: paso;
+  position: relative;
+  padding: 12px 14px 12px 52px;
+  border-radius: 14px;
+  background: #f4f5fa;
+  font-size: 15.5px;
+  line-height: 1.5;
+}
+.tesla-drawer-body .steps li::before {
+  content: counter(paso);
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffb627;
+  color: #0d1230;
+  display: grid;
+  place-items: center;
+  font: 800 13.5px Figtree, sans-serif;
+}
+.tesla-drawer-body .tip {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff4d9;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+#tesla-drawer footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 20px 20px;
+  border-top: 1px solid rgba(13, 18, 48, 0.1);
+}
+#tesla-drawer footer .tesla-btn {
+  width: 100%;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ───────── guía de la pantalla (globos) ───────── */
+#tesla-coach-ring {
+  position: fixed;
+  z-index: 100001;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow: 0 0 0 4px #ffb627, 0 0 0 9999px rgba(13, 18, 48, 0.58);
+  transition: left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+#tesla-coach {
+  position: fixed;
+  z-index: 100002;
+  background: #fff;
+  border-radius: 22px;
+  padding: 20px 20px 16px;
+  box-shadow: 0 28px 70px -18px rgba(13, 18, 48, 0.7);
+  font-family: Figtree, Arial, sans-serif;
+  color: #1b2040;
+  animation: teslaPop 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#tesla-coach .count {
+  font: 700 12.5px Figtree, sans-serif;
+  color: #646b8c;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+#tesla-coach h3 {
+  margin: 6px 0 8px;
+  font: 800 21px/1.1 "Bricolage Grotesque", Figtree, sans-serif;
+  color: #0d1230;
+  letter-spacing: -0.02em;
+}
+#tesla-coach p {
+  margin: 0 0 14px;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: #464c6b;
+}
+#tesla-coach .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#tesla-coach .grow {
+  flex: 1;
+}
+
+/* ───────── pantallas medianas ───────── */
+@media (max-width: 1000px) {
+  #tesla-practice {
+    bottom: 84px;
+  }
+  .tesla-item-title {
+    right: 100px;
+  }
+}

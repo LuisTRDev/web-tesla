@@ -6,14 +6,11 @@ import { getModule } from "@/data/modules";
 import { settings } from "@/data/settings";
 import { getNews } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
+import { moduleMetadata } from "@/lib/seo";
 
 const mod = getModule("noticias");
 
-export const metadata: Metadata = {
-  title: mod.label,
-  description: mod.seoDescription,
-  alternates: { canonical: mod.href },
-};
+export const metadata: Metadata = moduleMetadata(mod);
 
 export default async function NewsPage() {
   const posts = await getNews();

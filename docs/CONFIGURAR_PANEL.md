@@ -78,6 +78,20 @@ El panel incluye cuatro páginas propias en la barra superior. Los datos opciona
 - **Clic en la vista previa → campo** (`panel-ui.js`, función `onPreviewClick`): al hacer clic en la vista previa, el formulario se desplaza al campo, lo despliega si está dentro de una lista plegada y lo resalta. Orden de búsqueda: 1) un campo cuyo valor sea exactamente el texto pulsado; 2) la marca `data-field` del elemento o de un ancestro (fotos y textos compuestos), con la ruta `[etiqueta, nº de elemento, etiqueta…]` — se escribe en `previews.js` con el ayudante `F([...], props)`; 3) el campo cuyo valor, el más largo, esté contenido en el texto. Las etiquetas de la ruta deben coincidir con las de `config.yml` (se ignora el sufijo “(opcional)”). Al añadir una vista previa nueva, los textos se enlazan solos; solo las fotos necesitan la marca.
 - **Ayuda contextual**: el botón “? Ayuda” abre el tutorial de la sección actual (los ids de sección están en `ayuda.html`).
 
+## Orientación en los formularios (panel-guide.js)
+
+Capa sobre Decap que se apoya en sus nombres de clase (`ControlContainer`, `SortableListItem`, `StyledListItemTopBar`, `TopBarContainer`…); al actualizar `DECAP_VERSION`, repasa el panel. Si algo cambia, solo se pierde esta capa: los formularios siguen funcionando.
+
+- **Datos que la configuran (`secciones.js`):** `tabs` (pestañas de un formulario), `advanced` (etiquetas de campos que se ocultan hasta pulsar “Avanzado”), `limits` (largo recomendado → contador), `helpFor` (qué tutorial abre la ayuda en un formulario) y `examples` (el primero se muestra como texto de muestra dentro del campo, salvo que la ayuda ya diga “Ejemplo”). Las etiquetas se comparan sin “(opcional)” ni “(si quieres)”.
+- **Formularios sin pestañas** con 4 o más campos reciben el índice “Ir a:” (se genera solo).
+- **Listas:** el título de cada elemento es el valor de su primer campo de texto; al abrir una lista con 3 o más elementos solo el primero queda abierto y siempre hay uno solo abierto. Decap abre los elementos con retraso y pierde clics si se piden varios a la vez: por eso se espera a que las alturas se estabilicen (`whenSettled`) y se pliega de uno en uno (`closeMany`).
+- **Ayuda lateral y tutoriales:** `tutoriales.js` define `window.TESLA_TUTORIALS` (id, topics, title, time, steps en HTML, tip). Un tutorial nuevo aparece solo en Ayuda y en el selector del panel lateral; para que se sugiera en un formulario, agrega la colección en `topics` o la entrada en `helpFor`. Videos: `panel-config.js` → `videos { id: "https://www.youtube.com/embed/…" }` (guiones en `docs/VIDEOS_TUTORIALES.md`).
+- **Guía por pantalla (globos):** se muestra una vez por formulario (`localStorage tesla-coach-seen`) y se repite con “🧭 Guía”. Los pasos se arman con lo que haya en pantalla (primer campo, vista previa, pestañas o índice, listas, herramientas, barra de publicar).
+- **Modo práctica:** `sessionStorage tesla-practice`. Intercepta “Publicar ahora” de Decap y “Revisar y publicar”; salir recarga la página y descarta lo escrito.
+- **Preferencias del navegador:** `tesla-big` (letra grande), `tesla-adv` (mostrar avanzadas), `tesla-practiced` y `tesla-first-hidden` (Inicio → Tu primer día).
+- **Barra inferior:** siempre visible en un formulario (`panel-ux.js`): “Todo publicado” con “Ver mi web”, o “Tienes cambios sin publicar” con Descartar y Revisar y publicar.
+- **No incluido:** deshacer el borrado de un elemento de una lista (Decap no lo permite). Se mantiene la confirmación antes de quitar y la opción de salir sin publicar.
+
 ## El diseñador de afiches y QR
 
 - Está en **Campaña y QR** y lo dibuja `public/admin/qr-designer.js` con la librería MIT *qrcode-generator* (`public/admin/vendor/qrcode.js`), corrección de errores nivel **H** (tolera el escudo al centro).
@@ -91,6 +105,28 @@ El panel incluye cuatro páginas propias en la barra superior. Los datos opciona
 - **Verificado:** 70 combinaciones (8 formatos × 5 colores, centrado, foto de fondo ruidosa, QR al 70 % y 130 %, esquinas de otro color, estilo clásico, todo activado y textos muy largos) se leen con ZXing, tanto en la imagen final como reducida y desenfocada para imitar una foto de celular. Aun así, **hay que probarlo con celulares reales y pedir una prueba impresa**.
 - La forma del estilo “marca” está ajustada con esas pruebas (`TUNE` al inicio de `qr-designer.js`). Si se cambia (puntos más pequeños o ojos más redondos), repetir la prueba de lectura: los puntos demasiado separados hacen fallar algunos lectores.
 - El estilo “Clásico” (cuadrado, un solo color) queda como alternativa por si una imprenta o un fondo complican el de marca.
+
+## Personalización avanzada (colores, portada, menú, calendario, documentos, páginas nuevas)
+
+Todo es contenido en `content/` (sin base de datos) y se edita desde el panel.
+
+| Qué | Archivo de contenido | Lee | Notas |
+|---|---|---|---|
+| Colores y efectos | `content/apariencia.json` | `data/appearance.ts` | Tailwind lee los colores de variables CSS (`--c-noche`, `--c-filamento`…) que `app/layout.tsx` escribe en `<head>` con `cssVariables()`. Cinco paletas (`presets`); los colores sueltos derivan sus tonos con HSL. El código que necesita hex (SVG, estilos en línea) usa `palette`. |
+| Orden y visibilidad de la portada | `content/portada.json` | `data/home.ts` → `app/page.tsx` | Las secciones que falten en el JSON se añaden con su valor por defecto (`defaultShown`). |
+| Menú, botón destacado y pie | `content/navegacion.json` | `data/navigation.ts`, `data/modules.ts` | `hiddenModules` oculta secciones del menú y de la portada (la página sigue existiendo); la numeración y el "siguiente" saltan las ocultas. |
+| Avisos (varios) | `content/banner.json` | `data/banner.ts` → `AnnouncementBar` | Color, fechas y páginas donde se muestra; si coinciden varios, rotan cada 7 s. Se filtran por fecha otra vez en el navegador. |
+| Calendario | `content/eventos/*.json` | `data/events.ts`, `app/calendario/` | Un archivo por evento. `/calendario/<slug>/ics` genera el .ics al construir. Los eventos con fecha pasada salen solos de "Próximos" cuando la web se reconstruye (el flujo diario). |
+| Documentos | `content/documentos.json` + `public/documentos/` | `data/documents.ts`, `app/documentos/` | El tamaño se lee del archivo al construir; si el archivo no existe, el documento no se muestra e Inicio avisa. |
+| Páginas nuevas | `content/paginas/*.json` | `data/pages-extra.ts`, `app/p/[slug]/` | `published: false` = borrador (no existe, ni en el sitemap). Texto: `## ` subtítulo, `- ` lista. |
+| WhatsApp por página | `content/settings.json` → `contact.whatsappButton` | `data/settings.ts` → `WhatsAppFloat` | Gana la ruta más específica; `{año}` se reemplaza por el año de admisión. |
+| Título e imagen para Google/redes | `content/modules.json` (`seoTitle`, `shareImage`) | `lib/seo.ts` (`moduleMetadata`) | Las páginas nuevas usan `seoDescription` y `shareImage`. |
+
+- **Salud del sitio:** `lib/health.ts` revisa enlaces internos rotos (menú, pie, avisos, eventos, botones), documentos sin archivo y fotos de más de 2 MB; los muestra `lib/pending.ts` en **Inicio**.
+- **Páginas fuera del menú** (`/calendario`, `/documentos`, `/p/*`): se crean con `pageModule()` (`data/modules.ts`) y el tema de la barra y de la cortina sale de `themeForPath()`. Para que aparezcan en el menú, la clienta las añade en **Menú y pie de página → Enlaces extra**.
+- **Añadir una paleta:** agrega una entrada en `presets` (`data/appearance.ts`), su etiqueta en `presetLabels`, la opción en `config.yml` (`apariencia` → `Paleta`) y su muestra en `previews.js` (`PALETTES`). El texto sobre `filamento` es `noche`: el acento debe ser claro.
+- **Añadir una sección a la portada:** añade su id en `HOME_SECTIONS` y `defaultShown` (`data/home.ts`), su componente en `app/page.tsx` y la opción en `config.yml` (`portada`).
+- **No incluido a propósito:** bandeja de solicitudes y estadísticas dentro del panel (necesitan una base de datos o la API de Analytics). Las visitas se agendan por WhatsApp y se miden en Google Analytics.
 
 ## Medir la campaña (volantes, anuncios y WhatsApp)
 
@@ -129,6 +165,8 @@ carpeta, sin commit (haz el commit tú). Es la forma de probar campos nuevos o c
 | `public/admin/preview.css` | Estilos de las vistas previas. **Se genera solo** (`npm run build:admin-css`); no editar |
 | `public/admin/es-fixes.js` | Traduce los pocos textos que Decap deja en inglés |
 | `public/admin/panel-ui.js` | Menú superior propio, widget de descripción para Google, ayuda contextual y vista móvil |
+| `public/admin/panel-guide.js`, `guide.css` | Orientación: migas y botón Volver, índice de saltos, listas tipo acordeón con título, tarjeta de lista vacía, contadores, opciones avanzadas, ayuda lateral, guía por pantalla, modo práctica, Ctrl + S y letra grande |
+| `public/admin/tutoriales.js` | Tutoriales (los usan la página Ayuda y la ayuda lateral de cada formulario) |
 | `public/admin/panel-config.js` | Ajustes opcionales de las herramientas (ver arriba) |
 | `public/admin/inicio.html`, `campana.html`, `resultados.html`, `ayuda.html` | Páginas propias del panel |
 | `public/admin/qr-designer.js`, `vendor/qrcode.js` | Generador del QR con la identidad del colegio |
@@ -137,7 +175,8 @@ carpeta, sin commit (haz el commit tú). Es la forma de probar campos nuevos o c
 | `data/banner.ts`, `components/layout/AnnouncementBar.tsx` | Aviso destacado |
 | `app/admin/route.ts` | Página `/admin` que carga Decap (versión fija; `noindex`) |
 | `components/ui/SecretAdminTrigger.tsx` | 5 clics en el logo del pie de página abren `/admin` |
-| `content/*.json`, `content/noticias/*.json` | El contenido que edita el panel |
+| `content/*.json`, `content/noticias/*.json`, `content/eventos/*.json`, `content/paginas/*.json` | El contenido que edita el panel |
+| `lib/health.ts` | Revisión de enlaces rotos, documentos sin archivo y fotos pesadas |
 | `data/*.ts`, `lib/content.ts` | Leen y validan ese contenido (valores de respaldo) |
 
 ## Cómo añadir un campo nuevo

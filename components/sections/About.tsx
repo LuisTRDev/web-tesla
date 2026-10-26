@@ -5,6 +5,7 @@ import SchoolImage from "@/components/ui/SchoolImage";
 import WaveLine from "@/components/ui/WaveLine";
 import { aboutText } from "@/data/philosophy";
 import { settings } from "@/data/settings";
+import { palette } from "@/data/appearance";
 
 /** NOSOTROS: composición editorial con titular, texto, dos fotografías, cita y cifras. */
 export default function About() {
@@ -18,7 +19,7 @@ export default function About() {
                 {aboutText.title}
               </h2>
             </Reveal>
-            <WaveLine className="mt-8 max-w-sm" color="#E89B00" />
+            <WaveLine className="mt-8 max-w-sm" color={palette.filamento600} />
           </div>
           <div className="lg:col-span-5 lg:pt-6">
             <Reveal delay={0.1}>

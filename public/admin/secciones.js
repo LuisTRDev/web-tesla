@@ -22,7 +22,7 @@ window.TESLA = (function () {
       title: "Títulos, portada y aviso",
       desc: "Los títulos grandes de cada página, el aviso sobre el menú y los textos de la página de campaña.",
       cards: [
-        { file: "banner", icon: "🔔", title: "Aviso sobre el menú", desc: "La barra amarilla de arriba: “Matrícula abierta hasta…”. Se puede programar.", chips: ["Mensaje", "Botón", "Fechas"], web: "/" },
+        { file: "banner", icon: "🔔", title: "Avisos sobre el menú", desc: "La barra de arriba: “Matrícula abierta hasta…”. Puedes tener varios, con color, fechas y páginas.", chips: ["Mensaje", "Botón", "Color", "Fechas"], web: "/" },
         { file: "pages", icon: "🚀", title: "Portada y página de campaña", desc: "El texto de admisión de la portada y toda la página a la que llevan los anuncios.", chips: ["Razones para elegirnos", "Pasos", "Agenda tu visita"], web: "/admision-2027" },
         { file: "modules", icon: "🔤", title: "Títulos de cada página", desc: "El título grande, la introducción y la descripción para Google de cada sección.", chips: ["Título", "Introducción", "Google"], web: "/nosotros" },
       ],
@@ -67,6 +67,26 @@ window.TESLA = (function () {
       ],
     },
     noticias: { icon: "📰", title: "Noticias", desc: "Comunicados, logros y novedades.", cards: [] },
+    calendario: { icon: "📅", title: "Calendario de eventos", desc: "Reuniones, actividades y fechas importantes. Las familias pueden agregarlas a su calendario.", cards: [] },
+    documentos: {
+      icon: "📎",
+      title: "Documentos para descargar",
+      desc: "Reglamento, lista de útiles, ficha de inscripción… Se descargan desde la web.",
+      cards: [
+        { file: "documentos", icon: "📎", title: "Documentos", desc: "Sube PDF, Word o Excel, ponles nombre y elige su categoría.", chips: ["Archivo", "Categoría", "Descripción"], web: "/documentos" },
+      ],
+    },
+    extra: { icon: "📄", title: "Páginas nuevas", desc: "Crea páginas propias (reglamento, convivencia, convenios…) y añádelas al menú.", cards: [] },
+    personalizar: {
+      icon: "🎨",
+      title: "Personalizar la web",
+      desc: "El orden de la portada, el menú y el pie de página, los colores y los efectos.",
+      cards: [
+        { file: "portada", icon: "🧩", title: "Orden de la portada", desc: "Elige qué secciones se ven en la portada y en qué orden.", chips: ["Mostrar u ocultar", "Orden"], web: "/" },
+        { file: "navegacion", icon: "🧭", title: "Menú y pie de página", desc: "Oculta secciones del menú, añade enlaces, cambia el botón destacado y los enlaces del pie.", chips: ["Menú", "Botón", "Pie de página"], web: "/" },
+        { file: "apariencia", icon: "🎨", title: "Colores y efectos", desc: "Elige una paleta de colores y apaga los efectos que no quieras.", chips: ["Paleta", "Colores", "Efectos"], web: "/" },
+      ],
+    },
   };
 
   /* ───────── páginas de la web y qué se puede cambiar en cada una (mapa de la web) ───────── */
@@ -104,6 +124,25 @@ window.TESLA = (function () {
       { label: "Escribir una noticia nueva", to: "noticias/new" },
       { label: "Ver y editar las noticias", to: "noticias" },
     ] },
+    { id: "calendario", icon: "📅", title: "Calendario", url: "/calendario", edits: [
+      { label: "Agregar un evento", to: "calendario/new" },
+      { label: "Ver y editar los eventos", to: "calendario" },
+      { label: "Mostrar “Próximos eventos” en la portada", to: "personalizar/entries/portada" },
+    ] },
+    { id: "documentos", icon: "📎", title: "Documentos", url: "/documentos", edits: [
+      { label: "Subir o cambiar documentos", to: "documentos/entries/documentos" },
+    ] },
+    { id: "extra", icon: "📄", title: "Páginas nuevas", url: "/", edits: [
+      { label: "Crear una página nueva", to: "extra/new" },
+      { label: "Ver y editar mis páginas", to: "extra" },
+      { label: "Añadirla al menú", to: "personalizar/entries/navegacion", field: ["Enlaces extra en el menú"] },
+    ] },
+    { id: "personalizar", icon: "🎨", title: "Personalizar la web", url: "/", edits: [
+      { label: "Orden de la portada", to: "personalizar/entries/portada" },
+      { label: "Menú y pie de página", to: "personalizar/entries/navegacion" },
+      { label: "Colores y efectos", to: "personalizar/entries/apariencia" },
+      { label: "Botón flotante de WhatsApp", to: "colegio/entries/settings", field: ["Contacto", "Botón flotante de WhatsApp"] },
+    ] },
     { id: "admision", icon: "📋", title: "Admisión", url: "/admision", edits: [
       { label: "Pasos, requisitos y fechas", to: "admision/entries/admission" },
       { label: "Preguntas frecuentes", to: "admision/entries/faq" },
@@ -138,7 +177,15 @@ window.TESLA = (function () {
     find("Dirección de la web (dominio)", ["dominio", "web", "pagina web", "página web", "link", "url"], "colegio/entries/settings", ["Dirección de la web"]),
     find("Descripción que sale en Google", ["google", "buscador", "descripcion", "descripción", "seo"], "colegio/entries/settings", ["Descripción para Google"]),
     find("Etiquetas “Por confirmar”", ["etiquetas", "por confirmar", "confirmar", "borrador"], "colegio/entries/settings", ["Mostrar etiquetas “Por confirmar”"]),
-    find("Aviso sobre el menú", ["aviso", "barra", "anuncio", "banner", "alerta"], "paginas/entries/banner"),
+    find("Avisos sobre el menú", ["aviso", "barra", "anuncio", "banner", "alerta"], "paginas/entries/banner"),
+    find("Agregar un evento al calendario", ["evento", "calendario", "reunion", "reunión", "agenda", "fecha importante", "feriado"], "calendario/new"),
+    find("Subir un documento para descargar", ["documento", "pdf", "reglamento", "lista de utiles", "lista de útiles", "ficha", "formato", "descargar"], "documentos/entries/documentos"),
+    find("Crear una página nueva", ["pagina nueva", "página nueva", "crear pagina", "crear página", "convivencia", "convenios"], "extra/new"),
+    find("Orden de la portada", ["orden", "ordenar", "ocultar seccion", "ocultar sección", "secciones de la portada"], "personalizar/entries/portada"),
+    find("Menú y pie de página", ["menu", "menú", "pie de pagina", "pie de página", "enlaces", "libro de reclamaciones", "boton admisiones", "botón admisiones"], "personalizar/entries/navegacion"),
+    find("Colores y efectos", ["colores", "color", "paleta", "efectos", "chispas", "rayos", "animaciones", "apariencia"], "personalizar/entries/apariencia"),
+    find("Mensaje del botón de WhatsApp", ["boton whatsapp", "botón whatsapp", "mensaje whatsapp", "mensaje de whatsapp", "boton flotante", "botón flotante"], "colegio/entries/settings", ["Contacto", "Botón flotante de WhatsApp"]),
+    find("Título y foto para Google y redes de una página", ["titulo google", "título google", "compartir", "imagen al compartir", "vista previa whatsapp"], "paginas/entries/modules"),
     find("Títulos de las páginas", ["titulo", "título", "menu", "menú", "introduccion", "introducción"], "paginas/entries/modules"),
     find("Página de campaña (admisión 2027)", ["campaña", "campana", "landing", "razones", "visita", "agenda"], "paginas/entries/pages", ["Página de campaña (/admision-2027)"]),
     find("Quiénes somos y valores", ["quienes somos", "quiénes somos", "valores", "historia", "mision", "misión", "vision", "visión", "nosotros"], "nosotros/entries/philosophy"),
@@ -181,6 +228,36 @@ window.TESLA = (function () {
     ],
   };
 
+  /* pestañas de los formularios nuevos */
+  tabs["personalizar/navegacion"] = [
+    { label: "Menú", icon: "🧭", fields: ["Secciones que se ocultan del menú", "Enlaces extra en el menú", "Botón destacado del menú"] },
+    { label: "Pie de página", icon: "🔻", fields: ["Pie de página"] },
+  ];
+  tabs["personalizar/apariencia"] = [
+    { label: "Colores", icon: "🎨", fields: ["Colores"] },
+    { label: "Efectos", icon: "✨", fields: ["Efectos"] },
+  ];
+
+  /* ───────── opciones avanzadas: se ocultan hasta que se pide verlas ───────── */
+  var advanced = [
+    "descripción para google", "título para google", "imagen al compartir esta página", "imagen al compartir en redes",
+    "color de fondo oscuro", "color de acento", "color rojo", "color azul marino", "color de líneas y detalles fríos",
+    "mensajes según la página", "búsqueda para el mapa", "concepto", "descripción para google",
+  ];
+
+  /* ───────── largo recomendado de algunos textos (se muestra un contador) ───────── */
+  var limits = {
+    "mensaje": 70, "texto del botón": 28, "título grande de la página": 70, "frase principal": 80, "nombre corto": 30,
+    "resumen en la portada": 90, "resumen (1 o 2 líneas)": 200, "título": 90, "nombre del evento": 80, "nombre del documento": 70,
+    "frase del pie de página": 60, "rótulo superior": 40, "nombre en el menú": 24,
+  };
+
+  /* ───────── qué tutorial abre la ayuda en cada formulario (si no es el de su sección) ───────── */
+  var helpFor = {
+    "paginas/banner": "aviso", "personalizar/portada": "personalizar", "personalizar/navegacion": "personalizar", "personalizar/apariencia": "personalizar",
+    "documentos/documentos": "documentos", "admision/admission": "admision", "admision/faq": "admision",
+  };
+
   /* ───────── ejemplos de buen texto (se insertan con un clic) ───────── */
   var examples = {
     "Frase principal": ["Donde la curiosidad se convierte en futuro.", "Formamos personas curiosas, seguras y listas para el futuro.", "Aprender con alegría, crecer con valores."],
@@ -202,15 +279,16 @@ window.TESLA = (function () {
     "nosotros/philosophy": "/nosotros", "nosotros/team": "/nosotros", "nosotros/achievements": "/nosotros", "nosotros/testimonials": "/nosotros",
     "propuesta/pillars": "/propuesta", "propuesta/levels": "/niveles", "propuesta/activities": "/actividades", "propuesta/experience": "/nosotros",
     "admision/admission": "/admision", "admision/faq": "/admision", "galeria/gallery": "/galeria", noticias: "/noticias",
+    calendario: "/calendario", "documentos/documentos": "/documentos", "personalizar/portada": "/", "personalizar/navegacion": "/", "personalizar/apariencia": "/",
   };
 
   /* ───────── nombres amigables para el historial de cambios ───────── */
   var fileNames = {
-    "content/settings.json": "Datos del colegio", "content/banner.json": "Aviso sobre el menú", "content/pages.json": "Portada y campaña", "content/modules.json": "Títulos de las páginas",
+    "content/settings.json": "Datos del colegio", "content/banner.json": "Avisos sobre el menú", "content/documentos.json": "Documentos", "content/portada.json": "Orden de la portada", "content/navegacion.json": "Menú y pie de página", "content/apariencia.json": "Colores y efectos", "content/pages.json": "Portada y campaña", "content/modules.json": "Títulos de las páginas",
     "content/philosophy.json": "Quiénes somos", "content/team.json": "Equipo", "content/achievements.json": "Logros", "content/testimonials.json": "Testimonios",
     "content/pillars.json": "Pilares", "content/levels.json": "Niveles", "content/activities.json": "Actividades", "content/experience.json": "Así se vive",
     "content/admission.json": "Admisión", "content/faq.json": "Preguntas frecuentes", "content/gallery.json": "Galería",
   };
 
-  return { sections: sections, pages: pages, search: search, tabs: tabs, examples: examples, entryWeb: entryWeb, fileNames: fileNames, base: E };
+  return { sections: sections, pages: pages, search: search, tabs: tabs, examples: examples, entryWeb: entryWeb, fileNames: fileNames, advanced: advanced, limits: limits, helpFor: helpFor, base: E };
 })();

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { palette } from "@/data/appearance";
 
 /**
  * Ilustraciones de línea (SVG) que ocupan el lugar de una fotografía mientras no llega la real.
@@ -183,11 +184,11 @@ export default function Illustration({ name, tone = "dark", className }: { name:
       className={cn(
         "absolute inset-0 flex items-center justify-center overflow-hidden p-6 md:p-8",
         tone === "dark"
-          ? "bg-[radial-gradient(circle_at_50%_45%,#2A3373_0%,#141A42_55%,#0D1230_100%)] text-arco"
-          : "bg-[radial-gradient(circle_at_50%_45%,#FFFFFF_0%,#E2E5F0_70%,#D3D7E6_100%)] text-noche",
+          ? "bg-[radial-gradient(circle_at_50%_45%,rgb(var(--c-noche-600,42_51_115))_0%,rgb(var(--c-noche-800,20_26_66))_55%,rgb(var(--c-noche,13_18_48))_100%)] text-arco"
+          : "bg-[radial-gradient(circle_at_50%_45%,#FFFFFF_0%,rgb(var(--c-tiza-200,226_229_240))_70%,rgb(var(--c-tiza-300,211_215_230))_100%)] text-noche",
         className,
       )}
-      style={{ "--accent": tone === "dark" ? "#FFB627" : "#E89B00" } as CSSProperties}
+      style={{ "--accent": tone === "dark" ? palette.filamento : palette.filamento600 } as CSSProperties}
     >
       {/* Retícula y anillos de fondo */}
       <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full opacity-[0.16]" fill="none" stroke="currentColor">

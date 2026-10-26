@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { settings } from "@/data/settings";
+import { palette } from "@/data/appearance";
 
 export const runtime = "edge";
 export const alt = settings.name;
@@ -21,7 +22,7 @@ export default async function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#0D1230",
+          background: palette.noche,
           color: "#FFFFFF",
         }}
       >
@@ -38,7 +39,7 @@ export default async function OpengraphImage() {
             <span>NIKOLA</span>
             <span>TESLA</span>
           </div>
-          <div style={{ display: "flex", width: 220, height: 6, background: "#FFB627", marginTop: 28, borderRadius: 3 }} />
+          <div style={{ display: "flex", width: 220, height: 6, background: palette.filamento, marginTop: 28, borderRadius: 3 }} />
           <div style={{ display: "flex", fontSize: 34, marginTop: 28, opacity: 0.9 }}>{settings.tagline}</div>
         </div>
         <div style={{ display: "flex", fontSize: 28, opacity: 0.7 }}>

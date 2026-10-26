@@ -46,3 +46,20 @@ export function webUrl(value: unknown, fallback: string): string {
     return fallback;
   }
 }
+
+/** Valor de una lista cerrada (un "select" del panel); si no coincide, usa el respaldo. */
+export const oneOf = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
+  typeof value === "string" && (allowed as readonly string[]).includes(value) ? (value as T) : fallback;
+
+/** Color #RRGGBB válido (en mayúsculas) o null. */
+export const hexColor = (value: unknown): string | null => (typeof value === "string" && /^#[0-9a-fA-F]{6}$/.test(value.trim()) ? value.trim().toUpperCase() : null);
+
+/** Enlace interno (/pagina) o externo (https://…). Cualquier otra cosa se descarta para no generar enlaces rotos. */
+export const link = (value: unknown): string | null => {
+  const raw = typeof value === "string" ? value.trim() : "";
+  if (!raw) return null;
+  if (/^(https?:\/\/|mailto:|tel:)/i.test(raw)) return raw;
+  if (raw.startsWith("/")) return raw;
+  if (raw.startsWith("#")) return raw;
+  return `https://${raw}`;
+};

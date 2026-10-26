@@ -20,13 +20,17 @@ a[class*="SidebarNavLink"]::before {
   font-size: 22px;
   line-height: 1;
 }
-a[href="#/collections/colegio"]::before { content: "🏫"; }
-a[href="#/collections/paginas"]::before { content: "📝"; }
-a[href="#/collections/nosotros"]::before { content: "👥"; }
-a[href="#/collections/propuesta"]::before { content: "🎓"; }
-a[href="#/collections/admision"]::before { content: "📋"; }
-a[href="#/collections/galeria"]::before { content: "🖼️"; }
-a[href="#/collections/noticias"]::before { content: "📰"; }
+a[class*="SidebarNavLink"][href="#/collections/colegio"]::before { content: "🏫"; }
+a[class*="SidebarNavLink"][href="#/collections/paginas"]::before { content: "📝"; }
+a[class*="SidebarNavLink"][href="#/collections/nosotros"]::before { content: "👥"; }
+a[class*="SidebarNavLink"][href="#/collections/propuesta"]::before { content: "🎓"; }
+a[class*="SidebarNavLink"][href="#/collections/admision"]::before { content: "📋"; }
+a[class*="SidebarNavLink"][href="#/collections/galeria"]::before { content: "🖼️"; }
+a[class*="SidebarNavLink"][href="#/collections/noticias"]::before { content: "📰"; }
+a[class*="SidebarNavLink"][href="#/collections/calendario"]::before { content: "📅"; }
+a[class*="SidebarNavLink"][href="#/collections/documentos"]::before { content: "📎"; }
+a[class*="SidebarNavLink"][href="#/collections/extra"]::before { content: "📄"; }
+a[class*="SidebarNavLink"][href="#/collections/personalizar"]::before { content: "🎨"; }
 /* "Añadir rápido" confunde: se sustituye por "Nueva noticia" y los atajos de Inicio */
 [class*="AppHeaderQuickNewButton"] {
   display: none !important;
@@ -71,12 +75,13 @@ textarea {
   border-radius: 18px !important;
   border: 1px solid rgba(13, 18, 48, 0.1) !important;
   box-shadow: 0 10px 24px -22px rgba(13, 18, 48, 0.6);
-  overflow: hidden;
+  overflow: visible !important;
   margin-bottom: 14px !important;
 }
 [class*="StyledListItemTopBar"] {
   background: #f4f5fa !important;
   min-height: 56px;
+  border-radius: 17px 17px 0 0 !important;
 }
 [class*="NestedObjectLabel"] {
   font-size: 17px !important;

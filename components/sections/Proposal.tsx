@@ -7,6 +7,7 @@ import Reveal from "@/components/ui/Reveal";
 import SchoolImage from "@/components/ui/SchoolImage";
 import { pillars } from "@/data/pillars";
 import { cn } from "@/lib/utils";
+import { palette } from "@/data/appearance";
 
 /**
  * PROPUESTA EDUCATIVA: índice interactivo en lugar de tarjetas.
@@ -27,7 +28,7 @@ export default function Proposal({ showIntro = true }: { showIntro?: boolean }) 
         className="pointer-events-none absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
-            "linear-gradient(to right, #A9ADFF 1px, transparent 1px), linear-gradient(to bottom, #A9ADFF 1px, transparent 1px)",
+            `linear-gradient(to right, ${palette.arco} 1px, transparent 1px), linear-gradient(to bottom, ${palette.arco} 1px, transparent 1px)`,
           backgroundSize: "96px 96px",
         }}
       />

@@ -1,0 +1,13 @@
+{
+  "colors": {
+    "preset": "tesla"
+  },
+  "effects": {
+    "sparks": true,
+    "fieldAnimation": true,
+    "lightning": true,
+    "scrollProgress": true,
+    "pageTransitions": true,
+    "whatsappFloat": true
+  }
+}

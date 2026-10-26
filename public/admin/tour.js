@@ -11,7 +11,7 @@
     { icon: "🗂️", title: "Tus secciones", text: "A la izquierda está la lista: Datos del colegio, Nosotros, Propuesta, Admisión, Galería, Noticias… Elige una y verás sus campos para editar." },
     { icon: "👀", title: "Escribe y mira cómo queda", text: "A la derecha ves una vista previa que se actualiza mientras escribes. <strong>Haz clic en cualquier texto o foto de la vista previa</strong> y el formulario te lleva a su campo. Con “📱 Ver en celular” compruebas cómo se verá en un teléfono." },
     { icon: "🚀", title: "Publicar", text: "Cuando termines, pulsa Publicar → “Publicar ahora”. Los cambios aparecen en la web en 1 o 2 minutos. Mientras no publiques, nada cambia en la web." },
-    { icon: "🎓", title: "Siempre tienes ayuda", text: "El botón “? Ayuda” abajo a la derecha abre el tutorial de la sección donde estás. En “Inicio” ves qué falta para la campaña, y en “Campaña y QR” creas el QR de los volantes." },
+    { icon: "🎓", title: "Siempre tienes ayuda", text: "Dentro de cualquier formulario, <strong>“❓ Ayuda”</strong> abre el tutorial de esa pantalla a un lado, sin que pierdas lo que escribes, y <strong>“🧭 Guía”</strong> te explica sus partes. Si quieres probar sin miedo, usa el <strong>modo práctica</strong> (en “⋯”): nada se publica. En “Inicio” ves qué falta para la campaña." },
   ];
 
   var root = null;

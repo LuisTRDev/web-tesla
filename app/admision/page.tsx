@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Admission from "@/components/sections/Admission";
+import Documents from "@/components/sections/Documents";
 import Faq from "@/components/sections/Faq";
 import DraftBadge from "@/components/ui/DraftBadge";
 import ModuleHeader from "@/components/ui/ModuleHeader";
@@ -7,18 +8,15 @@ import NextModule from "@/components/ui/NextModule";
 import { admissionInfo, admissionIntro } from "@/data/admission";
 import { getModule } from "@/data/modules";
 import { settings } from "@/data/settings";
-import { getFaq } from "@/lib/data";
+import { getDocuments, getFaq } from "@/lib/data";
+import { moduleMetadata } from "@/lib/seo";
 
 const mod = getModule("admision");
 
-export const metadata: Metadata = {
-  title: `Admisión ${settings.admissionYear}`,
-  description: mod.seoDescription,
-  alternates: { canonical: mod.href },
-};
+export const metadata: Metadata = moduleMetadata(mod, `Admisión ${settings.admissionYear}`);
 
 export default async function AdmissionPage() {
-  const faq = await getFaq();
+  const [faq, documents] = await Promise.all([getFaq(), getDocuments()]);
   const { resolution, modularCode } = settings.legal;
 
   return (
@@ -45,6 +43,7 @@ export default async function AdmissionPage() {
       </section>
 
       <Faq items={faq} />
+      <Documents items={documents.filter((item) => item.category === "Admisión" || item.featured)} title="Documentos de admisión." tone="dark" />
 
       <NextModule current={mod.id} />
     </>

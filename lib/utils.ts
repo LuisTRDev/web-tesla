@@ -40,6 +40,25 @@ export function toEmbedUrl(url: string): string | null {
   return null;
 }
 
+/** "14 al 16 nov" / "14 nov" para un evento que puede durar varios días. */
+export function formatEventDates(start: string, end?: string | null): string {
+  if (!end) return formatShortDate(start);
+  const a = parseISODate(start);
+  const b = parseISODate(end);
+  if (a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear()) {
+    const month = new Intl.DateTimeFormat("es-PE", { month: "short" }).format(b).replace(".", "");
+    return `${a.getDate()} al ${b.getDate()} ${month}`;
+  }
+  return `${formatShortDate(start)} al ${formatShortDate(end)}`;
+}
+
+/** Fecha de un día sumando n días (AAAA-MM-DD). */
+export function addDays(iso: string, days: number): string {
+  const date = parseISODate(iso);
+  date.setDate(date.getDate() + days);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
 /** Fecha de hoy en Lima (AAAA-MM-DD). Sirve para ocultar noticias y eventos con fecha futura. */
 export function todayISO(): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Lima" }).format(new Date());

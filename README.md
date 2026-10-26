@@ -47,6 +47,7 @@ Cada cambio publicado se guarda como un commit en este repositorio y Netlify act
 
 - **Cómo entrar:** en el pie de página, 5 clics seguidos sobre el logo (no hay botón visible). Pide iniciar sesión con GitHub.
 - **Vista previa:** mientras se edita, el panel muestra cómo quedará cada sección (`public/admin/previews.js`).
+- **Orientación:** migas y botón Volver, índice de saltos, listas tipo acordeón, ayuda lateral por pantalla, guía con globos y modo práctica (`public/admin/panel-guide.js`, `guide.css`, `tutoriales.js`).
 - **Guía para la clienta:** [docs/GUIA_PANEL.md](docs/GUIA_PANEL.md)
 - **Configuración técnica (una sola vez):** [docs/CONFIGURAR_PANEL.md](docs/CONFIGURAR_PANEL.md)
 - **Herramientas incluidas:** Inicio (saludo, buscador “¿qué quieres cambiar?”, acciones, lista de pendientes por prioridad, mapa de la web y últimos cambios), secciones con tarjetas, formularios con pestañas, resumen y confirmación al publicar, Campaña y QR (diseñador de afiches, volantes y stickers con QR de la identidad del colegio: 9 formatos, plantillas de estilo, forma y color de puntos y esquinas, escudo central, etiqueta, contenido variable —web, WhatsApp, llamada, mapa, contacto—, semáforo y prueba de lectura con cámara, series numeradas, animación, PDF para la imprenta y diseños guardados; más generador de enlaces), Resultados, Ayuda con tutoriales, recorrido de bienvenida, optimizador de fotos y aviso destacado sobre el menú.
@@ -69,10 +70,14 @@ ponen valores de respaldo; los componentes no cambian al editar contenido.
 | Preguntas frecuentes | `content/faq.json` | Admisión y preguntas frecuentes |
 | Galería (eventos, fotos, videos) | `content/gallery.json` | Galería |
 | Noticias (un archivo por noticia; con fecha futura se publican solas ese día) | `content/noticias/*.json` | Noticias |
-| Aviso destacado sobre el menú (con fechas) | `content/banner.json` | Páginas y textos |
+| Avisos destacados sobre el menú (varios, con color, fechas y páginas) | `content/banner.json` | Páginas y textos |
+| Calendario de eventos (un archivo por evento) | `content/eventos/*.json` | Calendario de eventos |
+| Documentos para descargar (archivos en `public/documentos/`) | `content/documentos.json` | Documentos para descargar |
+| Páginas nuevas (`/p/nombre`) | `content/paginas/*.json` | Páginas nuevas |
+| Orden de la portada, menú y pie de página, colores y efectos | `content/portada.json`, `navegacion.json`, `apariencia.json` | Personalizar la web |
 
 Lo que sigue en el código (lo cambia el desarrollador): colores y motivos de cada módulo (`data/modules.ts`),
-paleta y tipografías (`tailwind.config.ts`, `app/layout.tsx`), logo (`components/ui/Logo.tsx`),
+tipografías (`app/layout.tsx`; los colores salen de `data/appearance.ts`), logo (`components/ui/Logo.tsx`),
 ilustraciones (`components/ui/Illustration.tsx`), campos y vistas previas del panel (`public/admin/`).
 Google Analytics: variable `NEXT_PUBLIC_GA_ID` (ver `.env.example`).
 

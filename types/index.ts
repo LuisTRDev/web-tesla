@@ -30,6 +30,14 @@ export interface SiteSettings {
     whatsapp: string[];
     /** Horario de atención, p. ej. "Lunes a viernes, 7:30 a. m. – 3:00 p. m.". null = pendiente. */
     hours: string | null;
+    /** Botón flotante de WhatsApp: texto, lado de la pantalla y mensajes según la página. */
+    whatsappButton: {
+      label: string;
+      side: "derecha" | "izquierda";
+      defaultMessage: string;
+      /** Mensaje por página; gana el que tenga la ruta más específica. */
+      messages: Array<{ path: string; message: string }>;
+    };
   };
   /** Datos oficiales que respaldan a la institución. null = pendiente. */
   legal: {
@@ -201,4 +209,56 @@ export interface Achievement {
   title: string;
   description: string;
   isPlaceholder?: boolean;
+}
+
+export interface SchoolEvent {
+  slug: string;
+  title: string;
+  /** Fecha de inicio (AAAA-MM-DD). */
+  date: string;
+  /** Fecha de fin, si dura varios días. */
+  endDate: string | null;
+  /** Hora en texto libre, por ejemplo "8:00 a. m.". */
+  time: string | null;
+  place: string | null;
+  category: string;
+  description: string | null;
+  image: string | null;
+  link: string | null;
+  linkText: string | null;
+  /** true = evento de ejemplo para mostrar el diseño. */
+  isPlaceholder?: boolean;
+}
+
+export interface SchoolDocument {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string;
+  /** Ruta del archivo (/documentos/…) o enlace externo. */
+  file: string;
+  date: string | null;
+  extension: string;
+  sizeLabel: string | null;
+  /** false = el archivo no existe en public/ (se avisa en el panel). */
+  fileExists: boolean;
+  featured: boolean;
+}
+
+export interface ExtraPage {
+  slug: string;
+  title: string;
+  kicker: string | null;
+  intro: string | null;
+  /** Párrafos. Una línea que empieza con "## " es un subtítulo y con "- " un punto de lista. */
+  body: string[];
+  image: string | null;
+  imageCaption: string | null;
+  buttonText: string | null;
+  buttonUrl: string | null;
+  documents: Array<{ title: string; file: string }>;
+  seoDescription: string;
+  shareImage: string | null;
+  published: boolean;
+  updated: string | null;
 }
