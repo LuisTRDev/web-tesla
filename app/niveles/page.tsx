@@ -9,7 +9,7 @@ const mod = getModule("niveles");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: "Niveles Primaria y Secundaria en la Institución Educativa Privada “Nikola Tesla”, Nuevo Imperial, Cañete.",
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

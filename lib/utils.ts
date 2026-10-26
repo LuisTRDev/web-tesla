@@ -39,3 +39,8 @@ export function toEmbedUrl(url: string): string | null {
   if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
   return null;
 }
+
+/** Fecha de hoy en Lima (AAAA-MM-DD). Sirve para ocultar noticias y eventos con fecha futura. */
+export function todayISO(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Lima" }).format(new Date());
+}

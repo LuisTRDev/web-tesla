@@ -1,0 +1,44 @@
+{
+  "headline": "¿Listos para comenzar esta historia?",
+  "intro": "Queremos conocer a tu familia. Escríbenos y te contamos, paso a paso, cómo ser parte de Nikola Tesla.",
+  "steps": [
+    {
+      "id": "informacion",
+      "title": "Solicita información",
+      "description": "[PASO POR CONFIRMAR] Escríbenos por WhatsApp o visítanos para resolver tus dudas.",
+      "confirmed": false
+    },
+    {
+      "id": "visita",
+      "title": "Conoce el colegio",
+      "description": "[PASO POR CONFIRMAR] Coordinamos una visita para que conozcas nuestros espacios.",
+      "confirmed": false
+    },
+    {
+      "id": "documentos",
+      "title": "Presenta los documentos",
+      "description": "[PASO POR CONFIRMAR] Lista de requisitos y documentos solicitados.",
+      "confirmed": false
+    },
+    {
+      "id": "matricula",
+      "title": "Matrícula",
+      "description": "[PASO POR CONFIRMAR] Fechas y condiciones de matrícula.",
+      "confirmed": false
+    }
+  ],
+  "info": [
+    {
+      "title": "Requisitos",
+      "text": "[REQUISITOS PENDIENTES] Documentos que debe presentar la familia."
+    },
+    {
+      "title": "Fechas",
+      "text": "[FECHAS PENDIENTES] Calendario de inscripción, evaluación y matrícula."
+    },
+    {
+      "title": "Vacantes",
+      "text": "[VACANTES PENDIENTES] Niveles y grados con vacantes disponibles."
+    }
+  ]
+}

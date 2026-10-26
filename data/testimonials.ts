@@ -1,29 +1,14 @@
+import raw from "@/content/testimonials.json";
 import type { Testimonial } from "@/types";
+import { bool, list, rec, str } from "@/lib/content";
 
-/**
- * Testimonios. NO inventar: estos son espacios reservados hasta recibir testimonios reales
- * (con autorización de quien los firma).
- */
-export const testimonials: Testimonial[] = [
-  {
-    id: "t1",
-    quote: "[TESTIMONIO PENDIENTE] Aquí irá el testimonio de un padre o madre de familia.",
-    author: "[NOMBRE Y APELLIDO]",
-    role: "Padre de familia",
-    isPlaceholder: true,
-  },
-  {
-    id: "t2",
-    quote: "[TESTIMONIO PENDIENTE] Aquí irá el testimonio de un estudiante.",
-    author: "[NOMBRE Y APELLIDO]",
-    role: "Estudiante",
-    isPlaceholder: true,
-  },
-  {
-    id: "t3",
-    quote: "[TESTIMONIO PENDIENTE] Aquí irá el testimonio de un docente.",
-    author: "[NOMBRE Y APELLIDO]",
-    role: "Docente",
-    isPlaceholder: true,
-  },
-];
+const roles: Testimonial["role"][] = ["Padre de familia", "Madre de familia", "Estudiante", "Docente"];
+
+/** Testimonios (con autorización de quien los firma). Se editan desde el panel (/admin → Testimonios). */
+export const testimonials: Testimonial[] = list(rec(raw).items).map((item, index) => ({
+  id: str(item.id, `testimonio-${index + 1}`),
+  quote: str(item.quote),
+  author: str(item.author),
+  role: roles.includes(item.role as Testimonial["role"]) ? (item.role as Testimonial["role"]) : "Padre de familia",
+  isPlaceholder: bool(item.isPlaceholder),
+}));

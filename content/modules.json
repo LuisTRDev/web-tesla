@@ -1,0 +1,69 @@
+{
+  "items": [
+    {
+      "id": "nosotros",
+      "label": "Nosotros",
+      "title": "Pasión por educar.",
+      "intro": "Una comunidad que forma con disciplina, liderazgo y excelencia, y que acompaña a cada estudiante a descubrir lo que puede llegar a ser.",
+      "teaser": "Quiénes somos, qué creemos y lo que dice nuestra comunidad.",
+      "seoDescription": "Conoce a la Institución Educativa Privada “Nikola Tesla” de Nuevo Imperial, Cañete: quiénes somos, qué creemos y lo que dice nuestra comunidad."
+    },
+    {
+      "id": "propuesta",
+      "label": "Propuesta educativa",
+      "title": "Una educación pensada para el futuro.",
+      "intro": "Los pilares que guían cómo enseñamos y cómo aprenden nuestros estudiantes, dentro y fuera del aula.",
+      "teaser": "Los pilares de nuestra forma de enseñar.",
+      "seoDescription": "La propuesta educativa de la Institución Educativa Privada “Nikola Tesla”: los pilares que guían cómo enseñamos y cómo aprenden nuestros estudiantes."
+    },
+    {
+      "id": "niveles",
+      "label": "Niveles",
+      "title": "Cada etapa, un descubrimiento.",
+      "intro": "Acompañamos a nuestros estudiantes desde la primaria hasta el final de la secundaria.",
+      "teaser": "Primaria y Secundaria.",
+      "seoDescription": "Niveles Primaria y Secundaria en la Institución Educativa Privada “Nikola Tesla”, Nuevo Imperial, Cañete."
+    },
+    {
+      "id": "actividades",
+      "label": "Actividades",
+      "title": "Aprender también ocurre fuera del aula.",
+      "intro": "Talleres y actividades para que cada estudiante encuentre lo suyo.",
+      "teaser": "Ciencia, arte, deporte, cultura y más.",
+      "seoDescription": "Talleres y actividades de la Institución Educativa Privada “Nikola Tesla”: ciencia, tecnología, arte, deporte, cultura y más."
+    },
+    {
+      "id": "galeria",
+      "label": "Galería",
+      "title": "El año, en imágenes.",
+      "intro": "Todas nuestras actividades, organizadas por año, mes y evento. Toca cualquier imagen para verla en grande.",
+      "teaser": "Fotos y videos, mes a mes.",
+      "seoDescription": "Fotos y videos de las actividades de la Institución Educativa Privada “Nikola Tesla”, organizados por año, mes y evento."
+    },
+    {
+      "id": "noticias",
+      "label": "Noticias",
+      "title": "Lo que está pasando en Nikola Tesla.",
+      "intro": "Comunicados, logros y actividades recientes de nuestra comunidad.",
+      "teaser": "Comunicados y novedades.",
+      "seoDescription": "Noticias, comunicados y actividades recientes de la Institución Educativa Privada “Nikola Tesla”."
+    },
+    {
+      "id": "admision",
+      "label": "Admisión",
+      "title": "¿Listos para comenzar esta historia?",
+      "intro": "Te acompañamos en cada paso para que tu familia forme parte de nuestra comunidad.",
+      "teaser": "Proceso de Admisión 2027.",
+      "seoDescription": "Conoce el proceso de Admisión 2027 de la Institución Educativa Privada “Nikola Tesla” en Nuevo Imperial, Cañete.",
+      "kicker": "Admisión 2027"
+    },
+    {
+      "id": "contacto",
+      "label": "Contacto",
+      "title": "Conversemos.",
+      "intro": "Escríbenos o visítanos en Nuevo Imperial. Nos encantará conocer a tu familia.",
+      "teaser": "Dirección, mapa y formulario.",
+      "seoDescription": "Contacta a la Institución Educativa Privada “Nikola Tesla”: Mz. B Lote 13, Nuevo Imperial, Cañete."
+    }
+  ]
+}

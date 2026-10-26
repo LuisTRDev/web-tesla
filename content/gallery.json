@@ -1,0 +1,443 @@
+{
+  "items": [
+    {
+      "id": "2026-10-aniversario",
+      "title": "Aniversario",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-10-23",
+      "category": "Eventos",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-10-aniversario-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-10-23"
+        },
+        {
+          "id": "2026-10-aniversario-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-10-23"
+        },
+        {
+          "id": "2026-10-aniversario-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-10-23"
+        },
+        {
+          "id": "2026-10-aniversario-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-10-23"
+        },
+        {
+          "id": "2026-10-aniversario-foto-5",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 5 DEL EVENTO]",
+          "date": "2026-10-23"
+        },
+        {
+          "id": "2026-10-aniversario-foto-6",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 6 DEL EVENTO]",
+          "date": "2026-10-23"
+        },
+        {
+          "id": "2026-10-aniversario-video-1",
+          "type": "video",
+          "url": null,
+          "thumbnail": null,
+          "caption": "[VIDEO 1 DEL EVENTO]",
+          "date": "2026-10-23"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2026-10-concurso",
+      "title": "Concurso",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-10-16",
+      "category": "Académico",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-10-concurso-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-10-16"
+        },
+        {
+          "id": "2026-10-concurso-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-10-16"
+        },
+        {
+          "id": "2026-10-concurso-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-10-16"
+        },
+        {
+          "id": "2026-10-concurso-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-10-16"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2026-10-actividad-cientifica",
+      "title": "Actividad científica",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-10-09",
+      "category": "Ciencia",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-10-actividad-cientifica-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-10-09"
+        },
+        {
+          "id": "2026-10-actividad-cientifica-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-10-09"
+        },
+        {
+          "id": "2026-10-actividad-cientifica-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-10-09"
+        },
+        {
+          "id": "2026-10-actividad-cientifica-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-10-09"
+        },
+        {
+          "id": "2026-10-actividad-cientifica-foto-5",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 5 DEL EVENTO]",
+          "date": "2026-10-09"
+        },
+        {
+          "id": "2026-10-actividad-cientifica-video-1",
+          "type": "video",
+          "url": null,
+          "thumbnail": null,
+          "caption": "[VIDEO 1 DEL EVENTO]",
+          "date": "2026-10-09"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2026-10-dia-del-estudiante",
+      "title": "Día del estudiante",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-10-02",
+      "category": "Celebraciones",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-10-dia-del-estudiante-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-10-02"
+        },
+        {
+          "id": "2026-10-dia-del-estudiante-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-10-02"
+        },
+        {
+          "id": "2026-10-dia-del-estudiante-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-10-02"
+        },
+        {
+          "id": "2026-10-dia-del-estudiante-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-10-02"
+        },
+        {
+          "id": "2026-10-dia-del-estudiante-foto-5",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 5 DEL EVENTO]",
+          "date": "2026-10-02"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2026-09-visita-educativa",
+      "title": "Visita educativa",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-09-25",
+      "category": "Académico",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-09-visita-educativa-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-09-25"
+        },
+        {
+          "id": "2026-09-visita-educativa-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-09-25"
+        },
+        {
+          "id": "2026-09-visita-educativa-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-09-25"
+        },
+        {
+          "id": "2026-09-visita-educativa-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-09-25"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2026-09-feria-escolar",
+      "title": "Feria escolar",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-09-18",
+      "category": "Ciencia",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-09-feria-escolar-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-09-18"
+        },
+        {
+          "id": "2026-09-feria-escolar-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-09-18"
+        },
+        {
+          "id": "2026-09-feria-escolar-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-09-18"
+        },
+        {
+          "id": "2026-09-feria-escolar-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-09-18"
+        },
+        {
+          "id": "2026-09-feria-escolar-foto-5",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 5 DEL EVENTO]",
+          "date": "2026-09-18"
+        },
+        {
+          "id": "2026-09-feria-escolar-foto-6",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 6 DEL EVENTO]",
+          "date": "2026-09-18"
+        },
+        {
+          "id": "2026-09-feria-escolar-video-1",
+          "type": "video",
+          "url": null,
+          "thumbnail": null,
+          "caption": "[VIDEO 1 DEL EVENTO]",
+          "date": "2026-09-18"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2026-09-juegos-deportivos",
+      "title": "Juegos deportivos",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2026-09-11",
+      "category": "Deportes",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2026-09-juegos-deportivos-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2026-09-11"
+        },
+        {
+          "id": "2026-09-juegos-deportivos-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2026-09-11"
+        },
+        {
+          "id": "2026-09-juegos-deportivos-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2026-09-11"
+        },
+        {
+          "id": "2026-09-juegos-deportivos-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2026-09-11"
+        },
+        {
+          "id": "2026-09-juegos-deportivos-foto-5",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 5 DEL EVENTO]",
+          "date": "2026-09-11"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2025-12-clausura",
+      "title": "Clausura del año escolar",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2025-12-19",
+      "category": "Eventos",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2025-12-clausura-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2025-12-19"
+        },
+        {
+          "id": "2025-12-clausura-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2025-12-19"
+        },
+        {
+          "id": "2025-12-clausura-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2025-12-19"
+        },
+        {
+          "id": "2025-12-clausura-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2025-12-19"
+        },
+        {
+          "id": "2025-12-clausura-foto-5",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 5 DEL EVENTO]",
+          "date": "2025-12-19"
+        },
+        {
+          "id": "2025-12-clausura-video-1",
+          "type": "video",
+          "url": null,
+          "thumbnail": null,
+          "caption": "[VIDEO 1 DEL EVENTO]",
+          "date": "2025-12-19"
+        }
+      ],
+      "isPlaceholder": true
+    },
+    {
+      "id": "2025-07-fiestas-patrias",
+      "title": "Fiestas Patrias",
+      "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
+      "date": "2025-07-24",
+      "category": "Celebraciones",
+      "coverImage": null,
+      "media": [
+        {
+          "id": "2025-07-fiestas-patrias-foto-1",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 1 DEL EVENTO]",
+          "date": "2025-07-24"
+        },
+        {
+          "id": "2025-07-fiestas-patrias-foto-2",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 2 DEL EVENTO]",
+          "date": "2025-07-24"
+        },
+        {
+          "id": "2025-07-fiestas-patrias-foto-3",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 3 DEL EVENTO]",
+          "date": "2025-07-24"
+        },
+        {
+          "id": "2025-07-fiestas-patrias-foto-4",
+          "type": "image",
+          "url": null,
+          "caption": "[FOTO 4 DEL EVENTO]",
+          "date": "2025-07-24"
+        }
+      ],
+      "isPlaceholder": true
+    }
+  ]
+}

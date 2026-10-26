@@ -1,0 +1,64 @@
+/* Estilo del panel con la identidad del colegio (paleta de la web). Solo cambia colores y tipografía. */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Figtree:wght@400;500;600;700&display=swap");
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: "Figtree", "Roboto", system-ui, sans-serif !important;
+}
+h1,
+h2,
+h3,
+[class*="CollectionTopHeading"],
+[class*="SidebarHeading"] {
+  font-family: "Bricolage Grotesque", "Figtree", sans-serif !important;
+  letter-spacing: -0.02em;
+}
+
+/* Barra superior */
+header[class*="AppHeader"] {
+  background: #0d1230 !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+header[class*="AppHeader"] a[class*="AppHeaderNavLink"],
+header[class*="AppHeader"] button[class*="AppHeaderButton"] {
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-weight: 600;
+}
+header[class*="AppHeader"] a[class*="AppHeaderNavLink"]:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+header[class*="AppHeader"] a[class*="AppHeaderNavLink"].active {
+  background: rgba(255, 182, 39, 0.16) !important;
+  color: #ffb627 !important;
+}
+header[class*="AppHeader"] a[class*="AppHeaderNavLink"] svg,
+header[class*="AppHeader"] a[class*="AppHeaderNavLink"] svg * {
+  color: inherit;
+}
+button[class*="AppHeaderQuickNewButton"] {
+  background: #ffb627 !important;
+  color: #0d1230 !important;
+  font-weight: 700 !important;
+}
+
+/* Lista de secciones */
+a[class*="SidebarNavLink"].sidebar-active {
+  background: #fff4d9 !important;
+  color: #0d1230 !important;
+  border-left-color: #ffb627 !important;
+}
+
+/* Vista previa en celular */
+body.preview-mobile iframe[class*="PreviewPane"],
+body.preview-mobile [class*="PreviewPaneContainer"] iframe,
+body.preview-mobile [class*="PreviewContent"] iframe {
+  max-width: 390px !important;
+  margin: 0 auto !important;
+  display: block !important;
+  box-shadow: 0 0 0 1px rgba(13, 18, 48, 0.15), 0 20px 50px -20px rgba(13, 18, 48, 0.5);
+  border-radius: 16px;
+}

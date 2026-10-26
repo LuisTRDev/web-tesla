@@ -1,57 +1,14 @@
+import raw from "@/content/faq.json";
 import type { FaqItem } from "@/types";
+import { bool, list, rec, str } from "@/lib/content";
 
 /**
- * Preguntas frecuentes de las familias. Las preguntas son las habituales en un colegio;
- * las respuestas NO se inventan: completar con la información oficial y cambiar `confirmed` a true.
- * Solo las respuestas confirmadas se envían a Google como datos estructurados (FAQPage).
+ * Preguntas frecuentes de las familias. Se editan desde el panel (/admin → Preguntas frecuentes).
+ * Solo las respuestas marcadas como confirmadas se envían a Google como datos estructurados (FAQPage).
  */
-export const faq: FaqItem[] = [
-  {
-    id: "horario",
-    question: "¿Cuál es el horario de clases?",
-    answer: "[RESPUESTA PENDIENTE] Hora de ingreso y de salida en Primaria y en Secundaria.",
-    confirmed: false,
-  },
-  {
-    id: "pension",
-    question: "¿Cuánto cuestan la matrícula y la pensión?",
-    answer: "[RESPUESTA PENDIENTE] Montos o indicación de solicitarlos por WhatsApp.",
-    confirmed: false,
-  },
-  {
-    id: "vacantes",
-    question: "¿Hay vacantes para el próximo año?",
-    answer: "[RESPUESTA PENDIENTE] Grados con vacantes disponibles y cómo reservarlas.",
-    confirmed: false,
-  },
-  {
-    id: "requisitos",
-    question: "¿Qué documentos necesito para matricular a mi hijo o hija?",
-    answer: "[RESPUESTA PENDIENTE] Lista de documentos solicitados.",
-    confirmed: false,
-  },
-  {
-    id: "traslado",
-    question: "¿Aceptan estudiantes que vienen de otro colegio a mitad de año?",
-    answer: "[RESPUESTA PENDIENTE] Condiciones para traslados.",
-    confirmed: false,
-  },
-  {
-    id: "uniforme",
-    question: "¿Cómo es el uniforme y dónde se consigue?",
-    answer: "[RESPUESTA PENDIENTE] Uniforme diario, buzo y lugar de venta.",
-    confirmed: false,
-  },
-  {
-    id: "talleres",
-    question: "¿Qué talleres o actividades extracurriculares ofrecen?",
-    answer: "[RESPUESTA PENDIENTE] Talleres deportivos, artísticos o académicos disponibles.",
-    confirmed: false,
-  },
-  {
-    id: "visita",
-    question: "¿Puedo visitar el colegio antes de matricular?",
-    answer: "[RESPUESTA PENDIENTE] Días y horarios para visitas de familias.",
-    confirmed: false,
-  },
-];
+export const faq: FaqItem[] = list(rec(raw).items).map((item, index) => ({
+  id: str(item.id, `pregunta-${index + 1}`),
+  question: str(item.question),
+  answer: str(item.answer),
+  confirmed: bool(item.confirmed),
+}));

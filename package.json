@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "npm run build:admin-css",
     "build": "next build",
+    "prebuild": "npm run build:admin-css && node scripts/check-images.mjs",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:admin-css": "tailwindcss -c tailwind.admin.config.ts -i scripts/admin-preview.css -o public/admin/preview.css --minify",
+    "panel": "npm run build:admin-css && concurrently -k -n web,cms \"next dev\" \"decap-server\""
   },
   "dependencies": {
     "framer-motion": "^11.11.9",
@@ -20,6 +24,8 @@
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^10.0.6",
+    "decap-server": "^3.11.5",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.15",
     "postcss": "^8.4.47",

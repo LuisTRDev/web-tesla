@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Inicio del panel</title>
+    <link rel="stylesheet" href="/admin/tools.css" />
+    <style>
+      .hello {
+        background: var(--noche);
+        color: #fff;
+        border-radius: 28px;
+        padding: 28px;
+        display: flex;
+        gap: 28px;
+        align-items: center;
+        flex-wrap: wrap;
+        position: relative;
+        overflow: hidden;
+      }
+      .hello::after {
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -80px;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 182, 39, 0.28), transparent 70%);
+        pointer-events: none;
+      }
+      .hello h1 {
+        color: #fff;
+      }
+      .hello p {
+        color: rgba(255, 255, 255, 0.8);
+        margin: 8px 0 0;
+        max-width: 56ch;
+      }
+      .ring {
+        --p: 0;
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        background: conic-gradient(var(--filamento) calc(var(--p) * 1%), rgba(255, 255, 255, 0.16) 0);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+      .ring > div {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: var(--noche);
+        display: grid;
+        place-items: center;
+        font: 800 26px "Bricolage Grotesque", sans-serif;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 13.5px;
+        font-weight: 600;
+        margin-top: 14px;
+      }
+      .chip i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #5fd38a;
+      }
+      h2.sec {
+        margin: 36px 0 6px;
+      }
+      .sub {
+        color: var(--niebla);
+        margin: 0 0 16px;
+      }
+      /* buscador */
+      .finder {
+        position: relative;
+        margin-top: 22px;
+      }
+      .finder input {
+        min-height: 60px;
+        border-radius: 20px;
+        padding: 0 20px 0 52px;
+        font-size: 17px;
+        border: 2px solid rgba(13, 18, 48, 0.12);
+        box-shadow: 0 8px 30px -18px rgba(13, 18, 48, 0.5);
+      }
+      .finder .icon {
+        position: absolute;
+        left: 18px;
+        top: 17px;
+        font-size: 22px;
+      }
+      #results {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 68px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 24px 60px -20px rgba(13, 18, 48, 0.5);
+        z-index: 20;
+        overflow: hidden;
+      }
+      #results button {
+        display: flex;
+        width: 100%;
+        gap: 12px;
+        align-items: center;
+        text-align: left;
+        border: 0;
+        background: #fff;
+        padding: 14px 20px;
+        font: 600 15.5px Figtree, sans-serif;
+        color: var(--noche);
+        cursor: pointer;
+      }
+      #results button:hover,
+      #results button:focus {
+        background: #fff4d9;
+        outline: none;
+      }
+      #results small {
+        color: var(--niebla);
+        font-weight: 500;
+      }
+      /* acciones */
+      .actions {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      }
+      .action {
+        text-align: left;
+        border: 0;
+        background: #fff;
+        border-radius: 22px;
+        padding: 22px;
+        cursor: pointer;
+        font: inherit;
+        box-shadow: 0 1px 0 rgba(13, 18, 48, 0.06);
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: block;
+        color: inherit;
+        text-decoration: none;
+      }
+      .action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 36px -18px rgba(13, 18, 48, 0.5);
+      }
+      .action .big {
+        font-size: 34px;
+        display: block;
+        margin-bottom: 10px;
+      }
+      .action strong {
+        display: block;
+        font: 800 19px "Bricolage Grotesque", sans-serif;
+        color: var(--noche);
+      }
+      .action span.d {
+        display: block;
+        color: var(--niebla);
+        font-size: 14.5px;
+        margin-top: 4px;
+      }
+      /* siguiente */
+      .next {
+        background: linear-gradient(135deg, #fff4d9, #ffe6a8);
+        border-radius: 24px;
+        padding: 24px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .next .tag {
+        font-size: 12.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #7a4d00;
+      }
+      .next h3 {
+        font-size: 1.5rem;
+        margin-top: 6px;
+      }
+      /* pendientes */
+      .group {
+        margin-bottom: 12px;
+      }
+      .group summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font: 800 18px "Bricolage Grotesque", sans-serif;
+        color: var(--noche);
+      }
+      .group summary::-webkit-details-marker {
+        display: none;
+      }
+      .group summary .count {
+        font: 700 13px Figtree, sans-serif;
+        padding: 3px 12px;
+        border-radius: 999px;
+      }
+      .group ul {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+      }
+      .group li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 0;
+        border-top: 1px solid rgba(13, 18, 48, 0.08);
+        font-size: 15.5px;
+      }
+      .group li .grow {
+        flex: 1;
+      }
+      .dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .dot.ok {
+        background: #17683a;
+        color: #fff;
+      }
+      .dot.todo {
+        border: 2px solid #e0a02b;
+      }
+      .done-label {
+        color: var(--niebla);
+      }
+      .caret {
+        margin-left: auto;
+        transition: transform 0.2s;
+      }
+      details[open] > summary .caret {
+        transform: rotate(180deg);
+      }
+      /* mapa */
+      .map {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
+      .page {
+        background: #fff;
+        border-radius: 22px;
+        padding: 20px;
+      }
+      .page header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .page header .e {
+        font-size: 26px;
+      }
+      .page ul {
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+      }
+      .page li button {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        padding: 9px 10px;
+        margin: 0 -10px;
+        border-radius: 10px;
+        font: 500 15px Figtree, sans-serif;
+        color: var(--tinta);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .page li button:hover {
+        background: #fff4d9;
+      }
+      .page .see {
+        margin-top: 10px;
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      /* cambios */
+      .log {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .log li {
+        display: flex;
+        gap: 12px;
+        padding: 12px 0;
+        border-top: 1px solid rgba(13, 18, 48, 0.08);
+        align-items: center;
+      }
+      .log li:first-child {
+        border-top: 0;
+      }
+      .log .when {
+        margin-left: auto;
+        color: var(--niebla);
+        font-size: 13.5px;
+        white-space: nowrap;
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="hello">
+        <div class="ring" id="ring"><div id="percent">–</div></div>
+        <div style="position: relative; z-index: 1">
+          <h1 id="greeting">Hola 👋</h1>
+          <p id="subtitle">Estamos revisando cómo está tu web…</p>
+          <span class="chip" id="status" hidden><i></i><span id="status-text"></span></span>
+        </div>
+      </section>
+
+      <div class="finder">
+        <span class="icon">🔎</span>
+        <input id="q" type="search" autocomplete="off" placeholder="¿Qué quieres cambiar? Escribe: WhatsApp, horario, foto de portada, noticia…" aria-label="Buscar qué cambiar" />
+        <div id="results" role="listbox" hidden></div>
+      </div>
+
+      <h2 class="sec">¿Qué quieres hacer hoy?</h2>
+      <div class="actions" id="actions"></div>
+
+      <section id="next-wrap" hidden>
+        <h2 class="sec">Lo siguiente que haría</h2>
+        <div class="next">
+          <div>
+            <span class="tag" id="next-tag"></span>
+            <h3 id="next-title"></h3>
+            <p class="muted" id="next-why" style="margin: 6px 0 0"></p>
+          </div>
+          <button class="btn" id="next-go" type="button" style="min-height: 52px; padding: 0 28px; font-size: 16px">Completar ahora →</button>
+        </div>
+      </section>
+
+      <h2 class="sec">Qué falta para la campaña</h2>
+      <p class="sub" id="pending-sub">Se actualiza cada vez que publicas un cambio (tarda 1 o 2 minutos).</p>
+      <div id="groups"></div>
+
+      <h2 class="sec">Mapa de la web</h2>
+      <p class="sub">Elige una página y verás qué puedes cambiar en ella.</p>
+      <div class="map" id="map"></div>
+
+      <h2 class="sec">Tus últimos cambios</h2>
+      <div class="card" id="log"><p class="muted" style="margin: 0">Cargando…</p></div>
+    </div>
+
+    <script src="/admin/panel-config.js"></script>
+    <script src="/admin/secciones.js"></script>
+    <script>
+      (function () {
+        var cfg = window.PANEL || {};
+        var T = window.TESLA;
+        function $(id) { return document.getElementById(id); }
+        function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+        /* ───────── navegar dentro del panel (la página vive en un iframe) ───────── */
+        function go(to, field, page) {
+          try {
+            if (field) sessionStorage.setItem("tesla-goto", JSON.stringify({ to: to, field: field }));
+            else sessionStorage.removeItem("tesla-goto");
+          } catch (e) {}
+          var top = window.top;
+          if (page) top.location.hash = "#/page/" + page;
+          else top.location.hash = "#/collections/" + to;
+        }
+        window.teslaGo = go;
+
+        /* ───────── saludo ───────── */
+        var hour = Number(new Intl.DateTimeFormat("es-PE", { hour: "numeric", hour12: false, timeZone: "America/Lima" }).format(new Date()));
+        $("greeting").textContent = (hour < 12 ? "Buenos días" : hour < 19 ? "Buenas tardes" : "Buenas noches") + " 👋";
+
+        /* ───────── acciones grandes ───────── */
+        var ACTIONS = [
+          { e: "✏️", t: "Cambiar un texto", d: "Frases, horarios, datos de contacto…", run: function () { $("q").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); } },
+          { e: "🖼️", t: "Cambiar una foto", d: "Portada, niveles, equipo, actividades…", href: "#fotos" },
+          { e: "📰", t: "Publicar una noticia", d: "Un comunicado o una novedad.", run: function () { go("noticias/new"); } },
+          { e: "📣", t: "Preparar la campaña", d: "QR, afiches y enlaces de anuncios.", run: function () { go("", null, "campana"); } },
+          { e: "🌐", t: "Ver cómo está la web", d: "Ábrela como la ven las familias.", href: "/", blank: true },
+          { e: "🆘", t: "Pedir ayuda", d: "Tutoriales paso a paso.", run: function () { go("", null, "ayuda"); } },
+        ];
+        $("actions").innerHTML = ACTIONS.map(function (a, i) {
+          return (a.href ? '<a class="action" href="' + a.href + '"' + (a.blank ? ' target="_blank" rel="noopener"' : "") : '<button class="action" type="button"') + ' data-i="' + i + '"><span class="big">' + a.e + "</span><strong>" + a.t + '</strong><span class="d">' + a.d + "</span>" + (a.href ? "</a>" : "</button>");
+        }).join("");
+        $("actions").addEventListener("click", function (ev) {
+          var el = ev.target.closest("[data-i]");
+          if (!el) return;
+          var a = ACTIONS[el.dataset.i];
+          if (a.href === "#fotos") { ev.preventDefault(); showPhotos(); }
+          else if (a.run) a.run();
+        });
+
+        /* ───────── cambiar una foto: ¿cuál? ───────── */
+        var PHOTOS = [
+          { l: "Foto o video de la portada", to: "colegio/entries/settings", f: ["Fotos y video principales", "Foto de la portada"] },
+          { l: "Fotos de Nosotros", to: "colegio/entries/settings", f: ["Fotos y video principales", "Foto de Nosotros"] },
+          { l: "Fotos de los pilares", to: "propuesta/entries/pillars" },
+          { l: "Fotos de Primaria y Secundaria", to: "propuesta/entries/levels" },
+          { l: "Fotos de las actividades", to: "propuesta/entries/activities" },
+          { l: "Fotos de “Así se vive”", to: "propuesta/entries/experience" },
+          { l: "Fotos del equipo", to: "nosotros/entries/team" },
+          { l: "Fotos de la galería", to: "galeria/entries/gallery" },
+          { l: "Imagen al compartir en redes", to: "colegio/entries/settings", f: ["Fotos y video principales", "Imagen al compartir en redes"] },
+        ];
+        function showPhotos() {
+          var box = $("results");
+          $("q").value = "";
+          box.hidden = false;
+          box.innerHTML = '<div style="padding:14px 20px 6px;font-weight:700;color:var(--niebla);font-size:13px;text-transform:uppercase;letter-spacing:.05em">¿Qué foto quieres cambiar?</div>' + PHOTOS.map(function (p, i) { return '<button data-photo="' + i + '">🖼️ ' + p.l + "</button>"; }).join("");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        /* ───────── buscador ───────── */
+        function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+        var q = $("q");
+        var results = $("results");
+        var found = [];
+        q.addEventListener("input", function () {
+          var text = norm(q.value.trim());
+          if (text.length < 2) { results.hidden = true; return; }
+          found = T.search.filter(function (item) {
+            return norm(item.label).indexOf(text) >= 0 || item.keys.some(function (k) { return norm(k).indexOf(text) >= 0 || text.indexOf(norm(k)) >= 0; });
+          }).slice(0, 6);
+          results.hidden = false;
+          results.innerHTML = found.length
+            ? found.map(function (f, i) { return '<button data-i="' + i + '" role="option">' + esc(f.label) + " <small>→ ir a cambiarlo</small></button>"; }).join("")
+            : '<div style="padding:16px 20px;color:var(--niebla)">No encontré eso. Prueba con otra palabra o <a href="#" id="to-help" style="color:var(--noche);font-weight:700">mira la ayuda</a>.</div>';
+        });
+        results.addEventListener("click", function (ev) {
+          var help = ev.target.closest("#to-help");
+          if (help) { ev.preventDefault(); go("", null, "ayuda"); return; }
+          var photo = ev.target.closest("[data-photo]");
+          if (photo) { var p = PHOTOS[photo.dataset.photo]; go(p.to, p.f); return; }
+          var b = ev.target.closest("[data-i]");
+          if (!b) return;
+          var item = found[b.dataset.i];
+          if (item.page) go("", null, item.page);
+          else go(item.to, item.field);
+        });
+        document.addEventListener("click", function (ev) { if (!ev.target.closest(".finder")) results.hidden = true; });
+        q.addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter") { var first = results.querySelector("button"); if (first) first.click(); }
+        });
+
+        /* ───────── pendientes ───────── */
+        var LEVELS = {
+          1: { title: "Antes de lanzar la campaña", color: "#fde0d9", text: "#8a2414", open: true },
+          2: { title: "Importante", color: "#fff1d1", text: "#7a4d00", open: false },
+          3: { title: "Cuando puedas", color: "#e8e9ff", text: "#0d1230", open: false },
+        };
+        var WHY = {
+          1: "Las familias lo necesitan para contactarte y matricular. Sin esto, la campaña no puede empezar.",
+          2: "Da confianza a las familias y completa la información del colegio.",
+          3: "Mejora el aspecto de la web; se puede hacer poco a poco.",
+        };
+        fetch("/admin/api/pendientes")
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            $("ring").style.setProperty("--p", data.percent);
+            $("percent").textContent = data.percent + "%";
+            var todo = data.items.filter(function (i) { return !i.done; });
+            var blocking = todo.filter(function (i) { return i.priority === 1; }).length;
+            $("subtitle").textContent = todo.length === 0
+              ? "¡Todo está listo! Tu web está completa para la campaña."
+              : blocking > 0
+                ? "Para empezar la campaña faltan " + blocking + " cosas importantes. Te llevamos paso a paso."
+                : "Lo esencial está listo. Quedan " + todo.length + " detalles para dejar la web perfecta.";
+
+            // lo siguiente
+            var nextItem = todo.slice().sort(function (a, b) { return a.priority - b.priority; })[0];
+            if (nextItem) {
+              $("next-wrap").hidden = false;
+              $("next-tag").textContent = nextItem.priority === 1 ? "Lo más importante ahora" : "Siguiente paso";
+              $("next-title").textContent = nextItem.label;
+              $("next-why").textContent = WHY[nextItem.priority] + (nextItem.detail ? " (" + nextItem.detail + ")" : "");
+              $("next-go").onclick = function () { go(nextItem.to, nextItem.field); };
+            }
+
+            // grupos por prioridad
+            window.__pending = data.items;
+            $("groups").innerHTML = [1, 2, 3].map(function (p) {
+              var list = data.items.filter(function (i) { return i.priority === p; });
+              if (!list.length) return "";
+              var pending = list.filter(function (i) { return !i.done; }).length;
+              var lv = LEVELS[p];
+              var rows = list.map(function (i) {
+                var idx = data.items.indexOf(i);
+                return '<li><span class="dot ' + (i.done ? "ok" : "todo") + '">' + (i.done ? "✓" : "") + '</span><span class="grow ' + (i.done ? "done-label" : "") + '">' + esc(i.label) + (i.detail && !i.done ? ' <span class="muted">(' + i.detail + ")</span>" : "") + "</span>" + (i.done ? '<span class="pill ok">Listo</span>' : '<button class="btn small accent" data-p="' + idx + '" type="button">Completar</button>') + "</li>";
+              }).join("");
+              return '<details class="card group"' + (lv.open && pending ? " open" : "") + "><summary>" + lv.title + '<span class="count" style="background:' + (pending ? lv.color : "#dff5e6") + ";color:" + (pending ? lv.text : "#17683a") + '">' + (pending ? pending + " por hacer" : "Todo listo") + '</span><span class="caret">▾</span></summary><ul>' + rows + "</ul></details>";
+            }).join("");
+          })
+          .catch(function () {
+            $("subtitle").textContent = "No pudimos revisar la web ahora. Recarga la página; si sigue igual, pide ayuda.";
+          });
+        $("groups").addEventListener("click", function (ev) {
+          var b = ev.target.closest("[data-p]");
+          if (!b) return;
+          var i = window.__pending[b.dataset.p];
+          go(i.to, i.field);
+        });
+
+        /* ───────── mapa de la web ───────── */
+        $("map").innerHTML = T.pages.map(function (p, pi) {
+          return '<article class="page"><header><span class="e">' + p.icon + "</span><h3>" + p.title + "</h3></header><ul>" + p.edits.map(function (e, ei) { return '<li><button data-m="' + pi + "," + ei + '" type="button"><span>' + esc(e.label) + '</span><span aria-hidden="true">→</span></button></li>'; }).join("") + '</ul><a class="see" href="' + p.url + '" target="_blank" rel="noopener">Ver esta página en la web ↗</a></article>';
+        }).join("");
+        $("map").addEventListener("click", function (ev) {
+          var b = ev.target.closest("[data-m]");
+          if (!b) return;
+          var ij = b.dataset.m.split(",");
+          var e = T.pages[ij[0]].edits[ij[1]];
+          if (e.page) go("", null, e.page);
+          else go(e.to, e.field);
+        });
+
+        /* ───────── últimos cambios (GitHub) y estado de la web ───────── */
+        function ago(iso) {
+          var s = Math.round((Date.now() - new Date(iso).getTime()) / 1000);
+          if (s < 60) return "hace un momento";
+          var m = Math.round(s / 60);
+          if (m < 60) return "hace " + m + " min";
+          var h = Math.round(m / 60);
+          if (h < 24) return "hace " + h + (h === 1 ? " hora" : " horas");
+          var d = Math.round(h / 24);
+          if (d < 30) return "hace " + d + (d === 1 ? " día" : " días");
+          return new Date(iso).toLocaleDateString("es-PE", { day: "numeric", month: "long" });
+        }
+        function describe(msg) {
+          var m = msg.match(/^Panel: (crear|actualizar|borrar) (\w+) “(.+)”/);
+          var verbs = { crear: "Creaste", actualizar: "Actualizaste", borrar: "Borraste" };
+          if (m) {
+            var name = m[2] === "noticias" ? "la noticia “" + m[3] + "”" : (T.fileNames["content/" + m[3] + ".json"] || m[3]);
+            return verbs[m[1]] + " " + name;
+          }
+          var up = msg.match(/^Panel: (subir|borrar) imagen/);
+          if (up) return up[1] === "subir" ? "Subiste una foto" : "Borraste una foto";
+          return msg.replace(/^Panel: /, "");
+        }
+        function loadLog() {
+          var user = null;
+          try { user = JSON.parse(localStorage.getItem("decap-cms-user") || localStorage.getItem("netlify-cms-user") || "null"); } catch (e) {}
+          var box = $("log");
+          if (!user || !user.token || user.backendName !== "github") {
+            box.innerHTML = '<p class="muted" style="margin:0">Aquí verás qué cambios hiciste y cuándo, cuando entres con tu cuenta de GitHub.</p>';
+            return;
+          }
+          fetch("https://api.github.com/repos/" + cfg.repo + "/commits?per_page=40", { headers: { Authorization: "token " + user.token, Accept: "application/vnd.github+json" } })
+            .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(function (commits) {
+              var mine = commits.filter(function (c) { return /^Panel:/.test(c.commit.message); }).slice(0, 8);
+              if (!mine.length) { box.innerHTML = '<p class="muted" style="margin:0">Todavía no hay cambios hechos desde el panel.</p>'; return; }
+              box.innerHTML = '<ul class="log">' + mine.map(function (c) { return '<li><span style="font-size:20px">✏️</span><div><strong>' + esc(describe(c.commit.message.split("\n")[0])) + '</strong><div class="muted" style="font-size:13.5px">por ' + esc(c.commit.author.name) + '</div></div><span class="when">' + ago(c.commit.author.date) + "</span></li>"; }).join("") + "</ul>";
+              var last = mine[0];
+              $("status").hidden = false;
+              $("status-text").textContent = "Último cambio publicado " + ago(last.commit.author.date);
+            })
+            .catch(function () { box.innerHTML = '<p class="muted" style="margin:0">No pudimos cargar tus últimos cambios ahora.</p>'; });
+        }
+        loadLog();
+        if (cfg.netlifySiteId) {
+          $("status").hidden = false;
+          $("status-text").innerHTML = 'Estado de la web: <img alt="" style="height:18px;vertical-align:middle" src="https://api.netlify.com/api/v1/badges/' + cfg.netlifySiteId + '/deploy-status" />';
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+/* Estilos comunes de las páginas de herramientas del panel (Inicio, Campaña, Resultados, Ayuda). */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap");
+
+:root {
+  --noche: #0d1230;
+  --noche-700: #1d2558;
+  --marino: #1f3557;
+  --rojo: #e03c26;
+  --filamento: #ffb627;
+  --arco: #a9adff;
+  --tiza: #eef0f7;
+  --niebla: #646b8c;
+  --tinta: #1b2040;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--tiza);
+  color: var(--tinta);
+  font-family: "Figtree", system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3 {
+  font-family: "Bricolage Grotesque", "Figtree", sans-serif;
+  color: var(--noche);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+}
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+}
+h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+a {
+  color: inherit;
+}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+.lead {
+  color: var(--niebla);
+  font-size: 1.05rem;
+  max-width: 62ch;
+  margin: 10px 0 0;
+}
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 1px 0 rgba(13, 18, 48, 0.06);
+}
+.card + .card {
+  margin-top: 16px;
+}
+.grid {
+  display: grid;
+  gap: 16px;
+}
+.grid.two {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.grid.three {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--noche);
+  color: #fff;
+  font: 600 15px "Figtree", sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn:hover {
+  background: var(--noche-700);
+}
+.btn.accent {
+  background: var(--filamento);
+  color: var(--noche);
+}
+.btn.accent:hover {
+  background: #ffc654;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--noche);
+  border: 1px solid rgba(13, 18, 48, 0.3);
+}
+.btn.ghost:hover {
+  background: var(--noche);
+  color: #fff;
+}
+.btn.small {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 13.5px;
+}
+.btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--niebla);
+  margin-bottom: 6px;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(13, 18, 48, 0.2);
+  border-radius: 12px;
+  font: 500 15px "Figtree", sans-serif;
+  color: var(--noche);
+  background: #fff;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--filamento);
+  border-color: var(--noche);
+}
+.field {
+  margin-bottom: 14px;
+}
+.hint {
+  font-size: 13px;
+  color: var(--niebla);
+  margin: 6px 0 0;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.pill.ok {
+  background: #dff5e6;
+  color: #17683a;
+}
+.pill.todo {
+  background: #fff1d1;
+  color: #7a4d00;
+}
+.alert {
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 14.5px;
+  margin: 14px 0;
+}
+.alert.warn {
+  background: #fff1d1;
+  color: #5c3a00;
+  border: 1px solid #ffd98a;
+}
+.alert.info {
+  background: #e8e9ff;
+  color: var(--noche);
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 24px 0 18px;
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(13, 18, 48, 0.25);
+  background: transparent;
+  font: 600 14.5px "Figtree", sans-serif;
+  color: var(--noche);
+  cursor: pointer;
+}
+.tab[aria-selected="true"] {
+  background: var(--noche);
+  color: #fff;
+  border-color: var(--noche);
+}
+.muted {
+  color: var(--niebla);
+}
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+code,
+.mono {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 13.5px;
+  background: #eef0f7;
+  padding: 2px 6px;
+  border-radius: 6px;
+  word-break: break-all;
+}
+@media (max-width: 640px) {
+  .wrap {
+    padding: 20px 16px 48px;
+  }
+}
+.grid > .card + .card {
+  margin-top: 0;
+}

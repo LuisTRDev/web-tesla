@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": "horario",
+      "question": "¿Cuál es el horario de clases?",
+      "answer": "[RESPUESTA PENDIENTE] Hora de ingreso y de salida en Primaria y en Secundaria.",
+      "confirmed": false
+    },
+    {
+      "id": "pension",
+      "question": "¿Cuánto cuestan la matrícula y la pensión?",
+      "answer": "[RESPUESTA PENDIENTE] Montos o indicación de solicitarlos por WhatsApp.",
+      "confirmed": false
+    },
+    {
+      "id": "vacantes",
+      "question": "¿Hay vacantes para el próximo año?",
+      "answer": "[RESPUESTA PENDIENTE] Grados con vacantes disponibles y cómo reservarlas.",
+      "confirmed": false
+    },
+    {
+      "id": "requisitos",
+      "question": "¿Qué documentos necesito para matricular a mi hijo o hija?",
+      "answer": "[RESPUESTA PENDIENTE] Lista de documentos solicitados.",
+      "confirmed": false
+    },
+    {
+      "id": "traslado",
+      "question": "¿Aceptan estudiantes que vienen de otro colegio a mitad de año?",
+      "answer": "[RESPUESTA PENDIENTE] Condiciones para traslados.",
+      "confirmed": false
+    },
+    {
+      "id": "uniforme",
+      "question": "¿Cómo es el uniforme y dónde se consigue?",
+      "answer": "[RESPUESTA PENDIENTE] Uniforme diario, buzo y lugar de venta.",
+      "confirmed": false
+    },
+    {
+      "id": "talleres",
+      "question": "¿Qué talleres o actividades extracurriculares ofrecen?",
+      "answer": "[RESPUESTA PENDIENTE] Talleres deportivos, artísticos o académicos disponibles.",
+      "confirmed": false
+    },
+    {
+      "id": "visita",
+      "question": "¿Puedo visitar el colegio antes de matricular?",
+      "answer": "[RESPUESTA PENDIENTE] Días y horarios para visitas de familias.",
+      "confirmed": false
+    }
+  ]
+}

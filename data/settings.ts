@@ -1,69 +1,68 @@
+import raw from "@/content/settings.json";
 import type { SiteSettings } from "@/types";
+import { bool, list, num, rec, str, strings, text, webUrl } from "@/lib/content";
 
 /**
  * CONFIGURACIÓN CENTRAL DEL SITIO
- * Todo dato institucional vive aquí. Cambia un valor y se actualiza en toda la web.
- * Los valores en `null` se muestran como placeholders visibles, por ejemplo [WHATSAPP OFICIAL].
+ * Los valores viven en content/settings.json y se editan desde el panel (/admin → Datos del colegio).
+ * Todo dato institucional se lee de aquí: cambia un valor y se actualiza en toda la web.
+ * Los valores vacíos (null) se muestran como placeholders visibles, por ejemplo [WHATSAPP OFICIAL].
  */
+const r = rec(raw);
+const location = rec(r.location);
+const contact = rec(r.contact);
+const legal = rec(r.legal);
+const social = rec(r.social);
+const images = rec(r.images);
+
 export const settings: SiteSettings = {
-  name: "Institución Educativa Privada “Nikola Tesla”",
-  shortName: "Nikola Tesla",
-  kicker: "Institución Educativa Privada",
-  tagline: "Donde la curiosidad se convierte en futuro.",
-  concept: "Educación que despierta la curiosidad y prepara para el futuro.",
-  footerPhrase: "Educación, curiosidad y futuro.",
-  description:
-    "Institución Educativa Privada “Nikola Tesla”, ubicada en Nuevo Imperial, Cañete, Lima. Conoce nuestra propuesta educativa, actividades, comunidad y proceso de admisión.",
-  admissionYear: 2027,
-  // Fecha PROVISIONAL del contador regresivo. Reemplazar por el cierre oficial de inscripciones (o null para ocultarlo).
-  admissionDeadline: "2027-02-26",
-
-  // TODO: reemplazar por el dominio real antes de publicar.
-  siteUrl: "https://www.example.com",
-
+  name: str(r.name, "Institución Educativa Privada “Nikola Tesla”"),
+  shortName: str(r.shortName, "Nikola Tesla"),
+  kicker: str(r.kicker, "Institución Educativa Privada"),
+  tagline: str(r.tagline, "Donde la curiosidad se convierte en futuro."),
+  concept: str(r.concept),
+  footerPhrase: str(r.footerPhrase, "Educación, curiosidad y futuro."),
+  description: str(r.description),
+  admissionYear: num(r.admissionYear, 2027),
+  admissionDeadline: text(r.admissionDeadline),
+  siteUrl: webUrl(r.siteUrl, "https://www.example.com"),
   location: {
-    address: "Mz. B Lote 13",
-    district: "Nuevo Imperial",
-    province: "Cañete",
-    region: "Lima",
-    country: "Perú",
-    mapQuery: "Nuevo Imperial, Cañete, Lima, Perú",
+    address: str(location.address),
+    district: str(location.district),
+    province: str(location.province),
+    region: str(location.region),
+    country: str(location.country, "Perú"),
+    mapQuery: str(location.mapQuery),
   },
-
   contact: {
-    // Solo dígitos con código de país. El primero es el principal (formulario y botones de WhatsApp).
-    whatsapp: ["51960209798", "51982565433"],
-    hours: null,
+    // Solo dígitos con código de país. El primero es el principal.
+    whatsapp: strings(contact.whatsapp)
+      .map((number) => number.replace(/\D/g, ""))
+      .filter(Boolean),
+    hours: text(contact.hours),
   },
-
-  // Respaldo oficial. Se muestra en el pie de página y en Admisión.
   legal: {
-    resolution: null,
-    modularCode: null,
+    resolution: text(legal.resolution),
+    modularCode: text(legal.modularCode),
   },
-
   social: {
-    facebook: "https://www.facebook.com/search/top?q=instituci%C3%B3n%20educativa%20privada%20%22nikola%20tesla%22",
-    instagram: null,
-    tiktok: "https://www.tiktok.com/@colegio.tesla.canete",
-    youtube: null,
+    facebook: text(social.facebook),
+    instagram: text(social.instagram),
+    tiktok: text(social.tiktok),
+    youtube: text(social.youtube),
   },
-
-  // Etiquetas "Por confirmar" sobre contenido provisional. Cambiar a false al publicar.
-  showDraftBadges: true,
-
-  // Fotos principales. Coloca los archivos en /public/images y escribe la ruta, p. ej. "/images/hero.jpg".
+  showDraftBadges: bool(r.showDraftBadges, true),
   images: {
-    hero: null,
-    about: null,
-    aboutDetail: null,
-    admission: null,
+    hero: text(images.hero),
+    heroVideo: text(images.heroVideo),
+    about: text(images.about),
+    aboutDetail: text(images.aboutDetail),
+    admission: text(images.admission),
+    share: text(images.share),
   },
-
-  // Cifras de la sección "Nosotros". No inventar: completar con datos reales.
-  stats: [
-    { id: "trayectoria", value: null, label: "Años de trayectoria" },
-    { id: "estudiantes", value: null, label: "Estudiantes" },
-    { id: "docentes", value: null, label: "Docentes" },
-  ],
+  stats: list(r.stats).map((stat, index) => ({
+    id: str(stat.id, `cifra-${index + 1}`),
+    value: text(stat.value),
+    label: str(stat.label),
+  })),
 };

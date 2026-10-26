@@ -10,7 +10,7 @@ import FieldCanvas from "@/components/ui/FieldCanvas";
 import Illustration from "@/components/ui/Illustration";
 import Reveal from "@/components/ui/Reveal";
 import { admissionIntro, admissionSteps } from "@/data/admission";
-import { pillars } from "@/data/pillars";
+import { campaignPage } from "@/data/pages";
 import { settings } from "@/data/settings";
 import { getFaq } from "@/lib/data";
 import { whatsappLink } from "@/lib/utils";
@@ -26,17 +26,14 @@ const path = `/admision-${settings.admissionYear}`;
 
 export const metadata: Metadata = {
   title: `Admisión ${settings.admissionYear}`,
-  description: `Matrícula y admisión ${settings.admissionYear} en la Institución Educativa Privada “Nikola Tesla”, Nuevo Imperial, Cañete. Agenda tu visita o escríbenos por WhatsApp.`,
+  description: campaignPage.seoDescription,
   alternates: { canonical: path },
   openGraph: { url: path, title: `Admisión ${settings.admissionYear} | ${settings.name}` },
 };
 
-/** Razones para elegir el colegio: salen de los pilares de la propuesta (ver data/pillars.ts). */
-const reasonIds = ["tecnologia", "personal", "valores"];
-
 export default async function AdmissionCampaignPage() {
   const faq = await getFaq();
-  const reasons = pillars.filter((pillar) => reasonIds.includes(pillar.id));
+  const reasons = campaignPage.reasons;
   const stats = settings.stats.filter((stat) => stat.value);
   const wa = whatsappLink(settings.contact.whatsapp[0] ?? null, `Hola, quisiera información sobre la Admisión ${settings.admissionYear} en la I.E.P. Nikola Tesla.`);
 
@@ -48,7 +45,7 @@ export default async function AdmissionCampaignPage() {
         <FieldCanvas className="absolute inset-0 -z-10 h-full w-full" />
         <div className="mx-auto max-w-site px-5 pb-20 pt-36 md:px-10 md:pb-28 md:pt-44">
           <p className="hero-in inline-flex rounded-full bg-filamento px-4 py-1.5 text-[13px] font-bold uppercase tracking-[0.06em] text-noche">
-            {settings.shortName} · Cañete
+            {campaignPage.badge}
           </p>
           <h1 className="hero-in mt-6 max-w-[11ch] text-balance font-display text-[clamp(3.4rem,11vw,10rem)] font-extrabold uppercase leading-[0.86] tracking-[-0.045em]" style={{ "--d": "0.15s" } as CSSProperties}>
             Admisión {settings.admissionYear}
@@ -93,7 +90,7 @@ export default async function AdmissionCampaignPage() {
         <div className="mx-auto max-w-site px-5 md:px-10">
           <Reveal>
             <h2 className="max-w-[16ch] text-balance font-display text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[0.95] tracking-[-0.03em] text-noche">
-              ¿Por qué elegir Nikola Tesla?
+              {campaignPage.reasonsTitle}
             </h2>
             <DraftBadge label="Descripciones propuestas" className="mt-5" />
           </Reveal>
@@ -102,7 +99,7 @@ export default async function AdmissionCampaignPage() {
               <li key={reason.id} data-spark className="overflow-hidden rounded-panel bg-noche text-white">
                 <Reveal delay={index * 0.08}>
                   <div className="relative aspect-[4/3]">
-                    <Illustration name={reason.id} />
+                    <Illustration name={reason.illustration} />
                   </div>
                   <div className="p-7">
                     <h3 className="font-display text-2xl font-bold leading-tight">{reason.title}</h3>
@@ -119,7 +116,7 @@ export default async function AdmissionCampaignPage() {
       <section className="bg-filamento py-20 text-noche md:py-28">
         <div className="mx-auto max-w-site px-5 md:px-10">
           <Reveal>
-            <h2 className="font-display text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[0.95] tracking-[-0.03em]">Así de simple.</h2>
+            <h2 className="font-display text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[0.95] tracking-[-0.03em]">{campaignPage.stepsTitle}</h2>
             {admissionSteps.some((step) => !step.confirmed) && <DraftBadge label="Proceso propuesto, por confirmar" className="mt-5" />}
           </Reveal>
           <ol className="mt-12 grid border-t border-noche/25 sm:grid-cols-2 lg:grid-cols-4">
@@ -140,9 +137,9 @@ export default async function AdmissionCampaignPage() {
       <section id="visita" className="bg-tiza py-20 md:py-28">
         <div className="mx-auto grid max-w-site gap-12 px-5 md:px-10 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
-            <h2 className="text-balance font-display text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[0.95] tracking-[-0.03em] text-noche">Ven a conocernos.</h2>
+            <h2 className="text-balance font-display text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[0.95] tracking-[-0.03em] text-noche">{campaignPage.visitTitle}</h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-niebla">
-              Elige el día y el turno que mejor te vengan. Te confirmamos la hora por WhatsApp.
+              {campaignPage.visitText}
             </p>
             <p className="mt-6 text-[15px] text-niebla">
               {settings.location.address}, {settings.location.district}, {settings.location.province}

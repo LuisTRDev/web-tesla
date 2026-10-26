@@ -1,48 +1,36 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { NewsPost } from "@/types";
+import { bool, isoDate, paragraphs, rec, str, text } from "@/lib/content";
 
 /**
- * Noticias y comunicados. Las publicaciones marcadas con isPlaceholder son ejemplos de diseño.
- * Tabla sugerida en Supabase: news (slug, title, excerpt, body, date, category, image).
+ * Noticias y comunicados: un archivo por publicación en content/noticias/.
+ * Se crean y editan desde el panel (/admin → Noticias). El nombre del archivo es la dirección (slug).
+ * Solo se usa en el servidor (lee archivos).
  */
-export const news: NewsPost[] = [
-  {
-    slug: "ejemplo-admision-2027",
-    title: "[EJEMPLO] Inicia el proceso de Admisión 2027",
-    excerpt: "[DESCRIPCIÓN PENDIENTE] Resumen de la publicación en una o dos líneas.",
-    body: ["[CONTENIDO PENDIENTE] Aquí irá el texto completo de la publicación."],
-    date: "2026-10-05",
-    category: "Admisión",
-    image: null,
-    isPlaceholder: true,
-  },
-  {
-    slug: "ejemplo-feria-escolar",
-    title: "[EJEMPLO] Así vivimos la feria escolar",
-    excerpt: "[DESCRIPCIÓN PENDIENTE] Resumen de la publicación en una o dos líneas.",
-    body: ["[CONTENIDO PENDIENTE] Aquí irá el texto completo de la publicación."],
-    date: "2026-09-21",
-    category: "Actividades",
-    image: null,
-    isPlaceholder: true,
-  },
-  {
-    slug: "ejemplo-comunicado",
-    title: "[EJEMPLO] Comunicado para padres de familia",
-    excerpt: "[DESCRIPCIÓN PENDIENTE] Resumen de la publicación en una o dos líneas.",
-    body: ["[CONTENIDO PENDIENTE] Aquí irá el texto completo de la publicación."],
-    date: "2026-09-08",
-    category: "Comunicados",
-    image: null,
-    isPlaceholder: true,
-  },
-  {
-    slug: "ejemplo-juegos-deportivos",
-    title: "[EJEMPLO] Resultados de los juegos deportivos",
-    excerpt: "[DESCRIPCIÓN PENDIENTE] Resumen de la publicación en una o dos líneas.",
-    body: ["[CONTENIDO PENDIENTE] Aquí irá el texto completo de la publicación."],
-    date: "2026-09-12",
-    category: "Deportes",
-    image: null,
-    isPlaceholder: true,
-  },
-];
+const dir = path.join(process.cwd(), "content", "noticias");
+
+function readPosts(): NewsPost[] {
+  try {
+    return fs
+      .readdirSync(dir)
+      .filter((file) => file.endsWith(".json"))
+      .map((file) => {
+        const data = rec(JSON.parse(fs.readFileSync(path.join(dir, file), "utf8")));
+        return {
+          slug: file.replace(/\.json$/, ""),
+          title: str(data.title),
+          excerpt: str(data.excerpt),
+          body: paragraphs(data.body),
+          date: isoDate(data.date),
+          category: str(data.category, "Comunicados"),
+          image: text(data.image),
+          isPlaceholder: bool(data.isPlaceholder),
+        };
+      });
+  } catch {
+    return [];
+  }
+}
+
+export const news: NewsPost[] = readPosts();

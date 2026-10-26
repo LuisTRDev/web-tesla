@@ -1,0 +1,451 @@
+# PANEL DE EDICIÓN (Decap CMS) · Institución Educativa Privada “Nikola Tesla”
+# Se abre en /admin (en el pie de página: 5 clics seguidos sobre el logo).
+# Cada cambio publicado se guarda en el repositorio y Netlify actualiza la web en 1 o 2 minutos.
+# Guía para la clienta: docs/GUIA_PANEL.md · Configuración técnica: docs/CONFIGURAR_PANEL.md
+
+backend:
+  name: github
+  repo: LuisTRDev/web-tesla
+  branch: main
+  commit_messages:
+    create: 'Panel: crear {{collection}} “{{slug}}”'
+    update: 'Panel: actualizar {{collection}} “{{slug}}”'
+    delete: 'Panel: borrar {{collection}} “{{slug}}”'
+    uploadMedia: 'Panel: subir imagen “{{path}}”'
+    deleteMedia: 'Panel: borrar imagen “{{path}}”'
+
+# Solo funciona al abrir el panel en tu computadora (localhost) con `npm run panel`: edita sin iniciar sesión.
+local_backend: true
+
+locale: es
+logo_url: /images/logo-escudo.png
+# Para revisar los cambios antes de publicar, quitar el # de la línea siguiente (Borrador → En revisión → Publicado).
+# publish_mode: editorial_workflow
+show_preview_links: false
+
+media_folder: public/images/subidas
+public_folder: /images/subidas
+
+collections:
+  # ───────────────────────── DATOS DEL COLEGIO ─────────────────────────
+  - name: colegio
+    label: Datos del colegio
+    label_singular: Datos del colegio
+    description: Nombre, frases, ubicación, WhatsApp, redes, fotos principales y cifras. Se usa en toda la web.
+    media_folder: /public/images/generales
+    public_folder: /images/generales
+    files:
+      - name: settings
+        label: Datos del colegio
+        file: content/settings.json
+        fields:
+          - { label: Nombre oficial, name: name, widget: string }
+          - { label: Nombre corto, name: shortName, widget: string, hint: 'Aparece en el logo y en los títulos. Ejemplo: Nikola Tesla.' }
+          - { label: Rótulo sobre el nombre, name: kicker, widget: string, hint: 'Ejemplo: Institución Educativa Privada.' }
+          - { label: Frase principal, name: tagline, widget: string, hint: 'Se ve en la portada. Ejemplo: Donde la curiosidad se convierte en futuro.' }
+          - { label: Concepto, name: concept, widget: string, required: false }
+          - { label: Frase del pie de página, name: footerPhrase, widget: string }
+          - { label: Descripción para Google, name: description, widget: seo-descripcion, hint: 'Texto que aparece bajo el nombre del colegio en Google. Entre 120 y 160 caracteres.' }
+          - { label: Año de admisión, name: admissionYear, widget: number, value_type: int, min: 2025, max: 2100, hint: 'Cambiarlo cambia los textos “Admisión 2027”. La dirección /admision-2027 no cambia sola; avisa al desarrollador.' }
+          - label: Último día de inscripciones
+            name: admissionDeadline
+            widget: datetime
+            date_format: 'YYYY-MM-DD'
+            time_format: false
+            format: 'YYYY-MM-DD'
+            required: false
+            hint: 'Activa el contador regresivo. Si lo dejas vacío, el contador no se muestra.'
+          - { label: Dirección de la web, name: siteUrl, widget: string, hint: 'Ejemplo: https://www.colegionikolatesla.edu.pe. Si olvidas el https://, la web lo agrega sola.' }
+          - label: Ubicación
+            name: location
+            widget: object
+            fields:
+              - { label: Dirección, name: address, widget: string }
+              - { label: Distrito, name: district, widget: string }
+              - { label: Provincia, name: province, widget: string }
+              - { label: Región, name: region, widget: string }
+              - { label: País, name: country, widget: string }
+              - { label: Búsqueda para el mapa, name: mapQuery, widget: string, hint: 'Texto que se envía a Google Maps. Ejemplo: Mz. B Lote 13, Nuevo Imperial, Cañete, Lima, Perú.' }
+          - label: Contacto
+            name: contact
+            widget: object
+            fields:
+              - label: Números de WhatsApp
+                name: whatsapp
+                widget: list
+                hint: 'El primero es el principal (botón flotante y formularios). Solo números con el código del país. Ejemplo: 51960209798.'
+                field: { label: Número, name: number, widget: string, pattern: ['^51\d{9}$', 'Escribe solo números: 51 seguido de los 9 dígitos del celular.'] }
+              - { label: Horario de atención, name: hours, widget: string, required: false, hint: 'Ejemplo: Lunes a viernes, 7:30 a. m. – 3:00 p. m.' }
+          - label: Respaldo oficial
+            name: legal
+            widget: object
+            fields:
+              - { label: Resolución de funcionamiento (UGEL), name: resolution, widget: string, required: false }
+              - { label: Código modular, name: modularCode, widget: string, required: false }
+          - label: Redes sociales
+            name: social
+            widget: object
+            hint: Pega el enlace completo. Si está vacío, el ícono no se muestra.
+            fields:
+              - { label: Facebook, name: facebook, widget: string, required: false }
+              - { label: Instagram, name: instagram, widget: string, required: false }
+              - { label: TikTok, name: tiktok, widget: string, required: false }
+              - { label: YouTube, name: youtube, widget: string, required: false }
+          - { label: 'Mostrar etiquetas “Por confirmar”', name: showDraftBadges, widget: boolean, default: true, hint: 'Desmárcalo cuando todos los textos estén confirmados, antes de la campaña.' }
+          - label: Fotos y video principales
+            name: images
+            widget: object
+            hint: 'Recomendado: fotos horizontales, de menos de 2 MB, sin logo ni texto encima.'
+            fields:
+              - { label: Foto de la portada, name: hero, widget: image, required: false }
+              - { label: Video de la portada (opcional), name: heroVideo, widget: file, required: false, hint: 'Archivo .mp4 de 10 a 15 segundos y menos de 8 MB. Si lo pones, reemplaza a la foto.' }
+              - { label: Foto de Nosotros, name: about, widget: image, required: false }
+              - { label: Foto de detalle de Nosotros, name: aboutDetail, widget: image, required: false }
+              - { label: Foto de Admisión, name: admission, widget: image, required: false }
+              - { label: Imagen al compartir en redes, name: share, widget: image, required: false, hint: 'Medida ideal: 1200 × 630 px. Si la dejas vacía, se genera una automática.' }
+          - label: Cifras del colegio
+            name: stats
+            widget: list
+            allow_add: false
+            summary: '{{fields.label}}: {{fields.value}}'
+            hint: 'Solo datos reales. Si una cifra está vacía, se muestra [DATO].'
+            fields:
+              - { label: Código, name: id, widget: hidden }
+              - { label: Texto, name: label, widget: string }
+              - { label: Valor, name: value, widget: string, required: false, hint: 'Ejemplo: 15  o  +300' }
+
+  # ───────────────────────── PÁGINAS Y TEXTOS ─────────────────────────
+  - name: paginas
+    label: Títulos, portada y aviso
+    label_singular: Página
+    description: Los títulos grandes de cada página, el aviso sobre el menú y los textos de la página de campaña.
+    media_folder: /public/images/generales
+    public_folder: /images/generales
+    files:
+      - name: modules
+        label: Secciones del sitio (menú y títulos)
+        file: content/modules.json
+        fields:
+          - label: Secciones
+            name: items
+            widget: list
+            allow_add: false
+            summary: '{{fields.label}}'
+            fields:
+              - { label: Código, name: id, widget: hidden }
+              - { label: Nombre en el menú, name: label, widget: string }
+              - { label: Título grande de la página, name: title, widget: string }
+              - { label: Introducción, name: intro, widget: text }
+              - { label: Resumen en la portada, name: teaser, widget: string }
+              - { label: Rótulo sobre el título (opcional), name: kicker, widget: string, required: false }
+              - { label: Descripción para Google, name: seoDescription, widget: seo-descripcion, hint: 'Entre 120 y 160 caracteres.' }
+      - name: pages
+        label: Portada y página de campaña
+        file: content/pages.json
+        fields:
+          - label: Portada
+            name: home
+            widget: object
+            fields:
+              - { label: Texto del aviso de admisión, name: admissionNotice, widget: string, hint: 'Aparece junto a “Admisión 2027” en la portada.' }
+          - label: Página de campaña (/admision-2027)
+            name: campaign
+            widget: object
+            hint: 'Es la página a la que llevan los anuncios.'
+            fields:
+              - { label: Rótulo superior, name: badge, widget: string }
+              - { label: Descripción para Google, name: seoDescription, widget: seo-descripcion }
+              - { label: Título de “Por qué elegirnos”, name: reasonsTitle, widget: string }
+              - label: Razones para elegirnos
+                name: reasons
+                widget: list
+                summary: '{{fields.title}}'
+                max: 6
+                fields:
+                  - { label: Título, name: title, widget: string }
+                  - { label: Descripción, name: description, widget: text }
+                  - label: Ilustración
+                    name: illustration
+                    widget: select
+                    default: tecnologia
+                    options: &illustrations
+                      - { label: Libro (formación académica), value: academica }
+                      - { label: Foco (pensamiento crítico), value: critico }
+                      - { label: Chip (tecnología), value: tecnologia }
+                      - { label: Persona y corazón (desarrollo personal), value: personal }
+                      - { label: Escudo (valores), value: valores }
+                      - { label: Paleta (creatividad), value: creatividad }
+                      - { label: Matraz (ciencia), value: ciencia }
+                      - { label: Notas musicales (arte), value: arte }
+                      - { label: Balón (deportes), value: deportes }
+                      - { label: Cohete (proyectos), value: proyectos }
+                      - { label: Estrella (eventos), value: eventos }
+                      - { label: Pizarra (aulas), value: aulas }
+                      - { label: Carita feliz (recreos), value: recreo }
+                      - { label: Manzana (docentes), value: docentes }
+              - { label: Título de los pasos, name: stepsTitle, widget: string }
+              - { label: Título de “Agenda tu visita”, name: visitTitle, widget: string }
+              - { label: Texto de “Agenda tu visita”, name: visitText, widget: text }
+
+      - name: banner
+        label: Aviso destacado (barra sobre el menú)
+        file: content/banner.json
+        fields:
+          - { label: Mostrar el aviso, name: enabled, widget: boolean, default: false, hint: 'Actívalo para que aparezca la barra amarilla sobre el menú de toda la web.' }
+          - { label: Mensaje, name: text, widget: string, hint: 'Corto y claro. Ejemplo: Inscripciones abiertas · Admisión 2027.' }
+          - { label: Texto del botón, name: linkText, widget: string, required: false, hint: 'Ejemplo: Infórmate aquí.' }
+          - { label: A dónde lleva el botón, name: linkUrl, widget: string, required: false, hint: 'Una página de la web (ejemplo: /admision-2027) o un enlace completo (https://…).' }
+          - { label: Mostrar desde el día, name: startDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Vacío = desde ahora.' }
+          - { label: Mostrar hasta el día, name: endDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Vacío = sin fecha de fin. Pasado ese día, el aviso desaparece solo.' }
+
+  # ───────────────────────── NOSOTROS ─────────────────────────
+  - name: nosotros
+    label: Quiénes somos y equipo
+    label_singular: Nosotros
+    description: La historia y los valores del colegio, el equipo, los logros y lo que dicen las familias.
+    media_folder: /public/images/equipo
+    public_folder: /images/equipo
+    files:
+      - name: philosophy
+        label: Quiénes somos y valores
+        file: content/philosophy.json
+        fields:
+          - label: Texto principal
+            name: about
+            widget: object
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Frase destacada, name: quote, widget: string }
+              - label: Párrafos
+                name: paragraphs
+                widget: list
+                field: { label: Párrafo, name: paragraph, widget: text }
+              - { label: Texto confirmado por el colegio, name: confirmed, widget: boolean, default: false }
+          - label: Valores y conceptos
+            name: items
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { label: Nombre, name: title, widget: string }
+              - { label: Descripción, name: description, widget: string }
+              - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
+      - name: team
+        label: Equipo
+        file: content/team.json
+        fields:
+          - label: Personas
+            name: items
+            widget: list
+            summary: '{{fields.role}} · {{fields.name}}'
+            hint: 'Publica las fotos solo con autorización de cada persona.'
+            fields:
+              - { label: Cargo, name: role, widget: string, hint: 'Ejemplo: Dirección' }
+              - { label: Nombre completo, name: name, widget: string, required: false }
+              - { label: Especialidad o breve descripción, name: bio, widget: text, required: false }
+              - { label: Foto (retrato), name: image, widget: image, required: false }
+      - name: achievements
+        label: Logros
+        file: content/achievements.json
+        fields:
+          - label: Logros
+            name: items
+            widget: list
+            summary: '{{fields.year}} · {{fields.title}}'
+            fields:
+              - { label: Año, name: year, widget: string, required: false, pattern: ['^\d{4}$', 'Escribe el año con 4 números. Ejemplo: 2026.'] }
+              - { label: Título, name: title, widget: string }
+              - { label: Descripción, name: description, widget: text }
+              - { label: Es un espacio de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando el logro sea real.' }
+      - name: testimonials
+        label: Testimonios
+        file: content/testimonials.json
+        fields:
+          - label: Testimonios
+            name: items
+            widget: list
+            summary: '{{fields.author}}'
+            hint: 'Publica solo con autorización de quien los firma.'
+            fields:
+              - { label: Testimonio, name: quote, widget: text }
+              - { label: Nombre y apellido, name: author, widget: string }
+              - { label: Quién es, name: role, widget: select, options: [Padre de familia, Madre de familia, Estudiante, Docente], default: Padre de familia }
+              - { label: Es un espacio de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando el testimonio sea real.' }
+
+  # ───────────────────────── PROPUESTA, NIVELES Y ACTIVIDADES ─────────────────────────
+  - name: propuesta
+    label: Propuesta, niveles y actividades
+    label_singular: Propuesta
+    description: Pilares educativos, niveles, actividades y la sección “Así se vive Nikola Tesla”.
+    media_folder: /public/images/generales
+    public_folder: /images/generales
+    files:
+      - name: pillars
+        label: Pilares de la propuesta educativa
+        file: content/pillars.json
+        fields:
+          - label: Pilares
+            name: items
+            widget: list
+            summary: '{{fields.title}}'
+            hint: 'El orden de la lista es el orden en la web.'
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Descripción, name: description, widget: text }
+              - { label: Foto, name: image, widget: image, required: false, hint: 'Si no hay foto se muestra la ilustración.' }
+              - { label: Ilustración (mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
+              - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
+      - name: levels
+        label: Niveles
+        file: content/levels.json
+        fields:
+          - label: Niveles
+            name: items
+            widget: list
+            allow_add: false
+            summary: '{{fields.name}}'
+            fields:
+              - { label: Código, name: slug, widget: hidden }
+              - { label: Nombre, name: name, widget: string }
+              - { label: Frase breve, name: summary, widget: string }
+              - { label: Descripción, name: description, widget: text }
+              - label: Grados
+                name: grades
+                widget: list
+                required: false
+                hint: 'Ejemplo: 1.º grado, 2.º grado… Si no hay grados, se muestra “por confirmar”.'
+                field: { label: Grado, name: grade, widget: string }
+              - { label: Foto del nivel, name: image, widget: image, required: false }
+              - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
+      - name: activities
+        label: Actividades
+        file: content/activities.json
+        fields:
+          - label: Actividades
+            name: items
+            widget: list
+            summary: '{{fields.title}}'
+            hint: 'Las primeras ocupan los espacios más grandes de la composición.'
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Descripción, name: description, widget: string }
+              - { label: Foto, name: image, widget: image, required: false }
+              - { label: Ilustración (mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
+              - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
+      - name: experience
+        label: Así se vive Nikola Tesla
+        file: content/experience.json
+        fields:
+          - label: Momentos
+            name: shots
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { label: Rótulo, name: label, widget: string, hint: 'Ejemplo: Clases' }
+              - { label: Frase, name: caption, widget: string }
+              - { label: Foto, name: image, widget: image, required: false }
+              - { label: Ilustración (mientras no haya foto), name: illustration, widget: select, required: false, options: *illustrations }
+          - label: Palabras que se desplazan
+            name: words
+            widget: list
+            hint: 'Verbos de la experiencia de aprender. Ejemplo: Preguntar, Explorar…'
+            field: { label: Palabra, name: word, widget: string }
+
+  # ───────────────────────── ADMISIÓN Y PREGUNTAS ─────────────────────────
+  - name: admision
+    label: Admisión y preguntas
+    label_singular: Admisión
+    description: Los pasos para matricular, requisitos, fechas, vacantes y las preguntas de las familias.
+    media_folder: /public/images/generales
+    public_folder: /images/generales
+    files:
+      - name: admission
+        label: Proceso de admisión
+        file: content/admission.json
+        fields:
+          - { label: Titular grande, name: headline, widget: string }
+          - { label: Texto de invitación, name: intro, widget: text }
+          - label: Pasos del proceso
+            name: steps
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Descripción, name: description, widget: text }
+              - { label: Confirmado por el colegio, name: confirmed, widget: boolean, default: false }
+          - label: Requisitos, fechas y vacantes
+            name: info
+            widget: list
+            summary: '{{fields.title}}'
+            hint: 'Se muestran como bloques en la página de Admisión.'
+            fields:
+              - { label: Título, name: title, widget: string }
+              - { label: Texto, name: text, widget: text }
+      - name: faq
+        label: Preguntas frecuentes
+        file: content/faq.json
+        fields:
+          - label: Preguntas
+            name: items
+            widget: list
+            summary: '{{fields.question}}'
+            fields:
+              - { label: Pregunta, name: question, widget: string }
+              - { label: Respuesta, name: answer, widget: text }
+              - { label: Respuesta confirmada, name: confirmed, widget: boolean, default: false, hint: 'Solo las respuestas confirmadas se envían a Google.' }
+
+  # ───────────────────────── GALERÍA ─────────────────────────
+  - name: galeria
+    label: Galería de fotos
+    label_singular: Galería
+    description: Los eventos del colegio con sus fotos y videos, ordenados por fecha.
+    media_folder: /public/images/galeria
+    public_folder: /images/galeria
+    files:
+      - name: gallery
+        label: Eventos de la galería
+        file: content/gallery.json
+        fields:
+          - label: Eventos
+            name: items
+            widget: list
+            summary: '{{fields.date}} · {{fields.title}}'
+            fields:
+              - { label: Título del evento, name: title, widget: string }
+              - { label: Fecha, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: 'Importa: ubica el evento en su año y mes. Con fecha futura, el evento aparece solo ese día.' }
+              - { label: Categoría, name: category, widget: string, hint: 'Ejemplo: Eventos, Deportes, Ciencia.' }
+              - { label: Descripción, name: description, widget: text }
+              - { label: Foto de portada, name: coverImage, widget: image, required: false }
+              - { label: Es un evento de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando el evento sea real.' }
+              - label: Fotos y videos
+                name: media
+                widget: list
+                required: false
+                summary: '{{fields.type}} · {{fields.caption}}'
+                fields:
+                  - { label: Tipo, name: type, widget: select, options: [{ label: Foto, value: image }, { label: Video, value: video }], default: image }
+                  - { label: Archivo, name: url, widget: file, required: false, hint: 'Foto o video. Para YouTube o Vimeo, usa “Insertar desde URL” y pega el enlace.' }
+                  - { label: Imagen de vista previa del video, name: thumbnail, widget: image, required: false }
+                  - { label: Descripción breve, name: caption, widget: string, required: false }
+
+  # ───────────────────────── NOTICIAS ─────────────────────────
+  - name: noticias
+    label: Noticias
+    label_singular: Noticia
+    description: Comunicados, logros y novedades. Cada noticia es una publicación.
+    folder: content/noticias
+    extension: json
+    format: json
+    create: true
+    slug: '{{slug}}'
+    media_folder: /public/images/noticias
+    public_folder: /images/noticias
+    summary: '{{date}} · {{title}}'
+    sortable_fields: [date, title]
+    fields:
+      - { label: Título, name: title, widget: string }
+      - { label: Fecha, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: 'Para programar una noticia, pon una fecha futura: aparecerá sola ese día.' }
+      - { label: Categoría, name: category, widget: select, options: [Admisión, Actividades, Comunicados, Deportes, Logros, Cultura], default: Comunicados }
+      - { label: Resumen (1 o 2 líneas), name: excerpt, widget: text }
+      - { label: Texto completo, name: body, widget: text, hint: 'Deja una línea en blanco entre un párrafo y el siguiente.' }
+      - { label: Foto, name: image, widget: image, required: false }
+      - { label: Es una noticia de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando la noticia sea real. Las de ejemplo no aparecen en Google.' }

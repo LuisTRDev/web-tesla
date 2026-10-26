@@ -1,0 +1,24 @@
+# Reconstruye la web en Netlify todas las madrugadas (5:00 a. m. de Lima).
+# Sirve para que las noticias, eventos y avisos programados con fecha futura aparezcan solos el día elegido.
+# Requisito: crear un "Build hook" en Netlify (Site configuration → Build & deploy → Build hooks) y guardarlo en
+# GitHub (Settings → Secrets and variables → Actions) con el nombre NETLIFY_BUILD_HOOK. Sin el secreto, no hace nada.
+name: Reconstruir la web cada día
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Avisar a Netlify
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "Falta el secreto NETLIFY_BUILD_HOOK: no se reconstruye."
+            exit 0
+          fi
+          curl -fsS -X POST -d '{}' "$HOOK"

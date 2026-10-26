@@ -1,14 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Figtree } from "next/font/google";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Analytics from "@/components/layout/Analytics";
+import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import ClickTracker from "@/components/layout/ClickTracker";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import SparkTrail from "@/components/ui/SparkTrail";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
+import { banner, isBannerActive } from "@/data/banner";
 import { settings } from "@/data/settings";
+import { todayISO } from "@/lib/utils";
 import "./globals.css";
 
 // Títulos: Bricolage Grotesque (con carácter, cálida). Texto: Figtree (clara y amable).
@@ -39,8 +42,9 @@ export const metadata: Metadata = {
     siteName: settings.name,
     title,
     description: settings.description,
+    ...(settings.images.share ? { images: [settings.images.share] } : {}),
   },
-  twitter: { card: "summary_large_image", title, description: settings.description },
+  twitter: { card: "summary_large_image", title, description: settings.description, ...(settings.images.share ? { images: [settings.images.share] } : {}) },
   robots: { index: true, follow: true },
 };
 
@@ -75,7 +79,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es-PE" className={`${display.variable} ${body.variable}`}>
+    <html lang="es-PE" className={`${display.variable} ${body.variable}`} style={{ "--bar-h": isBannerActive() ? "40px" : "0px" } as CSSProperties}>
       <body>
         <a
           href="#contenido"
@@ -84,6 +88,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           Saltar al contenido
         </a>
         <ScrollProgress />
+        {banner.enabled && banner.text && !(banner.endDate && todayISO() > banner.endDate) && (
+          <AnnouncementBar text={banner.text} linkText={banner.linkText} linkUrl={banner.linkUrl} startDate={banner.startDate} endDate={banner.endDate} initialVisible={isBannerActive()} />
+        )}
         <Navbar />
         <main id="contenido">{children}</main>
         <Footer />

@@ -2,7 +2,7 @@ import ButtonLink from "@/components/ui/ButtonLink";
 import Countdown from "@/components/ui/Countdown";
 import DraftBadge from "@/components/ui/DraftBadge";
 import Reveal from "@/components/ui/Reveal";
-import { admissionIntro, admissionSteps } from "@/data/admission";
+import { admissionHeadline, admissionIntro, admissionSteps } from "@/data/admission";
 import { settings } from "@/data/settings";
 import { cn, whatsappLink } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ export default function Admission({ showProcessLink = true, showIntro = true }: 
           <Reveal className="mb-10">
             <p className="font-display text-xl font-bold md:text-2xl">Admisión {settings.admissionYear}</p>
             <h2 className="mt-4 max-w-[13ch] text-balance font-display text-[clamp(3rem,9.5vw,8.5rem)] font-extrabold leading-[0.88] tracking-[-0.045em]">
-              ¿Listos para comenzar esta historia?
+              {admissionHeadline}
             </h2>
             <p className="mt-8 max-w-xl text-xl leading-relaxed text-noche/85">{admissionIntro}</p>
           </Reveal>

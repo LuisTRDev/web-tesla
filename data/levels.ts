@@ -1,28 +1,21 @@
+import raw from "@/content/levels.json";
 import type { Level } from "@/types";
+import { bool, list, rec, str, strings, text } from "@/lib/content";
 
 /**
- * Niveles educativos: el colegio ofrece solo Primaria y Secundaria. NO se inventan grados ni edades:
- * completa `grades` con la información oficial, p. ej. ["1.º grado", "2.º grado"].
+ * Niveles educativos: el colegio ofrece Primaria y Secundaria. Se editan desde el panel (/admin → Niveles).
+ * No se inventan grados: si `grades` está vacío se muestra "por confirmar".
  */
-export const levels: Level[] = [
-  {
-    slug: "primaria",
-    name: "Primaria",
-    summary: "Aprender a aprender.",
-    description:
-      "[DESCRIPCIÓN PENDIENTE] Texto breve sobre el nivel Primaria: hábitos de estudio, áreas y proyectos.",
-    grades: null,
-    image: "/images/niveles/primaria/aula-primaria-01.png",
-    confirmed: false,
-  },
-  {
-    slug: "secundaria",
-    name: "Secundaria",
-    summary: "Preparados para lo que viene.",
-    description:
-      "[DESCRIPCIÓN PENDIENTE] Texto breve sobre el nivel Secundaria: preparación académica y proyecto de vida.",
-    grades: null,
-    image: "/images/niveles/secundaria/aula-secundaria-01.png",
-    confirmed: false,
-  },
-];
+export const levels: Level[] = list(rec(raw).items).map((item, index) => {
+  const grades = strings(item.grades);
+  const name = str(item.name);
+  return {
+    slug: str(item.slug, name.toLowerCase().replace(/[^a-z0-9]+/g, "-") || `nivel-${index + 1}`),
+    name,
+    summary: str(item.summary),
+    description: str(item.description),
+    grades: grades.length > 0 ? grades : null,
+    image: text(item.image),
+    confirmed: bool(item.confirmed),
+  };
+});

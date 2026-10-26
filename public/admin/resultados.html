@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Resultados de la campaña</title>
+    <link rel="stylesheet" href="/admin/tools.css" />
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14.5px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 8px;
+        border-top: 1px solid rgba(13, 18, 48, 0.1);
+        vertical-align: top;
+      }
+      th {
+        font-size: 12.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--niebla);
+        border-top: 0;
+      }
+      .report {
+        width: 100%;
+        height: 78vh;
+        border: 0;
+        border-radius: 16px;
+        background: #fff;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      ol li {
+        margin: 6px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Resultados de la campaña</h1>
+      <p class="lead">Cuántas familias visitan la web, de dónde vienen y cuántas te escriben por WhatsApp. Los datos los recoge Google Analytics.</p>
+
+      <div class="card" id="report-card" hidden style="margin-top: 20px"><iframe class="report" id="report" title="Informe de resultados" loading="lazy"></iframe></div>
+
+      <div class="card" id="setup" style="margin-top: 20px">
+        <h2>Conectar tu informe</h2>
+        <p class="muted" id="setup-note">Aún no hay un informe conectado. Mientras tanto puedes ver los datos directamente en Google Analytics.</p>
+        <div class="row" style="margin: 14px 0">
+          <a class="btn accent" href="https://analytics.google.com" target="_blank" rel="noopener">Abrir Google Analytics</a>
+          <a class="btn ghost" href="https://lookerstudio.google.com" target="_blank" rel="noopener">Abrir Looker Studio</a>
+        </div>
+        <div class="field" style="max-width: 640px">
+          <label for="looker">Enlace de tu informe de Looker Studio (opcional)</label>
+          <input id="looker" placeholder="https://lookerstudio.google.com/embed/reporting/…" />
+          <p class="hint">Para incrustarlo: en Looker Studio → Archivo → Insertar informe → “Habilitar la inserción” → copia la URL. Se guarda solo en este navegador.</p>
+        </div>
+        <button class="btn small" id="save" type="button">Guardar enlace</button>
+      </div>
+
+      <div class="grid two" style="margin-top: 16px">
+        <div class="card">
+          <h3>Qué mirar</h3>
+          <table>
+            <thead><tr><th>Dato</th><th>Dónde está</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Mensajes de WhatsApp</strong></td><td>Eventos → <code>whatsapp_click</code></td></tr>
+              <tr><td><strong>Visitas agendadas</strong></td><td>Eventos → <code>visit_request</code></td></tr>
+              <tr><td><strong>Formulario de contacto</strong></td><td>Eventos → <code>contact_form_submit</code></td></tr>
+              <tr><td><strong>Visitas a la web</strong></td><td>Informes → Adquisición → Resumen</td></tr>
+              <tr><td><strong>Desde dónde llegaron</strong></td><td>Adquisición → Adquisición de tráfico → “Origen de la sesión”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Cómo se identifica cada medio</h3>
+          <table>
+            <thead><tr><th>Medio</th><th>Origen que verás</th></tr></thead>
+            <tbody>
+              <tr><td>QR del volante</td><td><code>volante</code></td></tr>
+              <tr><td>QR del afiche</td><td><code>afiche</code></td></tr>
+              <tr><td>QR de banner o redes</td><td><code>banner</code>, <code>redes</code></td></tr>
+              <tr><td>Anuncios de Facebook o Instagram</td><td><code>facebook</code>, <code>instagram</code></td></tr>
+            </tbody>
+          </table>
+          <p class="hint">Cada enlace se crea en <em>Campaña y QR</em>. Un volante con QR que se escanea aparece como “volante”.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 16px">
+        <h2>Activar la medición (una sola vez)</h2>
+        <ol>
+          <li>Crea una cuenta en <strong>Google Analytics</strong> y una propiedad GA4 para la web. Copia el <strong>ID de medición</strong> (empieza con <code>G-</code>).</li>
+          <li>Quien administra la web lo guarda en Netlify como variable <code>NEXT_PUBLIC_GA_ID</code> y vuelve a publicar.</li>
+          <li>En Analytics marca como <strong>evento clave</strong> a <code>whatsapp_click</code> y <code>visit_request</code>.</li>
+          <li>(Opcional) En Looker Studio conecta tu propiedad GA4 y crea un informe con visitas, origen y esos eventos.</li>
+        </ol>
+        <div class="alert info">Sin el paso 2 la web no envía datos: los QR y los enlaces funcionan igual, pero no se podrá medir.</div>
+      </div>
+    </div>
+
+    <script src="/admin/panel-config.js"></script>
+    <script>
+      (function () {
+        var cfg = window.PANEL || {};
+        var saved = "";
+        try { saved = localStorage.getItem("tesla-looker") || ""; } catch (e) {}
+        var url = saved || cfg.lookerUrl || "";
+        function show(u) {
+          if (!u) return;
+          document.getElementById("report").src = u;
+          document.getElementById("report-card").hidden = false;
+          document.getElementById("looker").value = u;
+          document.getElementById("setup-note").textContent = "Informe conectado. Puedes cambiarlo pegando otro enlace.";
+        }
+        show(url);
+        document.getElementById("save").addEventListener("click", function () {
+          var v = document.getElementById("looker").value.trim();
+          try { localStorage.setItem("tesla-looker", v); } catch (e) {}
+          if (v) show(v); else document.getElementById("report-card").hidden = true;
+        });
+      })();
+    </script>
+  </body>
+</html>

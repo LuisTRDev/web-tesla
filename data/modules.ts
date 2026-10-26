@@ -1,4 +1,5 @@
-import { settings } from "@/data/settings";
+import raw from "@/content/modules.json";
+import { list, rec, str, text } from "@/lib/content";
 
 /**
  * MÓDULOS DEL SITIO
@@ -6,6 +7,9 @@ import { settings } from "@/data/settings";
  * motivo gráfico y frase. La navegación, la portada, el pie de cada módulo ("siguiente")
  * y la transición de color al cambiar de página leen todo desde aquí.
  * El orden del arreglo es el orden de recorrido.
+ *
+ * Los TEXTOS (nombre en el menú, título, introducción, resumen y descripción para Google) se editan
+ * desde el panel (content/modules.json). El diseño (colores y motivos) vive aquí, en el código.
  */
 
 export type Motif = "escudo" | "plano" | "escalones" | "chispas" | "pelicula" | "periodico" | "ondas" | "relieve";
@@ -35,101 +39,83 @@ export interface SiteModule {
   intro: string;
   /** Resumen corto para la portada y el enlace "siguiente módulo". */
   teaser: string;
+  /** Descripción que muestran Google y las redes al compartir la página. */
+  seoDescription: string;
   motif: Motif;
   theme: ModuleTheme;
 }
 
-export const modules: SiteModule[] = [
+/** Diseño fijo de cada módulo. Los textos se combinan con content/modules.json por `id`. */
+const design: Array<{ id: string; motif: Motif; theme: ModuleTheme; fallback: { label: string; title: string } }> = [
   {
     id: "nosotros",
-    number: "01",
-    label: "Nosotros",
-    href: "/nosotros",
-    title: "Pasión por educar.",
-    intro: "Una comunidad que forma con disciplina, liderazgo y excelencia, y que acompaña a cada estudiante a descubrir lo que puede llegar a ser.",
-    teaser: "Quiénes somos, qué creemos y lo que dice nuestra comunidad.",
     motif: "escudo",
     theme: { tone: "light", bg: "bg-tiza", text: "text-noche", muted: "text-tinta/75", accent: "#E03C26" },
+    fallback: { label: "Nosotros", title: "Pasión por educar." },
   },
   {
     id: "propuesta",
-    number: "02",
-    label: "Propuesta educativa",
-    href: "/propuesta",
-    title: "Una educación pensada para el futuro.",
-    intro: "Los pilares que guían cómo enseñamos y cómo aprenden nuestros estudiantes, dentro y fuera del aula.",
-    teaser: "Los pilares de nuestra forma de enseñar.",
     motif: "plano",
     theme: { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/70", accent: "#A9ADFF" },
+    fallback: { label: "Propuesta educativa", title: "Una educación pensada para el futuro." },
   },
   {
     id: "niveles",
-    number: "03",
-    label: "Niveles",
-    href: "/niveles",
-    title: "Cada etapa, un descubrimiento.",
-    intro: "Acompañamos a nuestros estudiantes desde la primaria hasta el final de la secundaria.",
-    teaser: "Primaria y Secundaria.",
     motif: "escalones",
     theme: { tone: "dark", bg: "bg-marino", text: "text-white", muted: "text-white/75", accent: "#FFB627" },
+    fallback: { label: "Niveles", title: "Cada etapa, un descubrimiento." },
   },
   {
     id: "actividades",
-    number: "04",
-    label: "Actividades",
-    href: "/actividades",
-    title: "Aprender también ocurre fuera del aula.",
-    intro: "Talleres y actividades para que cada estudiante encuentre lo suyo.",
-    teaser: "Ciencia, arte, deporte, cultura y más.",
     motif: "chispas",
     theme: { tone: "dark", bg: "bg-rojo-700", text: "text-white", muted: "text-white/85", accent: "#FFB627" },
+    fallback: { label: "Actividades", title: "Aprender también ocurre fuera del aula." },
   },
   {
     id: "galeria",
-    number: "05",
-    label: "Galería",
-    href: "/galeria",
-    title: "El año, en imágenes.",
-    intro: "Todas nuestras actividades, organizadas por año, mes y evento. Toca cualquier imagen para verla en grande.",
-    teaser: "Fotos y videos, mes a mes.",
     motif: "pelicula",
     theme: { tone: "dark", bg: "bg-noche-900", text: "text-white", muted: "text-white/70", accent: "#FFB627" },
+    fallback: { label: "Galería", title: "El año, en imágenes." },
   },
   {
     id: "noticias",
-    number: "06",
-    label: "Noticias",
-    href: "/noticias",
-    title: "Lo que está pasando en Nikola Tesla.",
-    intro: "Comunicados, logros y actividades recientes de nuestra comunidad.",
-    teaser: "Comunicados y novedades.",
     motif: "periodico",
     theme: { tone: "light", bg: "bg-white", text: "text-noche", muted: "text-tinta/75", accent: "#E03C26" },
+    fallback: { label: "Noticias", title: "Lo que está pasando en Nikola Tesla." },
   },
   {
     id: "admision",
-    number: "07",
-    label: "Admisión",
-    href: "/admision",
-    kicker: `Admisión ${settings.admissionYear}`,
-    title: "¿Listos para comenzar esta historia?",
-    intro: "Te acompañamos en cada paso para que tu familia forme parte de nuestra comunidad.",
-    teaser: `Proceso de Admisión ${settings.admissionYear}.`,
     motif: "ondas",
     theme: { tone: "light", bg: "bg-filamento", text: "text-noche", muted: "text-noche/80", accent: "#0D1230" },
+    fallback: { label: "Admisión", title: "¿Listos para comenzar esta historia?" },
   },
   {
     id: "contacto",
-    number: "08",
-    label: "Contacto",
-    href: "/contacto",
-    title: "Conversemos.",
-    intro: `Escríbenos o visítanos en ${settings.location.district}. Nos encantará conocer a tu familia.`,
-    teaser: "Dirección, mapa y formulario.",
     motif: "relieve",
     theme: { tone: "light", bg: "bg-arco-100", text: "text-noche", muted: "text-tinta/75", accent: "#E03C26" },
+    fallback: { label: "Contacto", title: "Conversemos." },
   },
 ];
+
+const texts = list(rec(raw).items);
+
+export const modules: SiteModule[] = design.map((item, index) => {
+  const copy = texts.find((entry) => entry.id === item.id) ?? {};
+  const label = str(copy.label, item.fallback.label);
+  return {
+    id: item.id,
+    number: String(index + 1).padStart(2, "0"),
+    label,
+    href: `/${item.id}`,
+    kicker: text(copy.kicker) ?? undefined,
+    title: str(copy.title, item.fallback.title),
+    intro: str(copy.intro),
+    teaser: str(copy.teaser),
+    seoDescription: str(copy.seoDescription),
+    motif: item.motif,
+    theme: item.theme,
+  };
+});
 
 /** Tema de la portada y de páginas sin módulo (por ejemplo, 404). */
 export const homeTheme: ModuleTheme = { tone: "dark", bg: "bg-noche", text: "text-white", muted: "text-white/70", accent: "#FFB627" };

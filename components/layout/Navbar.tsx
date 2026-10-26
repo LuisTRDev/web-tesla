@@ -53,7 +53,7 @@ export default function Navbar() {
     <>
       <header
         className={cn(
-          "nav-in fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter,color] duration-500",
+          "nav-in fixed inset-x-0 top-[var(--bar-h,0px)] z-50 transition-[background-color,box-shadow,backdrop-filter,color] duration-500",
           onLight ? "text-noche" : "text-white",
           scrolled || open ? "bg-noche/85 shadow-[0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md" : "bg-transparent",
         )}

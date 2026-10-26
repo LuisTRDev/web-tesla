@@ -11,7 +11,7 @@ const mod = getModule("contacto");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: `Contacta a la Institución Educativa Privada “Nikola Tesla”: ${settings.location.address}, ${settings.location.district}, ${settings.location.province}.`,
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

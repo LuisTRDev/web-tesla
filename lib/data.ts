@@ -25,19 +25,23 @@ import { levels } from "@/data/levels";
 import { news } from "@/data/news";
 import { testimonials } from "@/data/testimonials";
 import { sortEvents } from "@/lib/gallery";
+import { todayISO } from "@/lib/utils";
+
+/** Noticias y eventos con fecha futura no se muestran hasta ese día (publicación programada). */
+const published = <T extends { date: string }>(items: T[]) => items.filter((item) => !item.date || item.date <= todayISO());
 
 export async function getGalleryEvents(limit?: number): Promise<GalleryEvent[]> {
-  const sorted = sortEvents(galleryEvents);
+  const sorted = sortEvents(published(galleryEvents));
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
 }
 
 export async function getNews(limit?: number): Promise<NewsPost[]> {
-  const sorted = [...news].sort((a, b) => b.date.localeCompare(a.date));
+  const sorted = published(news).sort((a, b) => b.date.localeCompare(a.date));
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsPost | null> {
-  return news.find((post) => post.slug === slug) ?? null;
+  return published(news).find((post) => post.slug === slug) ?? null;
 }
 
 export async function getLevels(): Promise<Level[]> {

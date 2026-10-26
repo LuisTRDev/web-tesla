@@ -1,0 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Figtree:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Bricolage Grotesque";
+  --font-body: "Figtree";
+}
+body {
+  @apply bg-tiza font-sans text-tinta antialiased;
+  margin: 0;
+}
+.text-balance {
+  text-wrap: balance;
+}
+.ph-dark {
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 2px, transparent 2px 14px);
+}
+.ph-light {
+  background-image: repeating-linear-gradient(135deg, rgba(13, 18, 48, 0.06) 0 2px, transparent 2px 14px);
+}
+.hero-aurora {
+  background:
+    radial-gradient(60% 55% at 78% 30%, rgba(255, 182, 39, 0.22), transparent 70%),
+    radial-gradient(55% 60% at 12% 75%, rgba(169, 173, 255, 0.28), transparent 70%),
+    radial-gradient(50% 50% at 50% 100%, rgba(42, 51, 115, 0.9), transparent 75%),
+    #0d1230;
+}
+
+/* Vista previa interactiva: se resalta solo el elemento más interno bajo el cursor. */
+body {
+  cursor: default;
+}
+body *:hover:not(:has(*:hover)) {
+  outline: 2px dashed rgba(255, 182, 39, 0.95);
+  outline-offset: 3px;
+  cursor: pointer;
+}

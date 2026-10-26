@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
+import SecretAdminTrigger from "@/components/ui/SecretAdminTrigger";
 import SocialIcon from "@/components/ui/SocialIcon";
 import { navLinks } from "@/data/navigation";
 import { settings } from "@/data/settings";
@@ -25,7 +26,9 @@ export default function Footer() {
 
         <div className="mt-16 grid gap-12 border-t border-white/[0.12] pt-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
-            <Logo />
+            <SecretAdminTrigger>
+              <Logo />
+            </SecretAdminTrigger>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/65">{settings.name}</p>
           </div>
 

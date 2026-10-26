@@ -1,0 +1,30 @@
+{
+  "home": {
+    "admissionNotice": "Infórmate sobre el proceso"
+  },
+  "campaign": {
+    "badge": "Nikola Tesla · Cañete",
+    "seoDescription": "Matrícula y admisión 2027 en la Institución Educativa Privada “Nikola Tesla”, Nuevo Imperial, Cañete. Agenda tu visita o escríbenos por WhatsApp.",
+    "reasonsTitle": "¿Por qué elegir Nikola Tesla?",
+    "reasons": [
+      {
+        "title": "Tecnología e innovación",
+        "description": "La tecnología como herramienta para investigar, crear y resolver problemas reales.",
+        "illustration": "tecnologia"
+      },
+      {
+        "title": "Desarrollo personal",
+        "description": "Confianza, autonomía y habilidades para la vida, dentro y fuera del aula.",
+        "illustration": "personal"
+      },
+      {
+        "title": "Valores",
+        "description": "Una convivencia basada en el respeto, la responsabilidad y la empatía.",
+        "illustration": "valores"
+      }
+    ],
+    "stepsTitle": "Así de simple.",
+    "visitTitle": "Ven a conocernos.",
+    "visitText": "Elige el día y el turno que mejor te vengan. Te confirmamos la hora por WhatsApp."
+  }
+}

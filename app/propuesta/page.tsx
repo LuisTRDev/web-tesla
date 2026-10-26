@@ -9,7 +9,7 @@ const mod = getModule("propuesta");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: "La propuesta educativa de la Institución Educativa Privada “Nikola Tesla”: los pilares que guían cómo enseñamos y cómo aprenden nuestros estudiantes.",
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

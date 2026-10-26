@@ -1,0 +1,63 @@
+{
+  "contact": {
+    "whatsapp": [
+      "51960209798",
+      "51982565433"
+    ],
+    "hours": null
+  },
+  "admissionDeadline": "2027-02-26",
+  "admissionYear": 2027,
+  "shortName": "Nikola Tesla",
+  "siteUrl": "colegionikolatesla.netlify.app",
+  "concept": "Educación que despierta la curiosidad y prepara para el futuro.",
+  "name": "Institución Educativa Privada “Nikola Tesla”",
+  "social": {
+    "facebook": "https://www.facebook.com/search/top?q=instituci%C3%B3n%20educativa%20privada%20%22nikola%20tesla%22",
+    "instagram": null,
+    "tiktok": "https://www.tiktok.com/@colegio.tesla.canete",
+    "youtube": null
+  },
+  "tagline": "Donde la curiosidad se convierte en futuro.",
+  "kicker": "Institución Educativa Privada",
+  "footerPhrase": "Educación, curiosidad y futuro.",
+  "showDraftBadges": true,
+  "location": {
+    "address": "Mz. B Lote 13",
+    "district": "Nuevo Imperial",
+    "province": "Cañete",
+    "region": "Lima",
+    "country": "Perú",
+    "mapQuery": "Nuevo Imperial, Cañete, Lima, Perú"
+  },
+  "images": {
+    "hero": null,
+    "about": null,
+    "aboutDetail": null,
+    "admission": null,
+    "heroVideo": null,
+    "share": null
+  },
+  "legal": {
+    "resolution": "RESOLUCION PRUEBA",
+    "modularCode": null
+  },
+  "description": "Institución Educativa Privada “Nikola Tesla” en Nuevo Imperial, Cañete. Conoce nuestra propuesta educativa, actividades, comunidad y proceso de admisión.",
+  "stats": [
+    {
+      "id": "trayectoria",
+      "value": null,
+      "label": "Años de trayectoria"
+    },
+    {
+      "id": "estudiantes",
+      "value": null,
+      "label": "Estudiantes"
+    },
+    {
+      "id": "docentes",
+      "value": null,
+      "label": "Docentes"
+    }
+  ]
+}

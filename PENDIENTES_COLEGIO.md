@@ -1,6 +1,6 @@
 # Información que necesitamos del colegio
 
-Con esto la web queda completa y lista para publicar. Las fotos son mejores si están sin logo ni texto encima.
+Con esto la web queda completa y lista para publicar. Todo se carga desde el panel de edición (`/admin`, ver `docs/GUIA_PANEL.md`): textos, fotos, cifras, noticias, galería y la fecha del contador de Admisión. Las fotos son mejores si están sin logo ni texto encima.
 
 ## Fotos
 - [ ] **Portada:** 1 foto horizontal amplia (frontis, patio o grupo de alumnos), o un video corto de 10 a 15 segundos.

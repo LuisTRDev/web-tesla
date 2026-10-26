@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "logro-1",
+      "year": null,
+      "title": "[LOGRO ACADÉMICO]",
+      "description": "[DESCRIPCIÓN PENDIENTE] Concurso u olimpiada, puesto obtenido y estudiantes participantes.",
+      "isPlaceholder": true
+    },
+    {
+      "id": "logro-2",
+      "year": null,
+      "title": "[LOGRO DEPORTIVO]",
+      "description": "[DESCRIPCIÓN PENDIENTE] Disciplina, campeonato y resultado.",
+      "isPlaceholder": true
+    },
+    {
+      "id": "logro-3",
+      "year": null,
+      "title": "[LOGRO CULTURAL O ARTÍSTICO]",
+      "description": "[DESCRIPCIÓN PENDIENTE] Concurso de danza, música, oratoria u otro.",
+      "isPlaceholder": true
+    }
+  ]
+}

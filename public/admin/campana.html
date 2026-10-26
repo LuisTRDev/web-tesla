@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Campaña: afiches, QR y enlaces</title>
+    <link rel="stylesheet" href="/admin/tools.css" />
+    <style>
+      .designer {
+        display: grid;
+        gap: 22px;
+        grid-template-columns: minmax(300px, 420px) 1fr;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .designer {
+          grid-template-columns: 1fr;
+        }
+        .sticky {
+          position: static !important;
+        }
+      }
+      .sticky {
+        position: sticky;
+        top: 12px;
+        max-height: calc(100vh - 24px);
+        overflow: auto;
+        padding-right: 4px;
+      }
+      .stage {
+        background: repeating-conic-gradient(#e2e5f0 0% 25%, #eef0f7 0% 50%) 50% / 24px 24px;
+        border-radius: 20px;
+        padding: 18px;
+        display: grid;
+        place-items: center;
+      }
+      #preview {
+        max-width: 100%;
+        max-height: 72vh;
+        width: auto;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 20px 50px -20px rgba(13, 18, 48, 0.55);
+        background: #fff;
+      }
+      /* controles */
+      .qgroup {
+        background: #fff;
+        border-radius: 18px;
+        margin-bottom: 12px;
+        overflow: hidden;
+      }
+      .qgroup > summary {
+        cursor: pointer;
+        list-style: none;
+        padding: 16px 20px;
+        font: 800 17px "Bricolage Grotesque", sans-serif;
+        color: var(--noche);
+        display: flex;
+        justify-content: space-between;
+      }
+      .qgroup > summary::-webkit-details-marker {
+        display: none;
+      }
+      .qgroup > summary::after {
+        content: "▾";
+        transition: transform 0.2s;
+      }
+      .qgroup[open] > summary::after {
+        transform: rotate(180deg);
+      }
+      .qbody {
+        padding: 0 20px 18px;
+      }
+      .qrow[hidden] {
+        display: none;
+      }
+      .qcheck {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 40px;
+      }
+      .qcheck input {
+        width: 22px;
+        height: 22px;
+        min-height: 0;
+        accent-color: var(--noche);
+        flex-shrink: 0;
+      }
+      .qchecklabel {
+        margin: 0 !important;
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: var(--tinta) !important;
+        cursor: pointer;
+      }
+      .qgroup label:not(.qchecklabel) {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--noche);
+      }
+      input[type="range"] {
+        min-height: 0;
+        padding: 0;
+        accent-color: var(--filamento);
+      }
+      .qval {
+        font-size: 13px;
+        color: var(--niebla);
+        font-weight: 600;
+      }
+      .qexample {
+        border: 0;
+        background: none;
+        color: var(--marino);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        font: 600 13.5px Figtree, sans-serif;
+        cursor: pointer;
+        padding: 6px 0 0;
+        text-align: left;
+      }
+      .swatches {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .swatch {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 1.5px rgba(13, 18, 48, 0.3);
+        cursor: pointer;
+      }
+      .swatch.on {
+        box-shadow: 0 0 0 3px var(--noche);
+      }
+      .photo {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .photo input[type="file"] {
+        min-height: 0;
+        padding: 8px;
+        flex: 1 1 200px;
+      }
+      .drow {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 0;
+        border-top: 1px solid rgba(13, 18, 48, 0.08);
+        flex-wrap: wrap;
+      }
+      .drow:first-child {
+        border-top: 0;
+      }
+      .tips li {
+        margin: 6px 0;
+      }
+      .urlbox {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .urlbox .mono {
+        flex: 1 1 220px;
+      }
+      .downloads {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .downloads select {
+        width: auto;
+        min-width: 210px;
+      }
+      .presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip-btn {
+        border: 1px solid rgba(13, 18, 48, 0.25);
+        background: #fff;
+        color: var(--noche);
+        border-radius: 999px;
+        padding: 0 16px;
+        min-height: 40px;
+        font: 700 14px Figtree, sans-serif;
+        cursor: pointer;
+      }
+      .chip-btn:hover {
+        background: #fff4d9;
+        border-color: var(--filamento);
+      }
+      .lights {
+        font-size: 1.1rem;
+      }
+      .lights.ok { color: #17683a; }
+      .lights.warn { color: #8a5a00; }
+      .lights.bad { color: #a62a17; }
+      .health {
+        list-style: none;
+        margin: 10px 0 0;
+        padding: 0;
+        max-height: 260px;
+        overflow: auto;
+      }
+      .health li {
+        display: flex;
+        gap: 10px;
+        padding: 8px 0;
+        border-top: 1px solid rgba(13, 18, 48, 0.08);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .health li > span {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 800;
+        color: #fff;
+        margin-top: 2px;
+      }
+      .health li.ok > span { background: #17683a; }
+      .health li.warn > span { background: #d98a00; }
+      .health li.bad > span { background: #c9371f; }
+      .readsum {
+        font-weight: 700;
+        margin: 10px 0 4px;
+      }
+      .readsum.ok { color: #17683a; }
+      .readsum.warn { color: #8a5a00; }
+      .readsum.bad { color: #a62a17; }
+      #read-results .pill {
+        margin: 2px 4px 2px 0;
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Campaña: afiches, QR y enlaces</h1>
+      <p class="lead">Crea los afiches y volantes con el QR del colegio y los enlaces de los anuncios. Casi todo se puede cambiar: textos, colores, foto de fondo, datos de contacto y tamaño del QR.</p>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-tab="qr">Afiches y QR</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="links">Enlaces de anuncios</button>
+      </div>
+
+      <!-- ───────────── Afiches y QR ───────────── -->
+      <section id="tab-qr">
+        <div class="alert warn" id="warn" hidden>
+          <strong>Antes de imprimir:</strong> la dirección de la web todavía es de prueba. Ponla en <em>Datos del colegio → Dirección de la web</em>, publica, y vuelve a descargar el afiche. Un QR impreso con la dirección equivocada no se puede corregir.
+        </div>
+        <div class="alert warn" id="error" hidden></div>
+
+        <div class="designer">
+          <div>
+            <div class="card" style="padding: 16px 20px; margin-bottom: 12px">
+              <h3 style="margin-bottom: 4px">🎨 Estilo del QR</h3>
+              <p class="hint" style="margin: 0 0 10px">Elige una plantilla y ajústala abajo en los grupos “QR”.</p>
+              <div id="presets" class="presets"></div>
+            </div>
+            <div id="controls"></div>
+
+            <details class="qgroup">
+              <summary>📦 Series numeradas y todos los lugares</summary>
+              <div class="qbody">
+                <p class="hint" style="margin-top: 0">Cada código lleva su propio enlace (por ejemplo <code>/qr/volante-014</code>), así sabes cuál repartió cada promotor o dónde se pegó cada afiche. Se descargan juntos en un ZIP con el diseño actual.</p>
+                <div class="grid two">
+                  <div class="field"><label for="series-prefix">Nombre de la serie</label><input id="series-prefix" value="volante" maxlength="24" /></div>
+                  <div class="field"><label for="series-from">Empezar en el número</label><input id="series-from" type="number" min="1" value="1" /></div>
+                  <div class="field"><label for="series-count">Cuántos códigos (máx. 100)</label><input id="series-count" type="number" min="1" max="100" value="10" /></div>
+                </div>
+                <div class="alert warn" id="series-warn" hidden>Las series y los lugares solo funcionan cuando el QR abre la web del colegio. Cambia el contenido a “Abrir la web del colegio”.</div>
+                <div class="row">
+                  <button class="btn" id="dl-series" type="button">Descargar serie numerada (ZIP)</button>
+                  <button class="btn ghost" id="dl-all" type="button">Descargar todos los lugares (ZIP)</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="qgroup">
+              <summary>💾 Mis diseños</summary>
+              <div class="qbody">
+                <div class="field">
+                  <label for="design-name">Guardar este diseño con el nombre</label>
+                  <div class="row"><input id="design-name" placeholder="Ej.: Volante diciembre" style="flex: 1 1 200px" /><button class="btn" id="save-design" type="button">Guardar</button></div>
+                  <p class="hint">Se guarda en este navegador. Para tenerlo en otra computadora, expórtalo a un archivo.</p>
+                </div>
+                <div id="designs"></div>
+                <div class="row" style="margin-top: 14px">
+                  <button class="btn small ghost" id="export-designs" type="button">Exportar a un archivo</button>
+                  <label class="btn small ghost" style="margin: 0; cursor: pointer; text-transform: none; letter-spacing: 0; font-size: 13.5px; color: var(--noche)">Importar de un archivo<input id="import-designs" type="file" accept="application/json" hidden /></label>
+                  <button class="btn small ghost" id="reset" type="button">Volver al diseño inicial</button>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <div class="sticky">
+            <div class="card" style="padding: 16px 18px; margin-bottom: 12px">
+              <div class="row" style="justify-content: space-between">
+                <strong id="format-label"></strong>
+                <button class="btn small ghost" id="copy" type="button" disabled>Copiar contenido</button>
+              </div>
+              <div class="urlbox" style="margin-top: 8px"><span class="mono" id="url-out"></span></div>
+            </div>
+            <div class="stage"><canvas id="preview" width="1080" height="1350"></canvas></div>
+            <div class="card" style="margin-top: 12px">
+              <h3 id="health-head" class="lights ok">Revisando…</h3>
+              <ul id="health-list" class="health"></ul>
+              <div class="row" style="margin-top: 12px">
+                <button class="btn small accent" id="run-test" type="button">Probar lectura ahora</button>
+                <button class="btn small ghost" id="cam-start" type="button">Probar con la cámara</button>
+              </div>
+              <p id="read-summary" class="readsum"></p>
+              <div id="read-results" class="muted" style="font-size: 14px"></div>
+              <div id="cam-box" hidden style="margin-top: 12px">
+                <video id="cam-video" playsinline muted style="width: 100%; border-radius: 14px; background: #000; max-height: 260px; object-fit: cover"></video>
+                <p id="cam-result" class="readsum"></p>
+              </div>
+            </div>
+            <div class="card" style="margin-top: 12px">
+              <div class="downloads">
+                <select id="scale" aria-label="Calidad de la imagen">
+                  <option value="1">Pantalla y redes (×1)</option>
+                  <option value="2" selected>Impresión estándar (×2)</option>
+                  <option value="3">Impresión grande (×3)</option>
+                </select>
+                <button class="btn accent" id="dl-png" type="button">Descargar PNG</button>
+                <button class="btn" id="dl-pdf" type="button">Descargar PDF para la imprenta</button>
+                <button class="btn ghost" id="dl-svg" type="button" hidden>Descargar QR en SVG</button>
+                <button class="btn ghost" id="dl-anim" type="button">Descargar animación (WebM)</button>
+              </div>
+              <p class="hint">Los volantes A5 y A4 salen ya a 300 dpi (usa ×1 o el PDF). El PDF lleva el tamaño exacto de la hoja.</p>
+            </div>
+            <div class="card" style="margin-top: 12px">
+              <h3>Para que el volante funcione</h3>
+              <ul class="tips">
+                <li><strong>Tamaño:</strong> el QR debe medir al menos <strong>3 × 3 cm</strong> impreso (mejor 4 × 4 cm).</li>
+                <li><strong>Prueba antes de imprimir:</strong> escanéalo con 2 o 3 celulares distintos, con poca luz y desde 30 cm.</li>
+                <li>El QR siempre va <strong>sobre un recuadro blanco</strong>: no lo recortes ni le pongas nada encima.</li>
+                <li><strong>Pide una prueba impresa</strong> a la imprenta antes de tirar todos los volantes.</li>
+                <li>Revisa todos los textos: <strong>solo escribe datos confirmados</strong> (fechas, vacantes, teléfonos).</li>
+                <li>El enlace corto funciona solo si la web ya está publicada con su dirección real.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── Enlaces ───────────── -->
+      <section id="tab-links" hidden>
+        <div class="card" style="max-width: 760px">
+          <h2>Generador de enlaces para anuncios</h2>
+          <p class="muted">Pega el enlace resultante en tus anuncios de Facebook, Instagram, TikTok o Google. Cada clic en WhatsApp queda registrado con su origen (cuando Google Analytics está activo).</p>
+          <div class="grid two" style="margin-top: 16px">
+            <div class="field">
+              <label for="l-source">¿Dónde se publica?</label>
+              <select id="l-source">
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="tiktok">TikTok</option>
+                <option value="google">Google</option>
+                <option value="whatsapp">WhatsApp (estado o difusión)</option>
+                <option value="correo">Correo</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="l-medium">Tipo</label>
+              <select id="l-medium">
+                <option value="anuncio">Anuncio pagado</option>
+                <option value="social">Publicación normal</option>
+                <option value="mensaje">Mensaje directo</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="l-campaign">Nombre de la campaña</label>
+              <input id="l-campaign" value="admision-2027" />
+            </div>
+            <div class="field">
+              <label for="l-dest">¿A qué página lleva?</label>
+              <select id="l-dest">
+                <option value="/admision-2027">Página de campaña (recomendado)</option>
+                <option value="/admision">Admisión</option>
+                <option value="/contacto">Contacto</option>
+                <option value="/">Portada</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Tu enlace</label>
+            <div class="urlbox"><span class="mono" id="l-out"></span><button class="btn small accent" id="l-copy" type="button">Copiar enlace</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="/admin/vendor/qrcode.js"></script>
+    <script src="/admin/vendor/zxing.min.js"></script>
+    <script src="/admin/vendor/jsQR.js"></script>
+    <script src="/admin/qr-designer.js"></script>
+    <script>
+      (function () {
+        document.querySelectorAll(".tab").forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            document.querySelectorAll(".tab").forEach(function (t) { t.setAttribute("aria-selected", t === tab ? "true" : "false"); });
+            document.getElementById("tab-qr").hidden = tab.dataset.tab !== "qr";
+            document.getElementById("tab-links").hidden = tab.dataset.tab !== "links";
+          });
+        });
+
+        var site = null;
+        function clean(v) { return String(v || "").trim().toLowerCase().replace(/[^a-z0-9-_]+/g, "-").replace(/^-+|-+$/g, ""); }
+        function links() {
+          if (!site) return;
+          var base = site.siteUrl.replace(/\/+$/, "");
+          var params = new URLSearchParams({ utm_source: clean(document.getElementById("l-source").value), utm_medium: clean(document.getElementById("l-medium").value), utm_campaign: clean(document.getElementById("l-campaign").value) || "campana" });
+          document.getElementById("l-out").textContent = base + document.getElementById("l-dest").value + "?" + params.toString();
+        }
+        fetch("/admin/api/site").then(function (r) { return r.json(); }).then(function (s) {
+          site = s;
+          document.getElementById("l-campaign").value = "admision-" + s.year;
+          document.getElementById("l-dest").querySelector("option").value = "/admision-" + s.year;
+          links();
+        });
+        ["l-source", "l-medium", "l-campaign", "l-dest"].forEach(function (id) { document.getElementById(id).addEventListener("input", links); });
+        document.getElementById("l-copy").addEventListener("click", function () {
+          var b = document.getElementById("l-copy");
+          if (navigator.clipboard) navigator.clipboard.writeText(document.getElementById("l-out").textContent).then(function () { b.textContent = "¡Copiado!"; setTimeout(function () { b.textContent = "Copiar enlace"; }, 1500); });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -10,7 +10,7 @@ const mod = getModule("actividades");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: "Talleres y actividades de la Institución Educativa Privada “Nikola Tesla”: ciencia, tecnología, arte, deporte, cultura y más.",
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

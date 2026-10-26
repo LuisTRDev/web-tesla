@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Sección</title>
+    <link rel="stylesheet" href="/admin/tools.css" />
+    <style>
+      body {
+        background: var(--tiza);
+      }
+      .wrap {
+        padding: 12px 8px 40px;
+      }
+      .head {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 6px 4px 18px;
+      }
+      .head .big {
+        font-size: 44px;
+      }
+      .cards {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .tile {
+        background: #fff;
+        border-radius: 22px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .tile:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px -18px rgba(13, 18, 48, 0.5);
+      }
+      .tile .top {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .tile .top .e {
+        font-size: 30px;
+      }
+      .tile p {
+        margin: 0;
+        color: var(--niebla);
+        font-size: 15px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .chips span {
+        background: var(--tiza);
+        border-radius: 999px;
+        padding: 3px 11px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--tinta);
+      }
+      .tile .row {
+        margin-top: auto;
+        padding-top: 6px;
+      }
+      .help {
+        margin-top: 22px;
+        text-align: center;
+        color: var(--niebla);
+        font-size: 14.5px;
+      }
+      .help a {
+        color: var(--noche);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap" id="app"></div>
+    <script src="/admin/secciones.js"></script>
+    <script>
+      (function () {
+        var T = window.TESLA;
+        var id = (location.hash || "").replace(/^#/, "");
+        var sec = T.sections[id];
+        var app = document.getElementById("app");
+        function go(to, field) {
+          try {
+            if (field) sessionStorage.setItem("tesla-goto", JSON.stringify({ to: to, field: field }));
+            else sessionStorage.removeItem("tesla-goto");
+          } catch (e) {}
+          window.top.location.hash = "#/collections/" + to;
+        }
+        if (!sec) {
+          app.innerHTML = '<div class="card"><h2>Sección no encontrada</h2><p class="muted">Elige otra en el menú de la izquierda.</p></div>';
+          return;
+        }
+        app.innerHTML =
+          '<div class="head"><span class="big">' + sec.icon + "</span><div><h1>" + sec.title + '</h1><p class="lead" style="margin:6px 0 0">' + sec.desc + "</p></div></div>" +
+          '<div class="cards">' +
+          sec.cards.map(function (c, i) {
+            return '<article class="tile"><div class="top"><span class="e">' + c.icon + "</span><h3>" + c.title + "</h3></div><p>" + c.desc + '</p><div class="chips">' + c.chips.map(function (x) { return "<span>" + x + "</span>"; }).join("") + '</div><div class="row"><button class="btn accent" data-i="' + i + '" type="button">✏️ Editar</button><a class="btn ghost" href="' + c.web + '" target="_blank" rel="noopener">Ver en la web ↗</a></div></article>';
+          }).join("") +
+          "</div>" +
+          '<p class="help">¿No sabes cómo? <a href="#" id="help">Mira el tutorial de esta sección</a></p>';
+        app.addEventListener("click", function (ev) {
+          var b = ev.target.closest("[data-i]");
+          if (b) go(id + "/entries/" + sec.cards[b.dataset.i].file);
+          if (ev.target.id === "help") {
+            ev.preventDefault();
+            try { sessionStorage.setItem("tesla-ayuda-tema", id); } catch (e) {}
+            window.top.location.hash = "#/page/ayuda";
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

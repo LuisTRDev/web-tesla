@@ -1,13 +1,15 @@
+import raw from "@/content/team.json";
 import type { TeamMember } from "@/types";
+import { list, rec, str, text } from "@/lib/content";
 
 /**
- * Equipo directivo y docentes. NO inventar nombres: completar con datos reales
- * (y con autorización para publicar cada foto). Las fotos van en /public/images/equipo/.
- * Se pueden agregar o quitar cargos libremente.
+ * Equipo directivo y docentes. Se edita desde el panel (/admin → Equipo).
+ * Las fotos requieren autorización para publicarse.
  */
-export const team: TeamMember[] = [
-  { id: "direccion", name: null, role: "Dirección", bio: null, image: null },
-  { id: "coord-primaria", name: null, role: "Coordinación de Primaria", bio: null, image: null },
-  { id: "coord-secundaria", name: null, role: "Coordinación de Secundaria", bio: null, image: null },
-  { id: "tutoria", name: null, role: "Tutoría y bienestar", bio: null, image: null },
-];
+export const team: TeamMember[] = list(rec(raw).items).map((item, index) => ({
+  id: str(item.id, `miembro-${index + 1}`),
+  name: text(item.name),
+  role: str(item.role),
+  bio: text(item.bio),
+  image: text(item.image),
+}));

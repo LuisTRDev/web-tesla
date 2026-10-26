@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "direccion",
+      "name": null,
+      "role": "Dirección",
+      "bio": null,
+      "image": null
+    },
+    {
+      "id": "coord-primaria",
+      "name": null,
+      "role": "Coordinación de Primaria",
+      "bio": null,
+      "image": null
+    },
+    {
+      "id": "coord-secundaria",
+      "name": null,
+      "role": "Coordinación de Secundaria",
+      "bio": null,
+      "image": null
+    },
+    {
+      "id": "tutoria",
+      "name": null,
+      "role": "Tutoría y bienestar",
+      "bio": null,
+      "image": null
+    }
+  ]
+}

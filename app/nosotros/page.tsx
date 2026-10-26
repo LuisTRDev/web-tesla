@@ -14,7 +14,7 @@ const mod = getModule("nosotros");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: "Conoce a la Institución Educativa Privada “Nikola Tesla” de Nuevo Imperial, Cañete: quiénes somos, qué creemos y lo que dice nuestra comunidad.",
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

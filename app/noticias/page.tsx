@@ -11,7 +11,7 @@ const mod = getModule("noticias");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: "Noticias, comunicados y actividades recientes de la Institución Educativa Privada “Nikola Tesla”.",
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

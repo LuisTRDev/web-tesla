@@ -9,7 +9,7 @@ const mod = getModule("galeria");
 
 export const metadata: Metadata = {
   title: mod.label,
-  description: "Fotos y videos de las actividades de la Institución Educativa Privada “Nikola Tesla”, organizados por año, mes y evento.",
+  description: mod.seoDescription,
   alternates: { canonical: mod.href },
 };
 

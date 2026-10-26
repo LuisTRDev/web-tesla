@@ -1,0 +1,21 @@
+# Copia de seguridad semanal del contenido editable y las fotos (se guarda 90 días en la pestaña Actions).
+# El historial de Git ya permite volver a cualquier versión; esta copia es un respaldo extra, fácil de descargar.
+name: Copia de seguridad semanal
+
+on:
+  schedule:
+    - cron: "0 11 * * 0"
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprimir contenido y fotos
+        run: zip -r respaldo-web-tesla.zip content public/images public/admin/config.yml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: respaldo-web-tesla-${{ github.run_number }}
+          path: respaldo-web-tesla.zip
+          retention-days: 90

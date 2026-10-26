@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import ButtonLink from "@/components/ui/ButtonLink";
 import FieldCanvas from "@/components/ui/FieldCanvas";
 import SchoolImage from "@/components/ui/SchoolImage";
+import { homePage } from "@/data/pages";
 import { settings } from "@/data/settings";
 
 const delay = (seconds: number) => ({ "--d": `${seconds}s` }) as CSSProperties;
@@ -16,7 +17,20 @@ const delay = (seconds: number) => ({ "--d": `${seconds}s` }) as CSSProperties;
 export default function Hero() {
   return (
     <section id="inicio" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-noche text-white">
-      {settings.images.hero ? (
+      {settings.images.heroVideo ? (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={settings.images.hero ?? undefined}
+          aria-hidden="true"
+          className="absolute inset-0 -z-30 h-full w-full object-cover"
+        >
+          <source src={settings.images.heroVideo} />
+        </video>
+      ) : settings.images.hero ? (
         <SchoolImage
           cover
           priority
@@ -44,7 +58,7 @@ export default function Hero() {
           <span className="rounded-full bg-filamento px-3 py-1 text-[12px] font-bold uppercase tracking-[0.06em] text-noche">
             Admisión {settings.admissionYear}
           </span>
-          Infórmate sobre el proceso
+          {homePage.admissionNotice}
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

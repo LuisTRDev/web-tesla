@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Ayuda y tutoriales</title>
+    <link rel="stylesheet" href="/admin/tools.css" />
+    <style>
+      .top {
+        background: var(--noche);
+        color: #fff;
+        border-radius: 28px;
+        padding: 28px;
+      }
+      .top h1 {
+        color: #fff;
+      }
+      .top p {
+        color: rgba(255, 255, 255, 0.78);
+        margin: 8px 0 0;
+      }
+      .search {
+        margin-top: 18px;
+        max-width: 460px;
+      }
+      .tut {
+        scroll-margin-top: 16px;
+      }
+      .tut header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+      .tut ol {
+        margin: 14px 0 0;
+        padding-left: 22px;
+      }
+      .tut li {
+        margin: 7px 0;
+      }
+      .tip {
+        margin-top: 14px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: #fff4d9;
+        font-size: 14.5px;
+      }
+      .video {
+        margin-top: 14px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: var(--tiza);
+        aspect-ratio: 16/9;
+        display: grid;
+        place-items: center;
+        color: var(--niebla);
+        font-size: 14px;
+        text-align: center;
+        padding: 16px;
+      }
+      .video iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .tut.focus {
+        outline: 3px solid var(--filamento);
+      }
+      details {
+        border-top: 1px solid rgba(13, 18, 48, 0.1);
+        padding: 12px 0;
+      }
+      details summary {
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--noche);
+      }
+      details p {
+        margin: 8px 0 0;
+        color: #464c6b;
+      }
+      dt {
+        font-weight: 700;
+        color: var(--noche);
+        margin-top: 12px;
+      }
+      dd {
+        margin: 2px 0 0;
+        color: #464c6b;
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="top">
+        <h1>Ayuda y tutoriales</h1>
+        <p>Paso a paso para cada tarea. Si no encuentras lo que buscas, escribe aquí abajo o pide ayuda.</p>
+        <div class="search"><input id="q" type="search" placeholder="Buscar: foto, noticia, publicar, QR…" aria-label="Buscar en la ayuda" /></div>
+        <div class="row" style="margin-top: 16px">
+          <button class="btn accent" id="tour" type="button">▶ Repetir el recorrido de bienvenida</button>
+          <a class="btn ghost" id="wa" href="#" target="_blank" rel="noopener" hidden style="color: #fff; border-color: rgba(255, 255, 255, 0.4)">Pedir ayuda por WhatsApp</a>
+        </div>
+      </section>
+
+      <h2 style="margin: 32px 0 14px">Tutoriales</h2>
+      <div class="grid two" id="list"></div>
+
+      <h2 style="margin: 36px 0 6px">Preguntas frecuentes</h2>
+      <div class="card" id="faq"></div>
+
+      <h2 style="margin: 36px 0 6px">Palabras que verás</h2>
+      <div class="card">
+        <dl style="margin: 0">
+          <dt>Publicar</dt><dd>Enviar tus cambios a la web. Mientras no publiques, la web no cambia.</dd>
+          <dt>Vista previa</dt><dd>Cómo quedará lo que escribes. Se ve a la derecha mientras editas.</dd>
+          <dt>Confirmado por el colegio</dt><dd>Casilla para indicar que un texto ya fue revisado. Si está desmarcada, la web muestra una etiqueta “Por confirmar”.</dd>
+          <dt>Es un ejemplo</dt><dd>Marca los contenidos de prueba (noticias, eventos, testimonios). Desmárcala cuando el contenido sea real.</dd>
+          <dt>Aviso destacado</dt><dd>La barra amarilla que aparece sobre el menú de la web, para anunciar algo importante.</dd>
+          <dt>Enlace corto del QR</dt><dd>Una dirección como <code>tuweb.pe/qr/volante</code> que lleva a la página de Admisión y registra de dónde vino la familia.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <script src="/admin/panel-config.js"></script>
+    <script>
+      (function () {
+        var cfg = window.PANEL || {};
+        var TUTORIALS = [
+          { id: "inicio", topics: ["inicio"], title: "Entrar y recorrer el panel", time: "2 min", steps: ["Abre la web, baja al pie de página y haz <strong>5 clics seguidos</strong> sobre el logo.", "Inicia sesión con tu cuenta de GitHub.", "En <strong>Inicio</strong> escribe en el buscador lo que quieres cambiar (por ejemplo “WhatsApp”) y te lleva directo al campo.", "También puedes elegir una de las 6 acciones grandes o una página del <strong>mapa de la web</strong>.", "Lo que falta para la campaña aparece ordenado: primero lo más importante."], tip: "Si cambias de computadora, repite los pasos 1 y 2." },
+          { id: "texto", topics: ["colegio", "paginas", "nosotros", "propuesta"], title: "Cambiar un texto", time: "1 min", steps: ["Elige la sección (por ejemplo <em>Nosotros</em>) y el apartado.", "<strong>Atajo:</strong> haz clic en el texto o la foto que quieres cambiar <em>en la vista previa</em> (a la derecha): el formulario te lleva a su campo y lo resalta en amarillo.", "Escribe en el campo. La vista previa cambia sola.", "Pulsa <strong>Publicar → Publicar ahora</strong>.", "Espera 1 o 2 minutos y recarga la web con Ctrl + F5."], tip: "Cada campo tiene un texto de ayuda debajo con un ejemplo." },
+          { id: "foto", topics: ["fotos", "medios"], title: "Subir o cambiar una foto", time: "2 min", steps: ["En el campo de la foto, pulsa <strong>Elige una imagen</strong>.", "Pulsa <strong>Subir</strong> y elige la foto de tu computadora.", "Pulsa <strong>Elegir la seleccionada</strong>.", "Publica. Para quitar la foto, pulsa <strong>Quitar</strong>."], tip: "El panel <strong>reduce y optimiza la foto solo</strong> (hasta 2000 px, formato WebP). Verás un aviso con el nuevo peso. Usa fotos horizontales y sin logo ni texto encima." },
+          { id: "publicar", topics: ["publicar"], title: "Publicar y ver el cambio", time: "1 min", steps: ["Al cambiar algo, abajo aparece la barra <strong>“Tienes cambios sin publicar”</strong>.", "Pulsa <strong>Revisar y publicar</strong>: verás la lista de lo que cambiaste.", "Pulsa <strong>Publicar ahora</strong>. Saldrá la pantalla <strong>“¡Publicado!”</strong> con el botón <strong>Ver mi web</strong>.", "La web se actualiza en 1 o 2 minutos. Recarga con <strong>Ctrl + F5</strong> para verlo.", "Si no quieres publicar, pulsa <strong>Descartar</strong>: la web no cambia."], tip: "Arriba a la derecha, el indicador dice “Todo publicado” o “Cambios sin publicar”." },
+          { id: "noticias", topics: ["noticias"], title: "Publicar una noticia", time: "3 min", steps: ["Entra a <strong>Noticias</strong> y pulsa <strong>Nueva noticia</strong>.", "Completa título, fecha, categoría, resumen y texto. Deja una línea en blanco entre párrafos.", "Sube una foto (opcional) y deja <em>desmarcada</em> la casilla “Es una noticia de ejemplo”.", "Publica.", "<strong>Programar:</strong> si pones una fecha futura, la noticia aparece sola ese día."], tip: "Para borrar una noticia, ábrela y pulsa <strong>Eliminar entrada</strong>." },
+          { id: "galeria", topics: ["galeria"], title: "Crear un evento de galería", time: "4 min", steps: ["Entra a <strong>Galería → Eventos</strong> y pulsa <strong>Añadir</strong>.", "Escribe título, <strong>fecha</strong> (ubica el evento en su año y mes), categoría y descripción.", "Sube la foto de portada.", "En <strong>Fotos y videos</strong> añade cada archivo y una descripción breve.", "Para un video de YouTube o Vimeo usa <strong>Insertar desde URL</strong> y pega el enlace."], tip: "Desmarca “Es un evento de ejemplo” cuando el evento sea real." },
+          { id: "listas", topics: ["listas"], title: "Añadir, borrar y ordenar listas", time: "1 min", steps: ["<strong>Añadir:</strong> botón <em>Añadir…</em> al final de la lista.", "<strong>Borrar:</strong> la X del elemento.", "<strong>Ordenar:</strong> arrastra desde la barra izquierda del elemento.", "El orden del panel es el orden en la web."], tip: "Ejemplos: preguntas frecuentes, equipo, actividades, pilares." },
+          { id: "admision", topics: ["admision"], title: "Admisión y preguntas frecuentes", time: "4 min", steps: ["Entra a <strong>Admisión y preguntas frecuentes → Proceso de admisión</strong>.", "Escribe los pasos reales y los <strong>requisitos, fechas y vacantes</strong>.", "Marca “Confirmado por el colegio” en cada paso listo.", "En <strong>Preguntas frecuentes</strong> escribe las respuestas y marca “Respuesta confirmada”."], tip: "Solo las respuestas confirmadas se envían a Google." },
+          { id: "aviso", topics: ["aviso"], title: "Aviso destacado sobre el menú", time: "2 min", steps: ["Entra a <strong>Páginas y textos → Aviso destacado</strong>.", "Escribe el mensaje, el texto del botón y a qué página lleva.", "Elige desde y hasta qué día se muestra (opcional).", "Marca <strong>Mostrar el aviso</strong> y publica."], tip: "Con fecha de fin, el aviso desaparece solo. Las visitas pueden cerrarlo con la X." },
+          { id: "qr", topics: ["campana", "qr"], title: "Crear el afiche o volante con QR", time: "6 min", steps: ["Abre <strong>Campaña y QR</strong> en el menú superior.", "Arriba, en <strong>Estilo del QR</strong>, elige una plantilla (Marca, Clásico, Líquido, Suave, Energía, Tesla o Una tinta).", "En <strong>Formato y fondo del afiche</strong> elige el tamaño (volante A5, afiche A4, historia, cuadrado, sticker redondo…), el color y, si quieres, una foto del colegio de fondo.", "Escribe tus textos en <strong>Título y frase</strong>, <strong>Beneficios y fechas</strong> y <strong>Contacto y pie</strong>; apaga lo que no quieras con las casillas.", "En los grupos <strong>QR</strong> cambias lo que hace al escanearlo (abrir la web, WhatsApp con mensaje, llamar, mapa…), la forma de los puntos y esquinas, el escudo del centro, el recuadro y la etiqueta “ESCANÉAME”.", "Mira el <strong>semáforo de lectura</strong>: verde = se leerá bien; amarillo y rojo explican qué mejorar.", "Pulsa <strong>Probar lectura ahora</strong> y, con el afiche impreso, <strong>Probar con la cámara</strong>.", "Guarda el diseño en <strong>Mis diseños</strong>. Para muchos volantes, usa <strong>Series numeradas</strong> (un ZIP con un código por promotor o lugar).", "Descarga el <strong>PDF para la imprenta</strong> (A5 y A4 salen en tamaño exacto) o el PNG; el SVG sirve para gigantografías."], tip: "Escribe solo datos confirmados (fechas, teléfonos, vacantes). El QR siempre lleva su margen blanco. Antes de imprimir, pon el dominio real en Datos del colegio y prueba con 2 o 3 celulares." },
+        { id: "version", topics: ["version"], title: "Volver a una versión anterior", time: "—", steps: ["Si un cambio salió mal, <strong>avisa a quien administra la web</strong> (botón “Pedir ayuda”).", "Todo cambio publicado queda guardado en un historial; se puede restaurar cualquier versión.", "Mientras tanto, también puedes corregir el texto y publicar de nuevo."], tip: "No borres archivos desde GitHub: usa siempre el panel." },
+        ];
+        var FAQ = [
+          ["Publiqué y no veo el cambio", "Espera 2 minutos y recarga con Ctrl + F5. Si usas el celular, cierra y abre el navegador."],
+          ["No me deja guardar el WhatsApp", "Escribe solo números: 51 y los 9 dígitos del celular. Ejemplo: 51960209798."],
+          ["¿Puedo perder lo que escribí?", "Mientras no publiques puedes salir sin guardar. Después de publicar, todo queda en un historial y se puede recuperar."],
+          ["¿Se puede romper la web desde el panel?", "No. Si falta un dato, la web muestra un aviso o un valor de respaldo. Lo peor que puede pasar es que una sección se vea incompleta."],
+          ["¿Cuánto deben pesar las fotos?", "No te preocupes: el panel las reduce solo. Aun así, usa fotos horizontales, nítidas y sin texto encima."],
+          ["¿Cómo sé cuántas familias vinieron por el volante?", "Mira la sección <strong>Resultados</strong>: allí se explica cómo ver los mensajes de WhatsApp por origen (volante, Facebook, etc.)."],
+          ["¿Puedo programar una noticia?", "Sí: pon una fecha futura y aparecerá sola ese día."],
+          ["Cambié el año de admisión y algo no coincide", "Avisa a quien administra la web: la dirección de la página de campaña lleva el año y hay que renombrarla."],
+        ];
+
+        var list = document.getElementById("list");
+        list.innerHTML = TUTORIALS.map(function (t) {
+          var video = (cfg.videos && cfg.videos[t.id]) || "";
+          return '<article class="card tut" id="tema-' + t.id + '" data-text="' + (t.title + " " + t.steps.join(" ") + " " + t.tip).toLowerCase().replace(/<[^>]+>/g, "") + '" data-topics="' + t.topics.join(" ") + '">' +
+            "<header><h3>" + t.title + '</h3><span class="pill todo" style="background:#e8e9ff;color:#0d1230">' + t.time + "</span></header>" +
+            "<ol>" + t.steps.map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ol>" +
+            '<div class="tip">💡 ' + t.tip + "</div>" +
+            '<div class="video">' + (video ? '<iframe src="' + video + '" title="Video: ' + t.title + '" allowfullscreen loading="lazy"></iframe>' : "🎬 Video de este tutorial: próximamente") + "</div></article>";
+        }).join("");
+
+        document.getElementById("faq").innerHTML = FAQ.map(function (f) { return "<details><summary>" + f[0] + "</summary><p>" + f[1] + "</p></details>"; }).join("");
+
+        // Buscador
+        document.getElementById("q").addEventListener("input", function (e) {
+          var q = e.target.value.trim().toLowerCase();
+          document.querySelectorAll(".tut").forEach(function (el) { el.hidden = q && el.dataset.text.indexOf(q) < 0; });
+        });
+
+        // Tema de la sección desde la que se abrió la ayuda
+        var topic = "";
+        try { topic = sessionStorage.getItem("tesla-ayuda-tema") || ""; sessionStorage.removeItem("tesla-ayuda-tema"); } catch (e) {}
+        if (topic) {
+          var target = document.querySelector('.tut[data-topics~="' + topic + '"]');
+          if (target) { target.classList.add("focus"); setTimeout(function () { target.scrollIntoView({ block: "start", behavior: "smooth" }); }, 200); }
+        }
+
+        document.getElementById("tour").addEventListener("click", function () {
+          try { window.parent.TeslaTour.start(); } catch (e) { alert("Recarga el panel para ver el recorrido."); }
+        });
+        if (cfg.supportWhatsapp) {
+          var wa = document.getElementById("wa");
+          wa.hidden = false;
+          wa.href = "https://wa.me/" + cfg.supportWhatsapp.replace(/\D/g, "") + "?text=" + encodeURIComponent("Hola, necesito ayuda con el panel de la web del colegio.");
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -51,6 +51,10 @@ export interface SiteSettings {
     about: string | null;
     aboutDetail: string | null;
     admission: string | null;
+    /** Video del hero (archivo .mp4 o .webm). Si existe, reemplaza a la foto de portada. */
+    heroVideo: string | null;
+    /** Imagen que aparece al compartir el sitio en redes. null = imagen generada automáticamente. */
+    share: string | null;
   };
   stats: Stat[];
 }
@@ -80,6 +84,8 @@ export interface Pillar {
   title: string;
   description: string;
   image: string | null;
+  /** Ilustración que se muestra mientras no hay foto (ver components/ui/Illustration.tsx). */
+  illustration?: string;
   confirmed: boolean;
 }
 
@@ -99,6 +105,7 @@ export interface Activity {
   title: string;
   description: string;
   image: string | null;
+  illustration?: string;
   confirmed: boolean;
 }
 
@@ -161,6 +168,12 @@ export interface ExperienceShot {
   label: string;
   caption: string;
   image: string | null;
+  illustration?: string;
+}
+
+export interface AdmissionInfo {
+  title: string;
+  text: string;
 }
 
 export interface FaqItem {

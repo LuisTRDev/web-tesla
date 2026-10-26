@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "academica",
+      "title": "Formación académica",
+      "description": "Bases sólidas en cada área, con acompañamiento cercano para que nadie se quede atrás.",
+      "image": null,
+      "confirmed": false
+    },
+    {
+      "id": "critico",
+      "title": "Pensamiento crítico",
+      "description": "Estudiantes que preguntan, analizan y sustentan sus ideas con argumentos.",
+      "image": null,
+      "confirmed": false
+    },
+    {
+      "id": "tecnologia",
+      "title": "Tecnología e innovación",
+      "description": "La tecnología como herramienta para investigar, crear y resolver problemas reales.",
+      "image": null,
+      "confirmed": false
+    },
+    {
+      "id": "personal",
+      "title": "Desarrollo personal",
+      "description": "Confianza, autonomía y habilidades para la vida, dentro y fuera del aula.",
+      "image": null,
+      "confirmed": false
+    },
+    {
+      "id": "valores",
+      "title": "Valores",
+      "description": "Una convivencia basada en el respeto, la responsabilidad y la empatía.",
+      "image": null,
+      "confirmed": false
+    },
+    {
+      "id": "creatividad",
+      "title": "Creatividad",
+      "description": "Espacios para imaginar, expresarse y convertir las ideas en proyectos.",
+      "image": null,
+      "confirmed": false
+    }
+  ]
+}

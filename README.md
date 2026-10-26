@@ -11,6 +11,7 @@ npm install
 npm run dev      # http://localhost:3000
 npm run build    # compilación de producción
 npm run start
+npm run panel    # web + panel de edición en local (http://localhost:3000/admin), sin iniciar sesión
 ```
 
 ## Estructura
@@ -23,8 +24,11 @@ components/
   sections/   Bloques de contenido que componen cada módulo (Hero, About, Proposal, Levels, ModuleIndex, ...)
   gallery/    Explorador de galería y visor a pantalla completa
   ui/         Piezas reutilizables (ModuleHeader, ModuleMotif, NextModule, SchoolImage, ButtonLink, Reveal, ...)
-data/         Contenido editable (settings, gallery, news, levels, activities, testimonials, ...)
-lib/          Capa de datos (data.ts), utilidades y agrupación de la galería
+content/      Contenido editable en JSON (lo edita el panel /admin)
+data/         Lee y valida el contenido; diseño fijo de los módulos (data/modules.ts)
+lib/          Capa de datos (data.ts, content.ts), utilidades, seguimiento de campañas y agrupación de la galería
+public/admin/ Panel de edición: config.yml (campos), previews.js (vistas previas), preview.css (generado)
+scripts/      Estilos de las vistas previas y aviso de imágenes pesadas
 types/        Tipos compartidos, listos para mapear a tablas
 ```
 
@@ -36,65 +40,66 @@ el índice de la portada, la cabecera de cada módulo, el enlace "Siguiente" al 
 que aparece al cambiar de sección. Para cambiar el orden, el color o la frase de un módulo, se edita solo ese archivo.
 Cada nivel (Primaria y Secundaria) tiene además su propio color en `levelThemes`.
 
+## Panel de edición (para la clienta)
+
+El contenido de la web se edita desde un panel (**Decap CMS**) en `/admin`, sin tocar código y sin base de datos.
+Cada cambio publicado se guarda como un commit en este repositorio y Netlify actualiza la web en 1 o 2 minutos.
+
+- **Cómo entrar:** en el pie de página, 5 clics seguidos sobre el logo (no hay botón visible). Pide iniciar sesión con GitHub.
+- **Vista previa:** mientras se edita, el panel muestra cómo quedará cada sección (`public/admin/previews.js`).
+- **Guía para la clienta:** [docs/GUIA_PANEL.md](docs/GUIA_PANEL.md)
+- **Configuración técnica (una sola vez):** [docs/CONFIGURAR_PANEL.md](docs/CONFIGURAR_PANEL.md)
+- **Herramientas incluidas:** Inicio (saludo, buscador “¿qué quieres cambiar?”, acciones, lista de pendientes por prioridad, mapa de la web y últimos cambios), secciones con tarjetas, formularios con pestañas, resumen y confirmación al publicar, Campaña y QR (diseñador de afiches, volantes y stickers con QR de la identidad del colegio: 9 formatos, plantillas de estilo, forma y color de puntos y esquinas, escudo central, etiqueta, contenido variable —web, WhatsApp, llamada, mapa, contacto—, semáforo y prueba de lectura con cámara, series numeradas, animación, PDF para la imprenta y diseños guardados; más generador de enlaces), Resultados, Ayuda con tutoriales, recorrido de bienvenida, optimizador de fotos y aviso destacado sobre el menú.
+- **Probarlo en local sin iniciar sesión:** `npm run panel` y abrir http://localhost:3000/admin
+
 ## Dónde se edita cada cosa
 
-| Qué | Archivo |
-|---|---|
-| WhatsApp, redes, dirección, dominio, año de admisión | `data/settings.ts` |
-| Fotos principales (hero, nosotros) | `data/settings.ts` → `images` |
-| Texto de "Nosotros" y conceptos de filosofía | `data/philosophy.ts` |
-| Pilares de la propuesta educativa | `data/pillars.ts` |
-| Niveles y grados | `data/levels.ts` |
-| Actividades y talleres | `data/activities.ts` |
-| Galería (eventos, fotos, videos) | `data/gallery.ts` |
-| Noticias | `data/news.ts` |
-| Testimonios | `data/testimonials.ts` |
-| Proceso de admisión | `data/admission.ts` |
-| Preguntas frecuentes (Admisión y Contacto) | `data/faq.ts` |
-| Equipo directivo y docentes (Nosotros) | `data/team.ts` |
-| Logros (Nosotros) | `data/achievements.ts` |
-| Horario de atención, resolución y código modular | `data/settings.ts` → `contact` y `legal` |
-| Google Analytics | variable `NEXT_PUBLIC_GA_ID` (ver `.env.example`) |
-| Módulos: orden, colores, frases, motivos | `data/modules.ts` |
-| Colores y tipografías | `tailwind.config.ts` y `app/layout.tsx` |
-| Logo | `components/ui/Logo.tsx` |
+El contenido vive en **`content/*.json`** (lo edita el panel). Los archivos de `data/` solo lo leen, lo validan y le
+ponen valores de respaldo; los componentes no cambian al editar contenido.
+
+| Qué | Archivo | Sección del panel |
+|---|---|---|
+| WhatsApp, redes, dirección, dominio, año de admisión, fecha del contador, fotos principales, cifras | `content/settings.json` | Datos del colegio |
+| Menú, títulos, introducciones y descripción para Google de cada sección | `content/modules.json` | Páginas y textos |
+| Aviso de la portada y textos de la página de campaña | `content/pages.json` | Páginas y textos |
+| Texto de "Nosotros" y valores | `content/philosophy.json` | Nosotros |
+| Equipo, logros, testimonios | `content/team.json`, `achievements.json`, `testimonials.json` | Nosotros |
+| Pilares, niveles, actividades, "Así se vive" | `content/pillars.json`, `levels.json`, `activities.json`, `experience.json` | Propuesta, niveles y actividades |
+| Pasos, requisitos, fechas y vacantes de admisión | `content/admission.json` | Admisión y preguntas frecuentes |
+| Preguntas frecuentes | `content/faq.json` | Admisión y preguntas frecuentes |
+| Galería (eventos, fotos, videos) | `content/gallery.json` | Galería |
+| Noticias (un archivo por noticia; con fecha futura se publican solas ese día) | `content/noticias/*.json` | Noticias |
+| Aviso destacado sobre el menú (con fechas) | `content/banner.json` | Páginas y textos |
+
+Lo que sigue en el código (lo cambia el desarrollador): colores y motivos de cada módulo (`data/modules.ts`),
+paleta y tipografías (`tailwind.config.ts`, `app/layout.tsx`), logo (`components/ui/Logo.tsx`),
+ilustraciones (`components/ui/Illustration.tsx`), campos y vistas previas del panel (`public/admin/`).
+Google Analytics: variable `NEXT_PUBLIC_GA_ID` (ver `.env.example`).
+
+Si el panel guarda un campo vacío o falta uno, `lib/content.ts` lo convierte a "pendiente" o a un valor de respaldo,
+así que un cambio mal hecho no rompe la web. Un JSON con sintaxis inválida sí detiene el build de Netlify (la web publicada sigue intacta).
 
 ## Contenido pendiente (no se inventó ningún dato)
 
 Todo lo que falta aparece en la web entre corchetes, por ejemplo `[WHATSAPP OFICIAL]`, y como
-marcos rayados con el rótulo `[FOTO PENDIENTE]`. Además, el contenido provisional lleva una etiqueta
-"Por confirmar".
+marcos con el rótulo `[FOTO PENDIENTE]` o con una ilustración. Además, el contenido provisional lleva una
+etiqueta "Por confirmar".
 
-Antes de publicar:
+Antes de publicar (todo se hace desde el panel):
 
-1. Completar `data/settings.ts`: `siteUrl`, `contact`, `social.facebook`.
-2. Reemplazar fotos: copiar los archivos a `public/images/...` y escribir la ruta en el campo `image`/`url` correspondiente.
-3. Validar con la institución los textos marcados con `confirmed: false` y cambiarlos a `true`.
-4. Reemplazar eventos, noticias y testimonios de ejemplo (`isPlaceholder: true`).
-5. Verificar el punto del mapa (`location.mapQuery`).
-6. Poner `showDraftBadges: false` para ocultar las etiquetas "Por confirmar".
-7. El logo oficial ya está en `public/images/logo-escudo.png` (favicon: `app/icon.png`, iOS: `app/apple-icon.png`). Sus colores (rojo y azul marino) ya forman parte de la paleta en `tailwind.config.ts`.
+1. Datos del colegio: dirección de la web, WhatsApp, redes, horario, resolución y código modular.
+2. Subir fotos (y el video de la portada, si hay).
+3. Confirmar los textos (casilla "Confirmado por el colegio").
+4. Reemplazar eventos, noticias y testimonios de ejemplo.
+5. Verificar la búsqueda del mapa.
+6. Desmarcar "Mostrar etiquetas Por confirmar".
+7. Poner la fecha real de cierre de inscripciones (contador de la campaña).
+8. El logo oficial ya está en `public/images/logo-escudo.png`.
 
 ## Agregar un evento a la galería
 
-En `data/gallery.ts`:
-
-```ts
-{
-  id: "2026-11-feria-de-ciencias",
-  title: "Feria de ciencias",
-  description: "Nuestros estudiantes presentaron sus proyectos...",
-  date: "2026-11-14",
-  category: "Ciencia",
-  coverImage: "/images/galeria/2026-11-feria/portada.jpg",
-  media: [
-    { id: "f1", type: "image", url: "/images/galeria/2026-11-feria/01.jpg", caption: "Proyecto de 5.º grado" },
-    { id: "v1", type: "video", url: "https://www.youtube.com/watch?v=XXXXXXXX", thumbnail: "/images/galeria/2026-11-feria/video.jpg" },
-  ],
-}
-```
-
-La web lo ubica sola en su año y mes. Los videos aceptan enlaces de YouTube, Vimeo o archivos `.mp4`.
+Desde el panel: **Galería → Eventos → Añadir**. Se elige el título, la fecha, la categoría y se suben las fotos;
+para videos, el archivo .mp4 o el enlace de YouTube/Vimeo ("Insertar desde URL"). La web lo ubica sola en su año y mes.
 
 ## Conectar Supabase (o un CMS) más adelante
 

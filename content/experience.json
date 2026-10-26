@@ -1,0 +1,36 @@
+{
+  "shots": [
+    {
+      "id": "aulas",
+      "label": "Clases",
+      "caption": "Aulas donde se pregunta sin miedo.",
+      "image": null
+    },
+    {
+      "id": "recreo",
+      "label": "Recreos",
+      "caption": "Amistades que duran toda la vida.",
+      "image": null
+    },
+    {
+      "id": "docentes",
+      "label": "Docentes",
+      "caption": "Profesores que acompañan de cerca.",
+      "image": null
+    },
+    {
+      "id": "eventos",
+      "label": "Eventos",
+      "caption": "Momentos que la familia recuerda.",
+      "image": null
+    }
+  ],
+  "words": [
+    "Preguntar",
+    "Explorar",
+    "Crear",
+    "Experimentar",
+    "Compartir",
+    "Descubrir"
+  ]
+}

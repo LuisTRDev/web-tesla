@@ -1,35 +1,20 @@
-import type { AdmissionStep } from "@/types";
+import raw from "@/content/admission.json";
+import type { AdmissionInfo, AdmissionStep } from "@/types";
+import { bool, list, rec, str } from "@/lib/content";
 
-/**
- * Proceso de admisión. Es una estructura propuesta: reemplazar por los pasos,
- * requisitos y fechas oficiales antes de publicar.
- */
-export const admissionIntro =
-  "Queremos conocer a tu familia. Escríbenos y te contamos, paso a paso, cómo ser parte de Nikola Tesla.";
+/** Proceso de admisión. Se edita desde el panel (/admin → Admisión). */
+const r = rec(raw);
 
-export const admissionSteps: AdmissionStep[] = [
-  {
-    id: "informacion",
-    title: "Solicita información",
-    description: "[PASO POR CONFIRMAR] Escríbenos por WhatsApp o visítanos para resolver tus dudas.",
-    confirmed: false,
-  },
-  {
-    id: "visita",
-    title: "Conoce el colegio",
-    description: "[PASO POR CONFIRMAR] Coordinamos una visita para que conozcas nuestros espacios.",
-    confirmed: false,
-  },
-  {
-    id: "documentos",
-    title: "Presenta los documentos",
-    description: "[PASO POR CONFIRMAR] Lista de requisitos y documentos solicitados.",
-    confirmed: false,
-  },
-  {
-    id: "matricula",
-    title: "Matrícula",
-    description: "[PASO POR CONFIRMAR] Fechas y condiciones de matrícula.",
-    confirmed: false,
-  },
-];
+export const admissionHeadline = str(r.headline, "¿Listos para comenzar esta historia?");
+
+export const admissionIntro = str(r.intro);
+
+export const admissionSteps: AdmissionStep[] = list(r.steps).map((step, index) => ({
+  id: str(step.id, `paso-${index + 1}`),
+  title: str(step.title),
+  description: str(step.description),
+  confirmed: bool(step.confirmed),
+}));
+
+/** Bloques informativos de la página de admisión: requisitos, fechas, vacantes… */
+export const admissionInfo: AdmissionInfo[] = list(r.info).map((item) => ({ title: str(item.title), text: str(item.text) }));
