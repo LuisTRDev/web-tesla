@@ -175,3 +175,48 @@ Las entradas más recientes van al final.
 - Cinco animaciones: ⚛️ átomo (el escudo es el núcleo), ⚡ rayos, 🔮 bobina Tesla, 〰️ línea de energía y ✨ chispas, o ninguna. Se elige en el panel: **Datos del colegio → Animación al escanear el QR** (animación, frase y duración 1,5–6 s). Vale para todos los QR ya impresos, sin reimprimir. Con `?anim=nombre` se prueba otra sin cambiar el ajuste (el diseñador de QR tiene el botón “Ver la animación”); `?freeze=<ms>` congela un instante (solo para pruebas).
 - Probado: tipos, JS de la página y capturas reales en Edge de las 5 animaciones (a un instante fijo; la fluidez en celulares reales no se midió). Respeta “reducir movimiento” (dura 0,9 s). Sin commit.
 - Corrección: el campo de la animación no se veía porque el formulario “Datos del colegio” usa pestañas y no estaba en ninguna; ahora hay la pestaña **⚡ Animación del QR**, una entrada en el buscador y el botón “⚙️ Elegir la animación activa” en el diseñador.
+
+## 2026-10-26 · Mejoras de web, QR y panel
+
+- **Auditoría Lighthouse (móvil, producción)**: rendimiento 87–95, accesibilidad 95–97, buenas prácticas y SEO 100. Arreglado: nombre accesible del logo (ahora incluye el texto visible) y orden de encabezados en Contacto. **No se tocó**: el contraste de la palabra gigante del pie (decorativa, `aria-hidden`, intencional) y el LCP de la portada (la fuente y el CSS ya están optimizados; la medida alta es del entorno lento de prueba).
+- **A dónde llevan los QR impresos** (nuevo, en Datos del colegio → Animación del QR): campaña (por defecto), WhatsApp con mensaje, Contacto o Inicio. Pasada la fecha de cierre siempre va a Admisión.
+- **Escáner Tesla** (`/escanear`, `lib/qr-scanner.ts`): página con la cámara que detecta un QR (jsQR) y dibuja el efecto elegido sobre el propio código; al terminar abre la dirección si es de esta misma web, y si es de otra la muestra con un botón (no abre sola). Probado en Edge con una cámara falsa que mostraba un QR: detectó, dibujó el átomo sobre el código y entró a /admision-2027. **No probado en celulares reales** (iPhone/Android), donde la cámara exige HTTPS.
+- **Prueba automática del diseñador de QR**: `npm run test:qr` (9 plantillas, 10 formas de punto, degradado de 3 colores).
+- **Corrección**: la pestaña “Animación del QR” de Datos del colegio no se había guardado en una edición anterior (los archivos tienen saltos de línea de Windows y una sustitución de varias líneas no aplicó); ahora sí.
+- **No se hizo**: estadísticas de escaneos por lugar (el sitio no tiene base de datos; hace falta Google Analytics o un servicio), deshacer el borrado de elementos de listas (Decap no lo permite), rellenar los datos “Por confirmar” (son datos reales del colegio que no puedo inventar), WebAR con marcador sobre el afiche impreso.
+
+## 2026-10-26 · Tanda de mejoras: web, escáner y panel
+
+**Web**
+- **Línea de tiempo de Admisión** (`components/sections/AdmissionTimeline.tsx`, en la página de campaña): línea de energía que baja con el scroll, enciende cada paso y llega a “Cierre de inscripciones” con los días que faltan.
+- **Fondo y cursor eléctricos** (`components/ui/ElectricField.tsx`): partículas unidas por líneas que siguen el mouse o el dedo. Se elige en **Colores y efectos → Fondo y cursor eléctricos** (apagado / suave / normal / intenso; por defecto suave). Se apaga con “reducir movimiento” y con la pestaña oculta.
+- **Recorrido 360°** (`/recorrido`, `data/tour.ts`, `components/gallery/PanoramaViewer.tsx`): Pannellum 2.5.6 (MIT) servido desde `public/vendor/pannellum`. Se carga desde **Galería → Recorrido virtual 360°** (foto equirectangular por lugar). Sin lugares cargados la página no existe (404) y no sale en el mapa del sitio ni en la galería.
+- **Galería tipo stories** (`components/gallery/GalleryStories.tsx`): círculos por evento (solo con fotos reales), barras de progreso, toque izquierda/derecha, mantener para pausar, deslizar hacia abajo o Esc para cerrar.
+- **Cómo llegar** (`components/ui/Directions.tsx`, bajo el mapa de Contacto): Google Maps, Waze y Uber con la “Búsqueda para el mapa” de Datos del colegio.
+- **Compartir página** (`components/ui/ShareCard.tsx`, en el pie): tarjeta 4:5 con escudo, título, QR de esa página y su dirección; comparte con el menú del celular o descarga el PNG.
+- **Formularios al correo** (`lib/send-form.ts`, Web3Forms): además de abrir WhatsApp, cada formulario manda un correo si se pone la clave en Datos del colegio → Formularios al correo. **Agendar visita** (`components/ui/BookingEmbed.tsx`): calendario de Calendly o Cal.com incrustado si se pone su enlace (solo se aceptan esos dos dominios).
+
+**QR y escáner**
+- 4 efectos nuevos para la animación de entrada y el Escáner Tesla: 🌌 constelaciones, 🔌 circuito, 🎆 fuegos artificiales y 🇵🇪 bandera (ya son 9 en total).
+- **Entradas con nombre**: en el diseñador (“🎟 Entradas con nombre para eventos”) se generan QR por familia (`TESLA-TICKET|evento|nombre|n`). El Escáner Tesla los reconoce sin animación, marca “✓ Entrada válida” o “⚠ ya ingresó a las hh:mm”, vibra, cuenta cuántos entraron y exporta CSV. **Los ingresos viven solo en el celular que escanea** (localStorage): un celular por puerta; borrar los datos del navegador los pierde.
+- **Hoja para la imprenta**: PDF A4 a 300 dpi con 20 códigos de la serie por hoja (varias hojas en ZIP si hay más).
+- **Corrección importante**: los QR ahora se generan en **UTF-8**; antes un texto con tilde o eñe (p. ej. “Pérez”) se leía mal en el celular.
+
+**Panel**
+- **Plantillas de textos** (`public/admin/plantillas.html`, menú “Plantillas”): 6 modelos con huecos (reunión, admisión, logro, aviso, recordatorio, evento); copiar o abrir en WhatsApp.
+- **Atajos**: Ctrl + K o `/` abren el buscador del Inicio desde cualquier pantalla.
+- **Copia de seguridad**: acción en Inicio que descarga el ZIP del repositorio (contenido y fotos) desde GitHub; hay que haber iniciado sesión en GitHub.
+- **Ya existían** (no se rehicieron): el tablero de Inicio con porcentaje y pendientes por prioridad, el buscador “¿Qué quieres cambiar?”, y la publicación programada (noticias y eventos con fecha futura se ocultan hasta ese día; **al ser una web estática, solo aparecen cuando se vuelve a construir el sitio** — conviene una construcción diaria programada en Netlify).
+
+**No se hizo**: WebAR sobre el afiche impreso (exige celular real para ajustar), importar noticias/docentes desde Excel o CSV (Decap no tiene API para crear entradas desde una página propia), vista previa móvil en vivo dentro del editor (depende de clases internas de Decap que no se pudieron comprobar aquí).
+**Probado**: `tsc`, `npm run build`, `npm run test:qr`, capturas en Edge de las animaciones nuevas, línea de tiempo, tarjeta de compartir y fondo eléctrico; escáner con cámara falsa (URL y entrada válida/repetida); descarga real de la hoja PDF y del ZIP de entradas. **No probado en celulares reales.** Sin commit.
+
+## 2026-10-27 · Panel: vista previa fiel, errores y guardado, y versión para celular
+
+Se probó **en el panel real** (Decap con `npm run panel`, Edge controlado por script a 390×800 y 1300–1400 px), no solo leyendo código.
+
+- **Celular** (`public/admin/mobile.css`, `mobile.js`): Decap obliga a 800 px de ancho y pone formulario y vista previa lado a lado, así que en un celular la página se ensanchaba y no se veía el formulario. Ahora: una sola columna sin desborde, barra superior que se desliza, campos de 16 px (sin zoom en iPhone) y botones de 44–48 px, barra del editor pegada arriba con las pestañas "Ir a" debajo, botón flotante **👁 Ver cómo queda / ✏️ Volver a editar** para la vista previa a pantalla completa, y barra inferior con 4 accesos (Inicio, Noticia, Campaña, Contenido) que se esconde al editar para dejar la de “Publicar”. La ayuda flotante y los avisos no se tapan entre sí.
+- **Vista previa fiel** (`preview-device.js`, `previews.js`): selector **📱 Celular / 💻 Pantalla** sobre la vista previa (recordado; por defecto celular). El celular se muestra con marco y 390 px de ancho real, así que la web responde con su diseño móvil de verdad. La previa de la portada ahora incluye menú con escudo, botón Admisiones, título grande y botones, como en la web. **Sigue siendo una réplica**: Decap no puede mostrar la web real con el borrador, y las animaciones, ilustraciones y la mayoría de las secciones solo se ven al publicar.
+- **Errores y guardado** (`panel-errors.js`, `local_backup`): al publicar con campos obligatorios vacíos aparece **“Faltan N cosas para publicar”** con un botón por campo que lleva a él; avisos rojos de Decap reescritos en lenguaje claro (sin conexión, sesión vencida, conflicto, demasiadas publicaciones); aviso fijo **sin internet** y otro al volver; **copia automática del borrador** en el aparato (`local_backup: true`): se comprobó que un título escrito sobrevive a recargar el navegador.
+- **Fallo corregido**: cuando faltaban campos, el panel decía “Revisa tu conexión a internet” (engañoso). Y “Publicar ahora” ya no se rinde a los 350 ms si el menú de Decap tarda en abrir (espera hasta 3 s y, si no abre, explica qué hacer).
+- **No se hizo / límites**: no se probó en un celular real (solo emulación de Edge: tamaño, toque y viewport; no el teclado ni la cámara del aparato); las pruebas con `local_backup` cubren recargar, no cerrar el navegador por completo; el panel sigue cargando Decap desde unpkg (sin internet no abre). Sin commit.

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Plantillas de textos</title>
+    <link rel="stylesheet" href="/admin/tools.css" />
+    <style>
+      .tpls { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+      .tpl { border: 1px solid rgba(13, 18, 48, 0.2); background: #fff; border-radius: 999px; padding: 10px 18px; font: 600 15px inherit; cursor: pointer; min-height: 44px; }
+      .tpl[aria-pressed="true"] { background: var(--noche, #0d1230); color: #fff; border-color: transparent; }
+      .cols { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+      @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+      .field input, .field textarea { width: 100%; box-sizing: border-box; font: inherit; padding: 11px 14px; border: 1px solid rgba(13, 18, 48, 0.25); border-radius: 12px; background: #fff; }
+      .out { white-space: pre-wrap; background: #f6f7fb; border-radius: 14px; padding: 18px; min-height: 220px; line-height: 1.55; font-size: 16px; }
+      .out mark { background: #fff1d1; color: #7a4d00; border-radius: 4px; padding: 0 3px; }
+      .row { display: flex; flex-wrap: wrap; gap: 8px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Plantillas de textos</h1>
+      <p class="lead">Elige un modelo, llena los datos y copia el texto ya redactado para una noticia, un comunicado o un mensaje de WhatsApp. Lo pegas en la noticia nueva o lo envías tal cual.</p>
+      <div class="tpls" id="tpls" role="group" aria-label="Modelos"></div>
+      <div class="cols">
+        <div class="card"><h3 id="t-title"></h3><div id="form"></div></div>
+        <div class="card">
+          <h3>Así queda</h3>
+          <div class="out" id="out" aria-live="polite"></div>
+          <div class="row" style="margin-top: 14px">
+            <button class="btn accent" id="copy" type="button">📋 Copiar texto</button>
+            <a class="btn ghost" id="wa" target="_blank" rel="noopener">💬 Abrir en WhatsApp</a>
+            <a class="btn ghost" id="news" href="#/collections/noticias/new" target="_top">📰 Crear noticia</a>
+          </div>
+          <p class="hint" id="note"></p>
+        </div>
+      </div>
+    </div>
+    <script src="/admin/panel-config.js"></script>
+    <script>
+      (function () {
+        var $ = function (id) { return document.getElementById(id); };
+        var YEAR = new Date().getFullYear() + 1;
+        /* Cada modelo: campos (huecos) y una función que arma el texto. `v` trae lo escrito; lo vacío queda como [HUECO]. */
+        var T = {
+          reunion: { label: "📣 Reunión de padres", note: "Para una noticia, un cartel o un mensaje.", fields: [["fecha", "Fecha", "sábado 15 de marzo"], ["hora", "Hora", "9:00 a. m."], ["lugar", "Lugar", "el auditorio del colegio"], ["tema", "Tema", "el inicio del año escolar"]],
+            text: function (v) { return "📣 Reunión de padres de familia\n\nQueridas familias:\n\nLos invitamos a la reunión de padres de familia el " + v.fecha + " a las " + v.hora + ", en " + v.lugar + ". Conversaremos sobre " + v.tema + ".\n\nSu presencia es muy importante para acompañar juntos a nuestros estudiantes.\n\nAtentamente,\nLa Dirección"; } },
+          admision: { label: "🎓 Admisión abierta", note: "Para redes y WhatsApp. Usa solo datos confirmados.", fields: [["anio", "Año", String(YEAR)], ["niveles", "Niveles", "Primaria y Secundaria"], ["cierre", "Último día de inscripciones", "26 de febrero"], ["contacto", "WhatsApp", "960 209 798"]],
+            text: function (v) { return "🎓 ¡Admisión " + v.anio + " abierta!\n\nEn la I.E.P. Nikola Tesla abrimos las inscripciones para " + v.niveles + ".\n\n📅 Inscripciones hasta el " + v.cierre + ".\n💬 Escríbenos al " + v.contacto + " y agenda tu visita.\n\n¡Te esperamos!"; } },
+          logro: { label: "🏆 Felicitaciones por un logro", note: "Para noticias de logros y concursos.", fields: [["quien", "Quién (nombre o grupo)", "los estudiantes de 5.º de secundaria"], ["logro", "Qué lograron", "el primer puesto en la feria de ciencias"], ["donde", "Dónde / cuándo", "la feria provincial de este mes"], ["gracias", "Agradecer a", "sus docentes y familias"]],
+            text: function (v) { return "🏆 ¡Felicitaciones!\n\nCon mucho orgullo compartimos que " + v.quien + " obtuvieron " + v.logro + " en " + v.donde + ".\n\nAgradecemos el esfuerzo y la dedicación de " + v.gracias + ". Este logro nos motiva a seguir despertando la curiosidad y construyendo futuro.\n\n¡Felicitaciones a todos!"; } },
+          aviso: { label: "⚠️ Aviso importante", note: "Cambio de horario, suspensión de clases, etc.", fields: [["asunto", "Asunto", "Cambio de horario de ingreso"], ["detalle", "Qué ocurre", "mañana el ingreso será a las 8:30 a. m."], ["motivo", "Motivo", "una actividad programada"], ["accion", "Qué deben hacer", "enviar a los estudiantes con uniforme"]],
+            text: function (v) { return "⚠️ " + v.asunto + "\n\nEstimadas familias:\n\nLes comunicamos que " + v.detalle + " por " + v.motivo + ". Les pedimos " + v.accion + ".\n\nAgradecemos su comprensión.\nLa Dirección"; } },
+          recordatorio: { label: "🔔 Recordatorio de visita", note: "Mensaje de WhatsApp a una familia que agendó.", fields: [["familia", "Nombre de la familia", "familia Pérez"], ["dia", "Día", "mañana"], ["hora", "Hora", "10:00 a. m."], ["direccion", "Dirección", "Mz. B Lote 13, Nuevo Imperial"]],
+            text: function (v) { return "Hola, " + v.familia + " 👋\n\nLes recordamos su visita al colegio Nikola Tesla " + v.dia + " a las " + v.hora + ".\n📍 " + v.direccion + "\n\nSi necesitan cambiar el horario, respondan a este mensaje. ¡Los esperamos!"; } },
+          evento: { label: "🎉 Invitación a un evento", note: "Ferias, clausura, día del logro…", fields: [["evento", "Nombre del evento", "Feria escolar"], ["fecha", "Fecha", "viernes 20 de junio"], ["hora", "Hora", "3:00 p. m."], ["lugar", "Lugar", "el patio principal"], ["extra", "Algo especial", "habrá presentaciones y stands de cada grado"]],
+            text: function (v) { return "🎉 " + v.evento + "\n\nLos invitamos a nuestra " + v.evento.toLowerCase() + " el " + v.fecha + " a las " + v.hora + " en " + v.lugar + ". " + v.extra.charAt(0).toUpperCase() + v.extra.slice(1) + ".\n\n¡Vengan en familia!"; } },
+        };
+        var keys = Object.keys(T), cur = keys[0], vals = {};
+        function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+        function values() { var t = T[cur], v = {}; t.fields.forEach(function (f) { v[f[0]] = (vals[cur + f[0]] || "").trim() || "[" + f[1].toUpperCase() + "]"; }); return v; }
+        function draw() {
+          var text = T[cur].text(values());
+          $("out").innerHTML = esc(text).replace(/\[[^\]]*\]/g, function (m) { return "<mark>" + m + "</mark>"; });
+          $("wa").href = "https://wa.me/?text=" + encodeURIComponent(text);
+          return text;
+        }
+        function build() {
+          var t = T[cur];
+          $("t-title").textContent = t.label;
+          $("note").textContent = t.note;
+          $("form").innerHTML = t.fields.map(function (f) { return '<div class="field"><label for="f-' + f[0] + '">' + f[1] + '</label><input id="f-' + f[0] + '" data-k="' + f[0] + '" placeholder="Ej.: ' + esc(f[2]) + '" value="' + esc(vals[cur + f[0]] || "") + '" /></div>'; }).join("") + '<p class="hint">Lo que dejes vacío aparece como <mark style="background:#fff1d1">[ASÍ]</mark> para que no se te pase.</p>';
+          $("form").oninput = function (e) { if (e.target.dataset.k) { vals[cur + e.target.dataset.k] = e.target.value; draw(); } };
+          $("tpls").innerHTML = keys.map(function (k) { return '<button type="button" class="tpl" data-k="' + k + '" aria-pressed="' + (k === cur) + '">' + T[k].label + "</button>"; }).join("");
+          draw();
+        }
+        $("tpls").addEventListener("click", function (e) { var b = e.target.closest("[data-k]"); if (b) { cur = b.dataset.k; build(); } });
+        $("copy").addEventListener("click", function () {
+          var text = draw();
+          (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { $("copy").textContent = "✓ Copiado"; }, function () { var r = document.createRange(); r.selectNodeContents($("out")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copy").textContent = "Selecciona y copia (Ctrl + C)"; });
+          setTimeout(function () { $("copy").textContent = "📋 Copiar texto"; }, 2500);
+        });
+        build();
+      })();
+    </script>
+  </body>
+</html>

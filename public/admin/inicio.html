@@ -500,6 +500,8 @@
           { e: "📎", t: "Subir un documento", d: "Reglamento, lista de útiles, fichas…", run: function () { go("documentos/entries/documentos"); } },
           { e: "🎨", t: "Colores, menú y portada", d: "Personaliza cómo se ve y se ordena la web.", run: function () { go("personalizar"); } },
           { e: "📣", t: "Preparar la campaña", d: "QR, afiches y enlaces de anuncios.", run: function () { go("", null, "campana"); } },
+          { e: "🧾", t: "Plantillas de textos", d: "Comunicados y avisos con huecos para llenar.", run: function () { go("", null, "plantillas"); } },
+          { e: "💾", t: "Copia de seguridad", d: "Descarga todo el contenido y las fotos (ZIP).", href: "https://github.com/LuisTRDev/web-tesla/archive/refs/heads/main.zip", blank: true },
           { e: "🌐", t: "Ver cómo está la web", d: "Ábrela como la ven las familias.", href: "/", blank: true },
           { e: "🆘", t: "Pedir ayuda", d: "Tutoriales paso a paso.", run: function () { go("", null, "ayuda"); } },
         ];
@@ -538,6 +540,10 @@
         function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
         var q = $("q");
         var results = $("results");
+        document.addEventListener("keydown", function (ev) {
+          var typing = /^(INPUT|TEXTAREA|SELECT)$/.test((ev.target && ev.target.tagName) || "");
+          if (((ev.ctrlKey || ev.metaKey) && (ev.key === "k" || ev.key === "K")) || (ev.key === "/" && !typing)) { ev.preventDefault(); q.focus(); q.select(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+        });
         var found = [];
         q.addEventListener("input", function () {
           var text = norm(q.value.trim());

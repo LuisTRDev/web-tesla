@@ -148,6 +148,8 @@ export const appearance = {
     scrollProgress: bool(effects.scrollProgress, true),
     /** Cortina de color al cambiar de sección. */
     pageTransitions: bool(effects.pageTransitions, true),
+    /** Fondo y cursor eléctricos (partículas que reaccionan al mouse o al dedo). */
+    electric: oneOf(effects.electric, ["apagado", "suave", "normal", "intenso"] as const, "suave"),
     /** Botón flotante de WhatsApp. */
     whatsappFloat: bool(effects.whatsappFloat, true),
   },

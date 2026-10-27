@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import SparkTrail from "@/components/ui/SparkTrail";
+import ElectricField from "@/components/ui/ElectricField";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 import { appearance, cssVariables, palette } from "@/data/appearance";
 import { banners, hasGlobalBanner } from "@/data/banner";
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Analytics />
         <ClickTracker />
         {appearance.effects.sparks && <SparkTrail />}
+        {appearance.effects.electric !== "apagado" && <ElectricField level={appearance.effects.electric} />}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>

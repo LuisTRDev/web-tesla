@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
+import AdmissionTimeline from "@/components/sections/AdmissionTimeline";
 import Faq from "@/components/sections/Faq";
 import VisitForm from "@/components/sections/VisitForm";
 import ButtonLink from "@/components/ui/ButtonLink";
@@ -13,7 +14,7 @@ import { admissionIntro, admissionSteps } from "@/data/admission";
 import { campaignPage } from "@/data/pages";
 import { settings } from "@/data/settings";
 import { getFaq } from "@/lib/data";
-import { whatsappLink } from "@/lib/utils";
+import { formatDate, whatsappLink } from "@/lib/utils";
 
 /**
  * PÁGINA DE CAMPAÑA
@@ -119,17 +120,11 @@ export default async function AdmissionCampaignPage() {
             <h2 className="font-display text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[0.95] tracking-[-0.03em]">{campaignPage.stepsTitle}</h2>
             {admissionSteps.some((step) => !step.confirmed) && <DraftBadge label="Proceso propuesto, por confirmar" className="mt-5" />}
           </Reveal>
-          <ol className="mt-12 grid border-t border-noche/25 sm:grid-cols-2 lg:grid-cols-4">
-            {admissionSteps.map((step, index) => (
-              <li key={step.id} className="border-b border-noche/25 py-6 sm:pr-8 lg:border-b-0 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0">
-                <Reveal delay={index * 0.07}>
-                  <span className="font-display text-5xl font-extrabold leading-none tracking-[-0.03em] text-noche/35">{index + 1}</span>
-                  <h3 className="mt-3 font-display text-xl font-bold leading-tight">{step.title}</h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-noche/75">{step.description}</p>
-                </Reveal>
-              </li>
-            ))}
-          </ol>
+          <AdmissionTimeline
+            steps={admissionSteps}
+            deadline={settings.admissionDeadline}
+            deadlineLabel={settings.admissionDeadline ? `Último día para inscribirte: ${formatDate(settings.admissionDeadline)}.` : ""}
+          />
         </div>
       </section>
 

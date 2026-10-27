@@ -65,12 +65,18 @@ export interface SiteSettings {
     share: string | null;
   };
   stats: Stat[];
+  /** Formularios al correo (Web3Forms). */
+  forms: { emailKey: string | null };
+  /** Calendario para agendar la visita (Calendly o Cal.com). */
+  booking: { url: string | null };
   /** Animación breve al escanear un QR (antes de entrar a la web). */
   qrIntro: {
-    animation: "ninguna" | "atomo" | "rayos" | "bobina" | "energia" | "chispas";
+    animation: "ninguna" | "atomo" | "rayos" | "bobina" | "energia" | "chispas" | "constelaciones" | "circuito" | "fuegos" | "bandera";
     /** Frase bajo el nombre del colegio durante la animación. */
     text: string;
     seconds: number;
+    /** A dónde llevan los QR impresos: la página de campaña, WhatsApp, Contacto o el Inicio. */
+    destination: "campana" | "whatsapp" | "contacto" | "inicio";
   };
 }
 

@@ -78,7 +78,20 @@
     return Frame([
       Note("Portada, cifras y pie de página"),
       h("section", { "data-field": JSON.stringify(["Fotos y video principales", "Foto de la portada"]), className: "hero-aurora relative flex min-h-[520px] flex-col justify-end overflow-hidden bg-noche text-white", style: heroBg ? { backgroundImage: "linear-gradient(to top,#0D1230,rgba(13,18,48,.55)),url(" + heroBg + ")", backgroundSize: "cover", backgroundPosition: "center" } : { background: "radial-gradient(60% 55% at 78% 30%,rgba(255,182,39,.22),transparent 70%),radial-gradient(55% 60% at 12% 75%,rgba(169,173,255,.28),transparent 70%),#0D1230" } }, [
-        h("div", { key: "c", className: "px-6 pb-8 pt-20" }, [
+        h("div", { key: "nav", className: "absolute inset-x-0 top-0 flex h-[72px] items-center justify-between px-5" }, [
+          h("span", { key: "logo", className: "inline-flex items-center gap-3" }, [
+            h("img", { key: "i", src: "/images/logo-escudo.png", alt: "", className: "h-12 w-auto" }),
+            h("span", { key: "t", className: "flex flex-col leading-none" }, [
+              h("span", { key: "n", className: "font-display text-[17px] font-extrabold uppercase tracking-[0.02em]" }, t(d.shortName, "Nikola Tesla")),
+              h("span", { key: "k", className: "mt-1 text-[10.5px] font-medium opacity-70" }, t(d.kicker, "")),
+            ]),
+          ]),
+          h("span", { key: "r", className: "inline-flex items-center gap-3" }, [
+            h("span", { key: "b", className: "inline-flex min-h-[40px] items-center rounded-full bg-filamento px-4 text-[13px] font-semibold text-noche" }, "Admisiones"),
+            h("span", { key: "m", className: "flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border border-white/30" }, [h("i", { key: "1", className: "block h-px w-4 bg-white" }), h("i", { key: "2", className: "block h-px w-4 bg-white" })]),
+          ]),
+        ]),
+        h("div", { key: "c", className: "px-6 pb-8 pt-28" }, [
           h("span", { key: "chip", className: "mb-6 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 py-1.5 pl-1.5 pr-4 text-[13px] font-medium" }, [
             h("span", F(["Año de admisión"], { key: "y", className: "rounded-full bg-filamento px-3 py-1 text-[11px] font-bold uppercase text-noche" }), "Admisión " + t(d.admissionYear, "")),
             "Infórmate sobre el proceso",
@@ -86,6 +99,10 @@
           h("p", { key: "k", className: "text-[14px] text-white/80" }, t(d.kicker)),
           h("h1", { key: "h", className: "font-display text-7xl font-extrabold uppercase leading-[0.82] tracking-[-0.045em]" }, words.map(function (w, i) { return h("span", { key: i, className: "block" }, w); })),
           h("p", { key: "t", className: "mt-6 max-w-[20ch] text-balance font-display text-3xl font-semibold leading-[1.08]" }, t(d.tagline)),
+          h("div", { key: "cta", className: "mt-7 flex flex-wrap gap-3" }, [
+            h("span", { key: "a", className: "inline-flex min-h-[48px] items-center rounded-full bg-filamento px-6 text-[15px] font-semibold text-noche" }, "Conoce nuestra propuesta"),
+            h("span", { key: "b", className: "inline-flex min-h-[48px] items-center rounded-full border border-white/35 px-6 text-[15px] font-semibold" }, "Admisión " + t(d.admissionYear, "")),
+          ]),
           h("p", F(["Ubicación", "Distrito"], { key: "l", className: "mt-8 border-t border-white/15 pt-4 text-sm text-white/60" }), [loc.district, loc.province, loc.region].filter(Boolean).join(", ")),
         ]),
       ]),
@@ -551,7 +568,7 @@
     var base = (PALETTES[c.preset] || PALETTES.tesla).slice();
     [c.noche, c.filamento, c.rojo, c.marino, c.arco].forEach(function (v, i) { if (v && /^#[0-9a-fA-F]{6}$/.test(v)) base[i] = v; });
     var names = ["Fondo oscuro", "Acento", "Rojo", "Azul marino", "Detalles fríos", "Fondo claro"];
-    var EFFECTS = [["fieldAnimation", "Línea de energía"], ["lightning", "Rayos"], ["sparks", "Chispas"], ["scrollProgress", "Línea de progreso"], ["pageTransitions", "Cortina de color"], ["whatsappFloat", "Botón de WhatsApp"]];
+    var EFFECTS = [["fieldAnimation", "Línea de energía"], ["lightning", "Rayos"], ["sparks", "Chispas"], ["electric", "Fondo eléctrico"], ["scrollProgress", "Línea de progreso"], ["pageTransitions", "Cortina de color"], ["whatsappFloat", "Botón de WhatsApp"]];
     return Frame([
       Note("Colores y efectos (se aplican al publicar)"),
       h("div", { key: "hero", className: "px-6 py-10 text-white", style: { background: base[0] } }, [
@@ -563,7 +580,7 @@
         return h("div", { key: i }, [h("div", { key: "c", className: "h-12 rounded-xl ring-1 ring-noche/15", style: { background: hex } }), h("p", { key: "n", className: "mt-1.5 text-[11px] font-semibold text-noche" }, names[i]), h("p", { key: "h", className: "text-[11px] text-niebla" }, hex.toUpperCase())]);
       })),
       h("ul", { key: "fx", className: "space-y-1.5 bg-tiza px-6 py-6 text-[13px] text-noche" }, EFFECTS.map(function (x) {
-        var on = e[x[0]] !== false;
+        var on = e[x[0]] !== false && e[x[0]] !== "apagado";
         return h("li", { key: x[0], className: "flex justify-between font-semibold" }, [h("span", { key: "n" }, x[1]), h("span", { key: "s", className: on ? "text-noche" : "text-niebla" }, on ? "Activado" : "Apagado")]);
       })),
     ]);

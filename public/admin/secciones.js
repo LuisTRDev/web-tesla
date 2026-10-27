@@ -64,6 +64,7 @@ window.TESLA = (function () {
       desc: "Los eventos del colegio con sus fotos y videos, ordenados por fecha.",
       cards: [
         { file: "gallery", icon: "🖼️", title: "Eventos de la galería", desc: "Cada evento con su fecha, portada, fotos y videos.", chips: ["Evento", "Fecha", "Fotos", "Videos"], web: "/galeria" },
+        { file: "recorrido", icon: "🌐", title: "Recorrido virtual 360°", desc: "Fotos panorámicas para pasear por el colegio desde la web.", chips: ["Lugares", "Foto 360°"], web: "/recorrido" },
       ],
     },
     noticias: { icon: "📰", title: "Noticias", desc: "Comunicados, logros y novedades.", cards: [] },
@@ -119,6 +120,7 @@ window.TESLA = (function () {
     ] },
     { id: "galeria", icon: "🖼️", title: "Galería", url: "/galeria", edits: [
       { label: "Eventos, fotos y videos", to: "galeria/entries/gallery" },
+      { label: "Recorrido virtual 360°", to: "galeria/entries/recorrido" },
     ] },
     { id: "noticias", icon: "📰", title: "Noticias", url: "/noticias", edits: [
       { label: "Escribir una noticia nueva", to: "noticias/new" },
@@ -210,9 +212,10 @@ window.TESLA = (function () {
     "colegio/settings": [
       { label: "Nombre y frases", icon: "✏️", fields: ["Nombre oficial", "Nombre corto", "Rótulo sobre el nombre", "Frase principal", "Concepto", "Frase del pie de página", "Descripción para Google"] },
       { label: "Admisión", icon: "📅", fields: ["Año de admisión", "Último día de inscripciones", "Mostrar etiquetas “Por confirmar”"] },
-      { label: "Contacto y ubicación", icon: "📍", fields: ["Dirección de la web", "Ubicación", "Contacto", "Respaldo oficial"] },
+      { label: "Contacto y ubicación", icon: "📍", fields: ["Dirección de la web", "Ubicación", "Contacto", "Respaldo oficial", "Formularios al correo", "Agendar visita en calendario"] },
       { label: "Redes y fotos", icon: "📷", fields: ["Redes sociales", "Fotos y video principales"] },
       { label: "Cifras", icon: "🔢", fields: ["Cifras del colegio"] },
+      { label: "Animación del QR", icon: "⚡", fields: ["Animación al escanear el QR"] },
     ],
     "paginas/pages": [
       { label: "Portada", icon: "🏠", fields: ["Portada"] },
@@ -279,7 +282,7 @@ window.TESLA = (function () {
     "colegio/settings": "/", "paginas/banner": "/", "paginas/pages": "/admision-2027", "paginas/modules": "/nosotros",
     "nosotros/philosophy": "/nosotros", "nosotros/team": "/nosotros", "nosotros/achievements": "/nosotros", "nosotros/testimonials": "/nosotros",
     "propuesta/pillars": "/propuesta", "propuesta/levels": "/niveles", "propuesta/activities": "/actividades", "propuesta/experience": "/nosotros",
-    "admision/admission": "/admision", "admision/faq": "/admision", "galeria/gallery": "/galeria", noticias: "/noticias",
+    "admision/admission": "/admision", "admision/faq": "/admision", "galeria/gallery": "/galeria", "galeria/recorrido": "/recorrido", noticias: "/noticias",
     calendario: "/calendario", "documentos/documentos": "/documentos", "personalizar/portada": "/", "personalizar/navegacion": "/", "personalizar/apariencia": "/",
   };
 

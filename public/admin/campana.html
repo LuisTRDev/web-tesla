@@ -284,6 +284,15 @@
             <div id="controls"></div>
 
             <details class="qgroup">
+              <summary>🎟 Entradas con nombre para eventos</summary>
+              <div class="qbody">
+                <p class="hint" style="margin-top: 0">Un QR por familia, con su nombre. En la puerta, abre el <strong>Escáner Tesla</strong> (<code>/escanear</code>) en un celular: marca “✓ Entrada válida” y avisa si alguien intenta entrar dos veces. Los ingresos se guardan <strong>solo en ese celular</strong> (usa uno solo por puerta) y se pueden descargar en una lista.</p>
+                <div class="field"><label for="tk-event">Nombre del evento</label><input id="tk-event" value="Feria escolar" maxlength="40" /></div>
+                <div class="field"><label for="tk-names">Nombres (uno por línea, máx. 100)</label><textarea id="tk-names" rows="5" placeholder="Familia Pérez&#10;Familia Quispe&#10;Familia Rojas"></textarea></div>
+                <button class="btn" id="dl-tickets" type="button">Descargar entradas (ZIP)</button>
+              </div>
+            </details>
+            <details class="qgroup">
               <summary>📦 Series numeradas y todos los lugares</summary>
               <div class="qbody">
                 <p class="hint" style="margin-top: 0">Cada código lleva su propio enlace (por ejemplo <code>/qr/volante-014</code>), así sabes cuál repartió cada promotor o dónde se pegó cada afiche. Se descargan juntos en un ZIP con el diseño actual.</p>
@@ -296,7 +305,9 @@
                 <div class="row">
                   <button class="btn" id="dl-series" type="button">Descargar serie numerada (ZIP)</button>
                   <button class="btn ghost" id="dl-all" type="button">Descargar todos los lugares (ZIP)</button>
+                  <button class="btn ghost" id="dl-sheet" type="button">Hoja para la imprenta (PDF, 20 por hoja)</button>
                 </div>
+                <p class="hint">La hoja pone los códigos de la serie en una cuadrícula A4 de 300 dpi, cada uno con su nombre, lista para llevar a la imprenta o recortar.</p>
               </div>
             </details>
 

@@ -86,6 +86,8 @@
 
   /* ───────── matriz del QR y su geometría ───────── */
   function buildMatrix(text, ec) {
+    // UTF-8 para que tildes y eñes (nombres como “Pérez”) se lean bien en cualquier celular
+    if (qrcode.stringToBytesFuncs && qrcode.stringToBytesFuncs["UTF-8"]) qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
     var qr = qrcode(0, ec || "H");
     qr.addData(text);
     qr.make();
@@ -1535,7 +1537,7 @@
             input = document.createElement("div");
             input.className = "qintro";
             var sel = document.createElement("select");
-            [["atomo", "⚛️ Átomo"], ["rayos", "⚡ Rayos"], ["bobina", "🔮 Bobina Tesla"], ["energia", "〰️ Línea de energía"], ["chispas", "✨ Chispas"]].forEach(function (o) { var opt = document.createElement("option"); opt.value = o[0]; opt.textContent = o[1]; sel.appendChild(opt); });
+            [["atomo", "⚛️ Átomo"], ["rayos", "⚡ Rayos"], ["bobina", "🔮 Bobina Tesla"], ["energia", "〰️ Línea de energía"], ["chispas", "✨ Chispas"], ["constelaciones", "🌌 Constelaciones"], ["circuito", "🔌 Circuito"], ["fuegos", "🎆 Fuegos artificiales"], ["bandera", "🇵🇪 Bandera"]].forEach(function (o) { var opt = document.createElement("option"); opt.value = o[0]; opt.textContent = o[1]; sel.appendChild(opt); });
             var go = document.createElement("button");
             go.type = "button";
             go.className = "btn small";
@@ -1551,9 +1553,20 @@
             act.target = "_blank";
             act.rel = "noopener";
             act.textContent = "⚙️ Elegir la animación activa";
+            var cam = document.createElement("button");
+            cam.type = "button";
+            cam.className = "btn small ghost";
+            cam.textContent = "📷 Probar el Escáner Tesla";
+            cam.title = "Cámara que muestra el efecto sobre el QR en el momento de escanear. Dirección: /escanear";
+            cam.addEventListener("click", function () {
+              var base = String(st.base || "").trim().replace(/\/+$/, "");
+              if (base && !/^https?:\/\//i.test(base)) base = "https://" + base;
+              window.open((base || location.origin) + "/escanear", "_blank", "noopener");
+            });
             input.appendChild(sel);
             input.appendChild(go);
             input.appendChild(act);
+            input.appendChild(cam);
           } else if (fd.type === "image") {
             input = document.createElement("div");
             input.className = "photo";
@@ -1716,6 +1729,7 @@
     $("series-warn").hidden = st.contentType === "url";
     $("dl-series").disabled = st.contentType !== "url";
     $("dl-all").disabled = st.contentType !== "url";
+    $("dl-sheet").disabled = st.contentType !== "url";
     clearTimeout(timer);
     timer = setTimeout(function () {
       try {
@@ -1781,6 +1795,79 @@
     btn.disabled = true;
     next();
   }
+  /** Dibuja un QR "solo" (sin afiche) con el estilo actual, con el contenido indicado. */
+  function codeCanvas(content, scale) {
+    var copy = Object.assign({}, st, { format: "solo", contentType: "text", freeText: content });
+    var c = document.createElement("canvas");
+    render(c, copy, scale);
+    return c;
+  }
+  function sheetPdf() {
+    var prefix = String($("series-prefix").value || "volante").trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "") || "volante";
+    var from = Math.max(0, Number($("series-from").value) || 1);
+    var count = Math.min(100, Math.max(1, Number($("series-count").value) || 20));
+    var base = String(st.base || "").trim().replace(/\/+$/, "");
+    var W = 2480, H = 3508, M = 150, cols = 4, rows = 5, per = cols * rows;
+    var sheets = Math.ceil(count / per);
+    var files = [];
+    for (var s = 0; s < sheets; s++) {
+      var c = document.createElement("canvas");
+      c.width = W; c.height = H;
+      var g = c.getContext("2d");
+      g.fillStyle = "#FFFFFF"; g.fillRect(0, 0, W, H);
+      g.fillStyle = C.noche; g.font = fontStr(800, 64, "Bricolage Grotesque"); g.textBaseline = "alphabetic";
+      g.fillText((st.site && st.site.shortName ? st.site.shortName : "Nikola Tesla") + " · Códigos QR · " + prefix, M, M + 40);
+      var cw = (W - 2 * M) / cols, ch = (H - 2 * M - 120) / rows;
+      for (var k = 0; k < per && s * per + k < count; k++) {
+        var n = from + s * per + k, code = prefix + "-" + String(n).padStart(3, "0");
+        var qc = codeCanvas(base + "/qr/" + code, 1);
+        var side = Math.min(cw - 60, ch - 110);
+        var x = M + (k % cols) * cw + (cw - side) / 2, y = M + 120 + Math.floor(k / cols) * ch;
+        g.drawImage(qc, x, y, side, side);
+        g.fillStyle = C.noche; g.font = fontStr(800, 46, "Figtree"); g.textAlign = "center";
+        g.fillText(code, x + side / 2, y + side + 52);
+        g.textAlign = "left";
+        g.strokeStyle = "#BBBBBB"; g.setLineDash([10, 10]); g.lineWidth = 2;
+        g.strokeRect(M + (k % cols) * cw + 8, y - 12, cw - 16, ch - 8);
+        g.setLineDash([]);
+      }
+      files.push({ name: "hoja-" + prefix + "-" + (s + 1) + ".pdf", data: pdfFromJpegDataUrl(c.toDataURL("image/jpeg", 0.95), W, H, 300) });
+    }
+    if (files.length === 1) download(files[0].name, files[0].data);
+    else download("hojas-" + prefix + ".zip", zipStore(files));
+  }
+  function ticketsZip() {
+    var event = String($("tk-event").value || "Evento").trim().slice(0, 40) || "Evento";
+    var evKey = event.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "evento";
+    var names = String($("tk-names").value || "").split(/\n+/).map(function (x) { return x.replace(/[|]/g, " ").trim(); }).filter(Boolean).slice(0, 100);
+    if (!names.length) { alert("Escribe al menos un nombre."); return; }
+    var btn = $("dl-tickets");
+    var files = [];
+    var i = 0;
+    btn.disabled = true;
+    function next() {
+      if (i >= names.length) {
+        btn.textContent = "Descargar entradas (ZIP)";
+        btn.disabled = false;
+        download("entradas-" + evKey + ".zip", zipStore(files));
+        return;
+      }
+      btn.textContent = "Creando " + (i + 1) + " de " + names.length + "…";
+      var id = String(i + 1).padStart(3, "0");
+      var qc = codeCanvas("TESLA-TICKET|" + evKey + "|" + names[i] + "|" + id, 1);
+      var c = document.createElement("canvas");
+      c.width = 1200; c.height = 1500;
+      var g = c.getContext("2d");
+      g.fillStyle = "#FFFFFF"; g.fillRect(0, 0, 1200, 1500);
+      g.drawImage(qc, 0, 0, 1200, 1200);
+      g.fillStyle = C.noche; g.textAlign = "center";
+      g.font = fontStr(800, 70, "Bricolage Grotesque"); g.fillText(names[i], 600, 1290, 1100);
+      g.font = fontStr(600, 44, "Figtree"); g.fillText(event + " · Entrada " + id, 600, 1370, 1100);
+      var fname = "entrada-" + id + "-" + names[i].toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ".png";
+      canvasBytes(c).then(function (bytes) { files.push({ name: fname, data: bytes }); i++; setTimeout(next, 0); });
+    }
+    next();
+  }
   function allPlacesZip() {
     var places = ["volante", "afiche", "banner", "redes", "boletin"];
     var scale = Math.min(Number($("scale").value), FORMATS[st.format].w > 2000 ? 1 : 2);
@@ -1841,6 +1928,8 @@
     });
     $("dl-series").addEventListener("click", seriesZip);
     $("dl-all").addEventListener("click", allPlacesZip);
+    $("dl-sheet").addEventListener("click", sheetPdf);
+    $("dl-tickets").addEventListener("click", ticketsZip);
     $("copy").addEventListener("click", function () {
       var done = function () { $("copy").textContent = "¡Copiado!"; setTimeout(function () { $("copy").textContent = "Copiar contenido"; }, 1500); };
       if (navigator.clipboard) navigator.clipboard.writeText(payload(st)).then(done);

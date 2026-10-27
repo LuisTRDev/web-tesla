@@ -3,6 +3,7 @@ import Logo from "@/components/ui/Logo";
 import SecretAdminTrigger from "@/components/ui/SecretAdminTrigger";
 import SocialIcon from "@/components/ui/SocialIcon";
 import { footerConfig, navLinks } from "@/data/navigation";
+import ShareCard from "@/components/ui/ShareCard";
 import { settings } from "@/data/settings";
 import { formatPhone, whatsappLink } from "@/lib/utils";
 
@@ -122,7 +123,10 @@ export default function Footer() {
           </nav>
         )}
 
-        <p className="mt-14 text-[13px] text-white/50">
+        <div className="mt-12">
+          <ShareCard schoolName={settings.shortName} tagline="Escanea y conócenos" />
+        </div>
+        <p className="mt-8 text-[13px] text-white/50">
           © {new Date().getFullYear()} {settings.name}. Todos los derechos reservados.
         </p>
         {footerConfig.legalText && <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-white/50">{footerConfig.legalText}</p>}

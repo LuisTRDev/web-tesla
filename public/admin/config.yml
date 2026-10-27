@@ -17,6 +17,9 @@ backend:
 # Solo funciona al abrir el panel en tu computadora (localhost) con `npm run panel`: edita sin iniciar sesión.
 local_backend: true
 
+# Copia automática del borrador en el aparato: si se cierra el navegador sin publicar, Decap ofrece recuperar lo escrito.
+local_backup: true
+
 locale: es
 logo_url: /images/logo-escudo.png
 # Para revisar los cambios antes de publicar, quitar el # de la línea siguiente (Borrador → En revisión → Publicado).
@@ -123,6 +126,21 @@ collections:
               - { label: Instagram, name: instagram, widget: string, required: false }
               - { label: TikTok, name: tiktok, widget: string, required: false }
               - { label: YouTube, name: youtube, widget: string, required: false }
+          - label: Formularios al correo
+            name: forms
+            widget: object
+            collapsed: true
+            summary: '{{fields.emailKey}}'
+            hint: 'Además de abrir WhatsApp, cada formulario (información y visita) llega al correo del colegio. Gratis con Web3Forms.'
+            fields:
+              - { label: Clave de acceso de Web3Forms, name: emailKey, widget: string, required: false, hint: 'Entra a web3forms.com, escribe el correo del colegio y te llega una clave. Pégala aquí. Déjala vacía para no enviar correos.' }
+          - label: Agendar visita en calendario
+            name: booking
+            widget: object
+            collapsed: true
+            summary: '{{fields.url}}'
+            fields:
+              - { label: Enlace de tu calendario, name: url, widget: string, required: false, hint: 'Crea una cuenta gratis en calendly.com o cal.com, configura tus horarios y pega aquí el enlace (https://calendly.com/tu-colegio/visita). Déjalo vacío para no mostrar el calendario.' }
           - label: Animación al escanear el QR
             name: qrIntro
             widget: object
@@ -140,7 +158,21 @@ collections:
                   - { label: '🔮 Bobina Tesla (arcos eléctricos)', value: bobina }
                   - { label: '〰️ Línea de energía (como en la web)', value: energia }
                   - { label: '✨ Explosión de chispas', value: chispas }
+                  - { label: '🌌 Constelaciones (estrellas que se unen)', value: constelaciones }
+                  - { label: '🔌 Circuito (pistas de luz que viajan)', value: circuito }
+                  - { label: '🎆 Fuegos artificiales', value: fuegos }
+                  - { label: '🇵🇪 Bandera del Perú ondeando', value: bandera }
                   - { label: '🚫 Ninguna (entrar directo a la web)', value: ninguna }
+              - label: A dónde llevan los QR impresos
+                name: destination
+                widget: select
+                default: campana
+                hint: 'Los QR ya impresos no cambian, pero aquí decides a dónde llevan. Pasada la fecha de cierre, siempre llevan a Admisión.'
+                options:
+                  - { label: '🚀 Página de la campaña de Admisión (recomendado)', value: campana }
+                  - { label: '💬 Abrir WhatsApp con un mensaje', value: whatsapp }
+                  - { label: '📞 Página de Contacto', value: contacto }
+                  - { label: '🏠 Inicio de la web', value: inicio }
               - { label: Frase bajo el nombre, name: text, widget: string, required: false, hint: 'Ejemplo: Admisión 2027. Déjala vacía para no mostrar frase.' }
               - { label: Duración (segundos), name: seconds, widget: number, value_type: float, min: 1.5, max: 6, default: 2.8, hint: 'Entre 1,5 y 6. Quien escanea puede saltarla tocando “Saltar”.' }
           - { label: 'Mostrar etiquetas “Por confirmar”', name: showDraftBadges, widget: boolean, default: true, hint: 'Desmárcalo cuando todos los textos estén confirmados, antes de la campaña.' }
@@ -499,6 +531,22 @@ collections:
                   - { label: Imagen de vista previa del video, name: thumbnail, widget: image, required: false }
                   - { label: Descripción breve, name: caption, widget: string, required: false }
 
+      - name: recorrido
+        label: Recorrido virtual 360°
+        file: content/recorrido.json
+        fields:
+          - { label: Frase de presentación, name: intro, widget: text, required: false, hint: 'Se ve sobre el visor. Ejemplo: Camina por el colegio desde tu casa.' }
+          - label: Lugares del recorrido
+            name: scenes
+            widget: list
+            required: false
+            summary: '{{fields.title}}'
+            hint: 'Cada lugar es una foto panorámica 360°. Mientras no haya ninguno, la página /recorrido no aparece.'
+            fields:
+              - { label: Nombre del lugar, name: title, widget: string, hint: 'Ejemplo: Patio principal, Biblioteca, Aula de primaria.' }
+              - { label: Foto panorámica 360°, name: image, widget: image, hint: 'Foto equirectangular (2:1), la que sale del modo “Panorama 360” del celular o de una cámara 360°. Máximo unos 6 MB.' }
+              - { label: Descripción breve, name: description, widget: text, required: false }
+
   # ───────────────────────── NOTICIAS ─────────────────────────
   - name: noticias
     label: Noticias
@@ -737,6 +785,7 @@ collections:
               - { label: Línea de energía y animación de la portada, name: fieldAnimation, widget: boolean, default: true }
               - { label: Rayos en la portada, name: lightning, widget: boolean, default: true }
               - { label: Chispas al pasar el cursor, name: sparks, widget: boolean, default: true }
+              - { label: Fondo y cursor eléctricos (partículas que siguen al mouse o al dedo), name: electric, widget: select, default: suave, options: [{ label: Apagado, value: apagado }, { label: Suave (recomendado), value: suave }, { label: Normal, value: normal }, { label: Intenso, value: intenso }], hint: 'Puntos de luz unidos por líneas que reaccionan al cursor. Si la web se siente lenta en celulares viejos, elige Suave o Apagado.' }
               - { label: Línea de progreso bajo el menú, name: scrollProgress, widget: boolean, default: true }
               - { label: Cortina de color al cambiar de sección, name: pageTransitions, widget: boolean, default: true }
               - { label: Botón flotante de WhatsApp, name: whatsappFloat, widget: boolean, default: true }

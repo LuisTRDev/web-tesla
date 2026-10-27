@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import ContactForm from "@/components/sections/ContactForm";
+import Directions from "@/components/ui/Directions";
 import Reveal from "@/components/ui/Reveal";
 import SocialIcon from "@/components/ui/SocialIcon";
 import { settings } from "@/data/settings";
@@ -101,7 +102,7 @@ export default function Contact({ showIntro = true }: { showIntro?: boolean }) {
             </div>
 
             <div className="mt-12">
-              <h3 className="font-display text-xl font-bold text-noche">Solicitar información</h3>
+              <h2 className="font-display text-xl font-bold text-noche">Solicitar información</h2>
               <div className="mt-5">
                 <ContactForm />
               </div>
@@ -118,6 +119,7 @@ export default function Contact({ showIntro = true }: { showIntro?: boolean }) {
                 className="absolute inset-0 h-full w-full border-0"
               />
             </div>
+            <Directions className="mt-5" />
             {settings.showDraftBadges && (
               <p className="mt-3 text-sm text-niebla">
                 [POR VERIFICAR] Confirmar que el punto del mapa coincide con la ubicación exacta del colegio.

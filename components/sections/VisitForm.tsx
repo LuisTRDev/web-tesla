@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { levels } from "@/data/levels";
 import { settings } from "@/data/settings";
+import BookingEmbed from "@/components/ui/BookingEmbed";
+import { sendToEmail } from "@/lib/send-form";
 import { campaignTag, trackEvent } from "@/lib/track";
 import { formatDate, whatsappLink } from "@/lib/utils";
 
@@ -41,12 +43,15 @@ export default function VisitForm() {
     const url = whatsappLink(settings.contact.whatsapp[0] ?? null, `${text}${campaignTag()}`);
     trackEvent("visit_request", { level, shift });
     if (url) window.open(url, "_blank", "noopener,noreferrer");
+    void sendToEmail("Solicitud de visita", { nombre: name, dia: date ? formatDate(date) : "", turno: shift, nivel: level || "No indica", admision: String(settings.admissionYear) });
   };
 
   const field =
     "mt-2 w-full rounded-2xl border border-noche/20 bg-white px-4 py-3.5 text-base text-noche placeholder:text-niebla/70 focus:border-noche focus:outline-none focus:ring-2 focus:ring-filamento";
 
   return (
+    <>
+    <BookingEmbed />
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
         <label htmlFor="visita-nombre" className="text-sm font-semibold text-noche">
@@ -97,5 +102,6 @@ export default function VisitForm() {
         {hasWhatsapp ? "Te confirmamos el horario por el mismo chat." : "[WHATSAPP OFICIAL] pendiente: el envío se activará cuando se configure el número."}
       </p>
     </form>
+    </>
   );
 }

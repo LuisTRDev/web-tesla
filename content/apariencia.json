@@ -4,6 +4,7 @@
   },
   "effects": {
     "sparks": true,
+    "electric": "suave",
     "fieldAnimation": true,
     "lightning": true,
     "scrollProgress": true,

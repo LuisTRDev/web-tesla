@@ -20,6 +20,7 @@
     inicio: { title: "Inicio", src: "/admin/inicio.html" },
     campana: { title: "Campaña y QR", src: "/admin/campana.html" },
     resultados: { title: "Resultados", src: "/admin/resultados.html" },
+    plantillas: { title: "Plantillas de textos", src: "/admin/plantillas.html" },
     ayuda: { title: "Ayuda", src: "/admin/ayuda.html" },
   };
   var overlay = null;
@@ -109,6 +110,7 @@
     add("noticia", "Nueva noticia", "#/collections/noticias/new");
     add("campana", "Campaña y QR", "#/page/campana");
     add("resultados", "Resultados", "#/page/resultados");
+    add("plantillas", "Plantillas", "#/page/plantillas");
     add("ayuda", "Ayuda", "#/page/ayuda");
     add("web", "Ver la web", "/", true);
     markNav(pageFromHash());
@@ -344,6 +346,7 @@
     if (!help) {
       help = document.createElement("button");
       help.type = "button";
+      help.id = "tesla-help-fab";
       help.textContent = "? Ayuda";
       help.setAttribute("aria-label", "Abrir la ayuda de esta sección");
       help.style.cssText = "position:fixed;right:20px;bottom:20px;z-index:99998;border:0;border-radius:999px;padding:12px 20px;background:#0D1230;color:#fff;font:700 15px Figtree,Arial,sans-serif;cursor:pointer;box-shadow:0 10px 30px -8px rgba(13,18,48,.6)";

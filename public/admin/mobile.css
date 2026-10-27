@@ -1,0 +1,401 @@
+/*
+ * PANEL EN EL CELULAR
+ * Decap está pensado para pantallas de escritorio: el editor exige 800 px de ancho y pone el formulario y la vista previa
+ * lado a lado. Aquí, en pantallas angostas, el formulario ocupa todo el ancho y la vista previa se abre aparte con un botón
+ * flotante (👁 / ✏️, ver mobile.js). También: botones y campos para dedos, menú que se desliza y sin zoom automático en iPhone.
+ */
+@media (max-width: 860px) {
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ───────── barra superior: menú que se desliza, sin partirse en dos líneas ───────── */
+  header[class*="AppHeader"] {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  header[class*="AppHeader"] > div,
+  header[class*="AppHeaderContent"] {
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 0 6px !important;
+  }
+  header[class*="AppHeader"] nav {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+  header[class*="AppHeader"] nav ul {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    mask-image: linear-gradient(to right, #000 92%, transparent);
+  }
+  header[class*="AppHeader"] nav ul::-webkit-scrollbar {
+    display: none;
+  }
+  header[class*="AppHeader"] nav li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  header[class*="AppHeader"] a[class*="AppHeaderNavLink"],
+  header[class*="AppHeader"] button[class*="AppHeaderButton"] {
+    white-space: nowrap;
+    min-height: 48px;
+    padding: 0 12px !important;
+    font-size: 13.5px !important;
+  }
+
+  /* ───────── editor: una sola columna ───────── */
+  [class*="EditorContainer"],
+  [class*="ToolbarContainer"],
+  [class*="StyledSplitPane"] {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100vw;
+  }
+  [class*="ToolbarContainer"] {
+    height: auto !important;
+    flex-wrap: wrap !important;
+    gap: 6px;
+    padding: 8px 10px !important;
+    position: sticky;
+    top: 0;
+    z-index: 25;
+  }
+  [class*="ToolbarContainer"] [class*="ToolbarSection"] {
+    min-width: 0 !important;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  [class*="ToolbarContainer"] [class*="ToolbarSectionMain"] {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .SplitPane {
+    position: static !important;
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  .SplitPane .Pane1 {
+    width: 100% !important;
+    max-width: 100vw;
+    flex: none !important;
+    overflow: visible !important;
+  }
+  .SplitPane .Pane2,
+  .SplitPane .Resizer {
+    display: none !important;
+  }
+  [class*="ControlPaneContainer"] {
+    padding: 12px 12px 96px !important;
+    height: auto !important;
+    overflow: visible !important;
+    min-width: 0 !important;
+  }
+  [class*="ViewControls"] {
+    display: none !important;
+  }
+  /* vista previa: pantalla completa bajo la barra, al tocar el botón flotante */
+  body.tesla-previewing .SplitPane .Pane1 {
+    display: none !important;
+  }
+  body.tesla-previewing .SplitPane .Pane2 {
+    display: block !important;
+    width: 100% !important;
+  }
+  body.tesla-previewing [class*="PreviewPaneContainer"],
+  body.tesla-previewing [class*="PreviewPaneFrame"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: calc(100vh - 150px) !important;
+  }
+
+  /* ───────── formularios para dedos ───────── */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="search"],
+  input[type="url"],
+  input:not([type]),
+  textarea,
+  select {
+    font-size: 16px !important; /* evita el zoom automático de iPhone */
+    min-height: 48px;
+  }
+  [class*="ControlContainer"] label,
+  [class*="FieldLabel"] {
+    font-size: 15px !important;
+  }
+  button,
+  [role="button"] {
+    min-height: 44px;
+  }
+  [class*="ObjectWidgetTopBar"],
+  [class*="ListItemTopBar"],
+  [class*="TopBarContainer"] {
+    min-height: 52px;
+  }
+  [class*="ListItemTopBar"] button,
+  [class*="TopBarContainer"] button {
+    min-width: 44px;
+  }
+  [class*="ListControlContainer"] [class*="ListItem"] {
+    min-width: 0;
+  }
+  /* menús desplegables y ventanas dentro de la pantalla */
+  [class*="ModalContent"],
+  [class*="Dropdown"] [class*="List"],
+  [role="dialog"] {
+    max-width: calc(100vw - 16px) !important;
+  }
+  .tesla-modal,
+  [class*="tesla-modal"] {
+    max-width: calc(100vw - 16px);
+  }
+
+  /* ───────── nuestras piezas ───────── */
+  #tesla-bar {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: translateY(160%) !important;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  #tesla-bar.show {
+    transform: none !important;
+  }
+  /* "dónde estoy" y pestañas se pegan justo debajo de la barra del editor (mobile.js mide su alto) */
+  #tesla-crumbs {
+    position: static !important;
+    margin-left: -2px;
+  }
+  #tesla-crumbs ~ #tesla-tabs,
+  #tesla-tabs {
+    top: var(--tesla-toolbar-h, 0px) !important;
+  }
+  /* con la barra de “publicar” abierta, la ayuda flotante y el botón de vista previa no la tapan */
+  body:has(#tesla-bar.show) #tesla-help-fab {
+    display: none !important;
+  }
+  body:has(#tesla-bar.show) #tesla-prev-fab.on {
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  }
+  /* el avatar del usuario sobra dentro del editor: libera una fila */
+  [class*="ToolbarContainer"] [class*="UserMenu"],
+  [class*="ToolbarContainer"] [class*="AvatarImage"],
+  [class*="ToolbarContainer"] [class*="AvatarPlaceholder"] {
+    display: none !important;
+  }
+}
+
+/* ───────── errores y guardado (panel-errors.js) ───────── */
+#tesla-errbar {
+  position: fixed;
+  top: calc(var(--tesla-toolbar-h, 66px) + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99985;
+  width: min(560px, calc(100vw - 16px));
+  box-sizing: border-box;
+  padding: 14px 44px 14px 16px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid #e03c26;
+  box-shadow: 0 18px 40px -12px rgba(13, 18, 48, 0.5);
+  font: 500 15px Figtree, system-ui, sans-serif;
+  color: #0d1230;
+}
+#tesla-errbar[hidden] {
+  display: none;
+}
+.tesla-errchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.tesla-errchips button {
+  border: 1px solid #e03c26;
+  background: #fff3f1;
+  color: #8a1c0d;
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 0 16px;
+  font: 700 14px Figtree, system-ui, sans-serif;
+  cursor: pointer;
+}
+.tesla-errclose {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  font-size: 26px;
+  cursor: pointer;
+  color: #0d1230;
+}
+#tesla-net {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  top: calc(var(--tesla-toolbar-h, 66px) + 6px);
+  z-index: 99984;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font: 700 15px Figtree, system-ui, sans-serif;
+  text-align: center;
+  box-shadow: 0 12px 30px -10px rgba(13, 18, 48, 0.5);
+}
+#tesla-net[hidden] {
+  display: none;
+}
+#tesla-net.off {
+  background: #0d1230;
+  color: #ffb627;
+}
+#tesla-net.ok {
+  background: #14532d;
+  color: #fff;
+}
+
+/* ───────── vista previa en pantalla ancha: marco de celular o pantalla completa ───────── */
+#tesla-device {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: #0d1230;
+  box-shadow: 0 10px 28px -8px rgba(13, 18, 48, 0.55);
+}
+#tesla-device button {
+  border: 0;
+  border-radius: 999px;
+  min-height: 38px;
+  padding: 0 16px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font: 700 14px Figtree, system-ui, sans-serif;
+  cursor: pointer;
+}
+#tesla-device button[aria-pressed="true"] {
+  background: #ffb627;
+  color: #0d1230;
+}
+@media (min-width: 861px) {
+  body.tesla-phone .SplitPane .Pane2 [class*="PreviewPaneContainer"] {
+    display: flex;
+    justify-content: center;
+    background: #dfe3ee;
+    padding: 14px 0 70px;
+    box-sizing: border-box;
+  }
+  body.tesla-phone .SplitPane .Pane2 [class*="PreviewPaneFrame"] {
+    width: 390px !important;
+    max-width: calc(100% - 24px);
+    height: 100% !important;
+    border: 10px solid #0d1230 !important;
+    border-radius: 36px;
+    background: #fff;
+    box-shadow: 0 24px 50px -20px rgba(13, 18, 48, 0.55);
+  }
+}
+@media (max-width: 860px) {
+  #tesla-device {
+    display: none !important;
+  }
+}
+
+/* barra inferior del celular (la crea mobile.js) */
+#tesla-tabbar {
+  display: none;
+}
+@media (max-width: 860px) {
+  #tesla-tabbar:not([hidden]) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99970;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+    background: #0d1230;
+    box-shadow: 0 -10px 30px -12px rgba(13, 18, 48, 0.55);
+  }
+  #tesla-tabbar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 56px;
+    border-radius: 14px;
+    color: rgba(255, 255, 255, 0.78);
+    font: 700 12.5px Figtree, system-ui, sans-serif;
+    text-decoration: none;
+  }
+  #tesla-tabbar a span {
+    font-size: 22px;
+    line-height: 1;
+  }
+  #tesla-tabbar a.on {
+    background: rgba(255, 182, 39, 0.16);
+    color: #ffb627;
+  }
+  /* al editar, manda la barra de publicar: la de accesos se esconde */
+  body:has(#tesla-bar.show) #tesla-tabbar {
+    display: none;
+  }
+  /* la ayuda flotante sube para no quedar tapada por la barra de accesos */
+  #tesla-help-fab {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* botón flotante de la vista previa (lo crea mobile.js; solo se ve en pantallas angostas) */
+#tesla-prev-fab {
+  display: none;
+}
+@media (max-width: 860px) {
+  #tesla-prev-fab.on {
+    display: inline-flex;
+    position: fixed;
+    right: 12px;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    z-index: 99980;
+    align-items: center;
+    gap: 8px;
+    min-height: 52px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: #0d1230;
+    color: #fff;
+    font: 700 16px Figtree, system-ui, sans-serif;
+    box-shadow: 0 12px 30px -8px rgba(13, 18, 48, 0.6);
+  }
+  body.tesla-previewing #tesla-prev-fab.on {
+    background: #ffb627;
+    color: #0d1230;
+  }
+}

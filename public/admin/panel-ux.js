@@ -241,11 +241,17 @@
     if (!open) return false;
     publishing = true;
     open.click();
-    setTimeout(function () {
+    // el menú de Decap tarda en aparecer (más en celulares lentos): se espera hasta 3 s en vez de rendirse a los 350 ms
+    var tries = 0;
+    var timer = setInterval(function () {
       var item = $$("[role=menuitem], li, span, button").filter(function (s) { return /^Publicar ahora$/i.test(norm(s.textContent)) && s.offsetParent !== null; }).pop();
-      if (item) item.click();
-      else publishing = false;
-    }, 350);
+      if (item) { clearInterval(timer); item.click(); }
+      else if (++tries > 12) {
+        clearInterval(timer);
+        publishing = false;
+        openModal({ icon: "⚠️", title: "No se pudo abrir el menú de publicar", body: "<p>Toca el botón <strong>Publicar</strong> de arriba y luego <strong>Publicar ahora</strong>.</p>", buttons: [{ text: "Entendido", kind: "primary" }] });
+      }
+    }, 250);
     return true;
   }
   function reviewAndPublish() {
@@ -443,7 +449,11 @@
       publishing = false;
       showSuccess();
     }
-    if (publishing && $(".Toastify__toast--error")) showError();
+    if (publishing && $(".Toastify__toast--error")) {
+      // faltan campos obligatorios: no es un problema de internet; panel-errors.js muestra qué falta
+      if ($('[class*="ControlErrorsList"]')) publishing = false;
+      else showError();
+    }
     wasDirty = dirty;
     maybeGoto();
   }

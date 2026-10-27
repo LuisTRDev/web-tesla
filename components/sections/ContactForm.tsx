@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { levels } from "@/data/levels";
 import { settings } from "@/data/settings";
+import { sendToEmail } from "@/lib/send-form";
 import { campaignTag, trackEvent } from "@/lib/track";
 import { whatsappLink } from "@/lib/utils";
 
@@ -31,6 +32,8 @@ export default function ContactForm() {
     const url = whatsappLink(settings.contact.whatsapp[0] ?? null, `${text}${campaignTag()}`);
     trackEvent("contact_form_submit", { level });
     if (url) window.open(url, "_blank", "noopener,noreferrer");
+    // respaldo por correo (solo si el colegio puso su clave); no depende de que WhatsApp abra
+    void sendToEmail("Solicitud de información", { nombre: name, nivel: level || "No indica", mensaje: message });
   };
 
   const field =

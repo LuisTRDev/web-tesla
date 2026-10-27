@@ -20,6 +20,7 @@ const html = `<!doctype html>
     <link rel="stylesheet" href="/admin/admin-theme.css" />
     <link rel="stylesheet" href="/admin/admin-ux.css" />
     <link rel="stylesheet" href="/admin/guide.css" />
+    <link rel="stylesheet" href="/admin/mobile.css" />
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@${DECAP_VERSION}/dist/decap-cms.js"></script>
@@ -33,6 +34,9 @@ const html = `<!doctype html>
     <script src="/admin/photo-optimizer.js"></script>
     <script src="/admin/tour.js"></script>
     <script src="/admin/es-fixes.js"></script>
+    <script src="/admin/mobile.js"></script>
+    <script src="/admin/preview-device.js"></script>
+    <script src="/admin/panel-errors.js"></script>
   </body>
 </html>
 `;

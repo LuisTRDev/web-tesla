@@ -597,11 +597,34 @@
     ux().openModal({
       icon: "⌨️",
       title: "Atajos del teclado",
-      body: '<ul class="tesla-changes"><li><strong>Ctrl + S</strong> · revisar y publicar tus cambios</li><li><strong>Esc</strong> · cerrar ventanas, la ayuda o la guía</li><li><strong>← →</strong> · pasos de la guía de la pantalla</li></ul>',
+      body: '<ul class="tesla-changes"><li><strong>Ctrl + S</strong> · revisar y publicar tus cambios</li><li><strong>Ctrl + K</strong> o <strong>/</strong> · buscar qué cambiar (desde cualquier pantalla)</li><li><strong>Esc</strong> · cerrar ventanas, la ayuda o la guía</li><li><strong>← →</strong> · pasos de la guía de la pantalla</li></ul>',
       buttons: [{ text: "Entendido", kind: "primary" }],
     });
   }
+  /** Ir al buscador del Inicio ("¿Qué quieres cambiar?") y dejar el cursor listo para escribir. */
+  function goSearch() {
+    function focusIt() {
+      var frames = document.querySelectorAll("iframe");
+      for (var i = 0; i < frames.length; i++) {
+        try {
+          var q = frames[i].contentDocument && frames[i].contentDocument.getElementById("q");
+          if (q) { frames[i].focus(); q.focus(); q.select(); return true; }
+        } catch (err) { /* otro origen */ }
+      }
+      return false;
+    }
+    if (location.hash !== "#/page/inicio") location.hash = "#/page/inicio";
+    var tries = 0;
+    var timer = setInterval(function () { if (focusIt() || ++tries > 20) clearInterval(timer); }, 150);
+  }
   document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    var typing = /^(INPUT|TEXTAREA|SELECT)$/.test(tag) || (e.target && e.target.isContentEditable);
+    if (((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) || (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey)) {
+      e.preventDefault();
+      goSearch();
+      return;
+    }
     if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "S") && inEntry()) {
       e.preventDefault();
       if (ux().isDirty && ux().isDirty()) ux().reviewAndPublish();

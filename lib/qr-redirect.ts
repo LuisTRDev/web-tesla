@@ -13,11 +13,18 @@ import { QR_ANIMATIONS, qrSplashResponse, type QrAnimation } from "@/lib/qr-spla
 export function qrRedirect(request: Request, canal?: string) {
   const source = (canal ?? "qr").toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "qr";
   const closed = !!settings.admissionDeadline && todayISO() > settings.admissionDeadline;
-  const path = closed ? "/admision" : `/admision-${settings.admissionYear}`;
-  const url = new URL(path, request.url);
-  url.searchParams.set("utm_source", source);
-  url.searchParams.set("utm_medium", "impreso");
-  url.searchParams.set("utm_campaign", `admision-${settings.admissionYear}`);
+  const dest = closed ? "campana" : settings.qrIntro.destination;
+  const phone = settings.contact.whatsapp[0];
+  const path = closed ? "/admision" : dest === "contacto" ? "/contacto" : dest === "inicio" ? "/" : `/admision-${settings.admissionYear}`;
+  // WhatsApp directo: si no hay número escrito en el panel, cae a la página de campaña
+  const toWhatsapp = dest === "whatsapp" && !!phone;
+  const url = toWhatsapp ? new URL(`https://wa.me/${phone}`) : new URL(path, request.url);
+  if (toWhatsapp) url.searchParams.set("text", settings.contact.whatsappButton.defaultMessage);
+  else {
+    url.searchParams.set("utm_source", source);
+    url.searchParams.set("utm_medium", "impreso");
+    url.searchParams.set("utm_campaign", `admision-${settings.admissionYear}`);
+  }
   const asked = new URL(request.url).searchParams.get("anim");
   const anim = (QR_ANIMATIONS as readonly string[]).includes(asked ?? "") ? (asked as QrAnimation) : settings.qrIntro.animation;
   if (anim === "ninguna") return NextResponse.redirect(url, 307);

@@ -60,7 +60,7 @@ export default function Navbar() {
         )}
       >
         <div className="mx-auto flex h-[72px] max-w-site items-center justify-between gap-6 px-5 md:px-10">
-          <Link href="/" aria-label={`${settings.name}, ir al inicio`}>
+          <Link href="/" aria-label={`${settings.shortName} ${settings.kicker}, ir al inicio`}>
             <Logo />
           </Link>
 

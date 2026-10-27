@@ -17,6 +17,18 @@ const social = rec(r.social);
 const whatsappButton = rec(contact.whatsappButton);
 const images = rec(r.images);
 const qrIntro = rec(r.qrIntro);
+const forms = rec(r.forms);
+const booking = rec(r.booking);
+
+/** Solo se aceptan calendarios de Calendly o Cal.com (https). */
+const bookingUrl = (value: unknown): string | null => {
+  try {
+    const url = new URL(String(value ?? '').trim());
+    return url.protocol === 'https:' && /(^|\.)(calendly\.com|cal\.com)$/.test(url.hostname) ? url.toString() : null;
+  } catch {
+    return null;
+  }
+};
 
 export const settings: SiteSettings = {
   name: str(r.name, "Institución Educativa Privada “Nikola Tesla”"),
@@ -71,10 +83,13 @@ export const settings: SiteSettings = {
     admission: text(images.admission),
     share: text(images.share),
   },
+  forms: { emailKey: text(forms.emailKey) },
+  booking: { url: bookingUrl(booking.url) },
   qrIntro: {
     animation: oneOf(qrIntro.animation, QR_ANIMATIONS, "atomo"),
     text: str(qrIntro.text),
     seconds: Math.min(6, Math.max(1.5, num(qrIntro.seconds, 2.8))),
+    destination: oneOf(qrIntro.destination, ["campana", "whatsapp", "contacto", "inicio"] as const, "campana"),
   },
   stats: list(r.stats).map((stat, index) => ({
     id: str(stat.id, `cifra-${index + 1}`),

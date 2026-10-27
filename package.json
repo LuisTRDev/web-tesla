@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "test:qr": "node scripts/test-qr-designer.mjs",
     "build:admin-css": "tailwindcss -c tailwind.admin.config.ts -i scripts/admin-preview.css -o public/admin/preview.css --minify",
     "panel": "npm run build:admin-css && concurrently -k -n web,cms \"next dev\" \"decap-server\""
   },
