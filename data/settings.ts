@@ -1,4 +1,5 @@
 import raw from "@/content/settings.json";
+import { QR_ANIMATIONS } from "@/lib/qr-splash";
 import type { SiteSettings } from "@/types";
 import { bool, list, num, oneOf, rec, str, strings, text, webUrl } from "@/lib/content";
 
@@ -15,6 +16,7 @@ const legal = rec(r.legal);
 const social = rec(r.social);
 const whatsappButton = rec(contact.whatsappButton);
 const images = rec(r.images);
+const qrIntro = rec(r.qrIntro);
 
 export const settings: SiteSettings = {
   name: str(r.name, "Institución Educativa Privada “Nikola Tesla”"),
@@ -68,6 +70,11 @@ export const settings: SiteSettings = {
     aboutDetail: text(images.aboutDetail),
     admission: text(images.admission),
     share: text(images.share),
+  },
+  qrIntro: {
+    animation: oneOf(qrIntro.animation, QR_ANIMATIONS, "atomo"),
+    text: str(qrIntro.text),
+    seconds: Math.min(6, Math.max(1.5, num(qrIntro.seconds, 2.8))),
   },
   stats: list(r.stats).map((stat, index) => ({
     id: str(stat.id, `cifra-${index + 1}`),

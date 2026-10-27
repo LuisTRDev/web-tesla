@@ -27,6 +27,11 @@
   "kicker": "Institución Educativa Privada",
   "footerPhrase": "Disciplina, liderazgo, excelencia",
   "showDraftBadges": true,
+  "qrIntro": {
+    "animation": "atomo",
+    "text": "Admisión 2027",
+    "seconds": 2.8
+  },
   "location": {
     "address": "Asociación - \"Las Casuarinas\"",
     "district": "Nuevo Imperial",

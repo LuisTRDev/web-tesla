@@ -161,3 +161,17 @@ Las entradas más recientes van al final.
 - **Lo que la prueba descubrió**: Decap abre los elementos con retraso y pierde clics si se piden varios a la vez (se pliega de uno en uno esperando a que las alturas se estabilicen); y recargar con cambios hacía aparecer el "¿Salir del sitio?" del navegador (ya no).
 - **No se hizo**: "deshacer" el borrado de un elemento de una lista (Decap no lo permite; se mantiene la confirmación y salir sin publicar) y grabar los videos (están los guiones). La capa depende de los nombres de clase de Decap: repasar al cambiar `DECAP_VERSION`.
 - Estos cambios **todavía no están en un commit**.
+
+## 2026-10-26 · Diseñador de QR: chispas reparadas y efectos nuevos
+
+- **Chispas**: antes se apagaban al inclinar el recuadro y eran finas; ahora se dibujan dentro de la inclinación (siempre funcionan), con 4 tipos (rayos, destellos ✦, estelas de puntos, mezcla), cantidad (4–20), tamaño y color propios. No aparecen en "QR solo" ni en el sticker (no tienen recuadro/espacio).
+- **Nuevo en Recuadro y efectos**: resplandor neón (suave/fuerte, con color) y color y grosor del borde del recuadro.
+- Todo en `public/admin/qr-designer.js`. Revisado solo con `node --check`; **no se probó en navegador**. Sin commit.
+- **Más efectos del QR** (mismo archivo): formas de punto hexágono, cruz, corazón y rayo; 5 colores nuevos y degradado de tres colores (también en SVG); marca de agua con el escudo difuminado (PNG/PDF, no SVG); insignia en una esquina del recuadro (círculo, sol, rombo; su tamaño se limita al margen para no tapar las esquinas del código); dibujo de fondo del recuadro (ondas, rejilla, puntos, rayos); la animación WebM ahora usa el recuadro completo con chispas que parpadean y resplandor; plantillas **Neón** y **Fiesta**. El semáforo avisa de las formas decorativas, marca de agua y dibujo de fondo. Aplicar una plantilla reinicia estos efectos. Solo `node --check`, **sin probar en navegador**, sin commit.
+
+## 2026-10-26 · Animación al escanear el QR
+
+- Al escanear un QR (`/qr/<lugar>`) ahora se ve unos segundos una animación del colegio y luego se entra a la web (con los mismos `utm_*` de siempre; el botón “Saltar ›” y el tiempo máximo evitan que alguien se quede atascado; sin JavaScript hay `meta refresh`). Archivos: `lib/qr-splash.ts` (página HTML con canvas, sin React), `lib/qr-redirect.ts`, ajuste `qrIntro` en `content/settings.json` / `data/settings.ts` / `types`.
+- Cinco animaciones: ⚛️ átomo (el escudo es el núcleo), ⚡ rayos, 🔮 bobina Tesla, 〰️ línea de energía y ✨ chispas, o ninguna. Se elige en el panel: **Datos del colegio → Animación al escanear el QR** (animación, frase y duración 1,5–6 s). Vale para todos los QR ya impresos, sin reimprimir. Con `?anim=nombre` se prueba otra sin cambiar el ajuste (el diseñador de QR tiene el botón “Ver la animación”); `?freeze=<ms>` congela un instante (solo para pruebas).
+- Probado: tipos, JS de la página y capturas reales en Edge de las 5 animaciones (a un instante fijo; la fluidez en celulares reales no se midió). Respeta “reducir movimiento” (dura 0,9 s). Sin commit.
+- Corrección: el campo de la animación no se veía porque el formulario “Datos del colegio” usa pestañas y no estaba en ninguna; ahora hay la pestaña **⚡ Animación del QR**, una entrada en el buscador y el botón “⚙️ Elegir la animación activa” en el diseñador.

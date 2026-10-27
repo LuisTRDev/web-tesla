@@ -14,7 +14,7 @@ window.TESLA = (function () {
       title: "Datos del colegio",
       desc: "Lo que se repite en toda la web: nombre, frases, contacto, redes, fotos principales y cifras.",
       cards: [
-        { file: "settings", icon: "🏫", title: "Datos del colegio", desc: "Nombre, frase de la portada, dirección, WhatsApp, redes, fotos principales y cifras.", chips: ["Frase de portada", "WhatsApp", "Dirección", "Foto de portada", "Cifras"], web: "/" },
+        { file: "settings", icon: "🏫", title: "Datos del colegio", desc: "Nombre, frase de la portada, dirección, WhatsApp, redes, fotos principales y cifras.", chips: ["Frase de portada", "WhatsApp", "Dirección", "Foto de portada", "Cifras", "Animación del QR"], web: "/" },
       ],
     },
     paginas: {
@@ -176,6 +176,7 @@ window.TESLA = (function () {
     find("Resolución y código modular", ["resolucion", "resolución", "ugel", "modular", "codigo", "código"], "colegio/entries/settings", ["Respaldo oficial"]),
     find("Dirección de la web (dominio)", ["dominio", "web", "pagina web", "página web", "link", "url"], "colegio/entries/settings", ["Dirección de la web"]),
     find("Descripción que sale en Google", ["google", "buscador", "descripcion", "descripción", "seo"], "colegio/entries/settings", ["Descripción para Google"]),
+    find("Animación al escanear el QR", ["animacion", "animación", "qr", "atomo", "átomo", "rayos", "escanear", "bobina"], "colegio/entries/settings", ["Animación al escanear el QR"]),
     find("Etiquetas “Por confirmar”", ["etiquetas", "por confirmar", "confirmar", "borrador"], "colegio/entries/settings", ["Mostrar etiquetas “Por confirmar”"]),
     find("Avisos sobre el menú", ["aviso", "barra", "anuncio", "banner", "alerta"], "paginas/entries/banner"),
     find("Agregar un evento al calendario", ["evento", "calendario", "reunion", "reunión", "agenda", "fecha importante", "feriado"], "calendario/new"),

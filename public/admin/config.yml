@@ -123,6 +123,26 @@ collections:
               - { label: Instagram, name: instagram, widget: string, required: false }
               - { label: TikTok, name: tiktok, widget: string, required: false }
               - { label: YouTube, name: youtube, widget: string, required: false }
+          - label: Animación al escanear el QR
+            name: qrIntro
+            widget: object
+            collapsed: true
+            summary: '{{fields.animation}}'
+            hint: 'Lo que se ve un instante cuando una familia escanea un QR impreso, antes de entrar a la web. Vale para todos los QR ya impresos.'
+            fields:
+              - label: Animación
+                name: animation
+                widget: select
+                default: atomo
+                options:
+                  - { label: '⚛️ Átomo con electrones (el escudo es el núcleo)', value: atomo }
+                  - { label: '⚡ Rayos que caen sobre el escudo', value: rayos }
+                  - { label: '🔮 Bobina Tesla (arcos eléctricos)', value: bobina }
+                  - { label: '〰️ Línea de energía (como en la web)', value: energia }
+                  - { label: '✨ Explosión de chispas', value: chispas }
+                  - { label: '🚫 Ninguna (entrar directo a la web)', value: ninguna }
+              - { label: Frase bajo el nombre, name: text, widget: string, required: false, hint: 'Ejemplo: Admisión 2027. Déjala vacía para no mostrar frase.' }
+              - { label: Duración (segundos), name: seconds, widget: number, value_type: float, min: 1.5, max: 6, default: 2.8, hint: 'Entre 1,5 y 6. Quien escanea puede saltarla tocando “Saltar”.' }
           - { label: 'Mostrar etiquetas “Por confirmar”', name: showDraftBadges, widget: boolean, default: true, hint: 'Desmárcalo cuando todos los textos estén confirmados, antes de la campaña.' }
           - label: Fotos y video principales
             name: images

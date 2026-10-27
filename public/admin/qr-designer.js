@@ -19,8 +19,9 @@
   var PALETTE = {
     noche: ["Azul noche", "#0D1230"], marino: ["Azul marino", "#1F3557"], rojo700: ["Rojo oscuro", "#B42D1B"], rojo: ["Rojo", "#E03C26"],
     verde: ["Verde oscuro", "#14532D"], morado: ["Morado oscuro", "#3B1F6B"], negro: ["Negro", "#000000"], filamento: ["Amarillo", "#FFB627"], blanco: ["Blanco", "#FFFFFF"],
+    azul: ["Azul intenso", "#1D4ED8"], turquesa: ["Turquesa oscuro", "#0F766E"], fucsia: ["Fucsia oscuro", "#9D174D"], naranja: ["Naranja oscuro", "#C2410C"], dorado: ["Dorado oscuro", "#92400E"],
   };
-  var DARKS = ["noche", "marino", "rojo700", "rojo", "verde", "morado", "negro"];
+  var DARKS = ["noche", "marino", "azul", "turquesa", "verde", "morado", "fucsia", "rojo700", "rojo", "naranja", "dorado", "negro"];
   var BGS = { blanco: ["Blanco", "#FFFFFF"], crema: ["Crema", "#FFF8E8"], lila: ["Lila claro", "#EEF0FF"], transparente: ["Transparente (solo PNG y SVG)", null] };
   var EC_AREA = { L: 0, M: 4, Q: 7, H: 13 }; // % máximo seguro del área del escudo, medido con pruebas de lectura
 
@@ -77,7 +78,7 @@
     return {
       shape: st.dotShape, scale: st.dotScale / 100, round: st.dotRound / 100,
       eyeOuter: st.eyeOuter, eyeInner: st.eyeInner, thick: { fino: 0.9, normal: 1, grueso: 1.15 }[st.ringThick] || 1,
-      dot1: pick(st.dotColor), dot2: pick(st.dotColor2), grad: mono ? "none" : st.gradient,
+      dot1: pick(st.dotColor), dot2: pick(st.dotColor2), dot3: !mono && st.dotColor3 && st.dotColor3 !== "none" ? pick(st.dotColor3) : null, grad: mono ? "none" : st.gradient,
       ring: pick(st.ringColor), ball: pick(st.ballColor), bg: bg, quiet: st.quiet,
       logo: { mode: logoMode, area: logoMode === "none" ? 0 : st.logoArea, shape: st.logoShape, border: st.logoBorder === "none" ? null : mono ? "#000000" : (PALETTE[st.logoBorder] || PALETTE.filamento)[1], borderW: { fino: 0.12, normal: 0.28, grueso: 0.45 }[st.logoBorderW] || 0.28 },
     };
@@ -118,8 +119,29 @@
     if (s === "square") return rr(ex + 2 * c, ey + 2 * c, 3 * c, 3 * c, 0);
     return rr(ex + 2 * c, ey + 2 * c, 3 * c, 3 * c, 0.7 * c);
   }
+  function poly(pts) { return "M" + pts.map(function (p) { return f(p[0]) + " " + f(p[1]); }).join("L") + "Z"; }
   function dotPath(shape, o, x, y, c, nb) {
     var cx = x + c / 2, cy = y + c / 2;
+    var d = c * o.scale;
+    if (shape === "cross") {
+      var L = d / 2 * 1.08, h = d * 0.27;
+      return poly([[cx - h, cy - L], [cx + h, cy - L], [cx + h, cy - h], [cx + L, cy - h], [cx + L, cy + h], [cx + h, cy + h], [cx + h, cy + L], [cx - h, cy + L], [cx - h, cy + h], [cx - L, cy + h], [cx - L, cy - h], [cx - h, cy - h]]);
+    }
+    if (shape === "hex") {
+      var hp = [];
+      for (var k = 0; k < 6; k++) hp.push([cx + Math.cos(((k * 60 - 90) * Math.PI) / 180) * d * 0.56, cy + Math.sin(((k * 60 - 90) * Math.PI) / 180) * d * 0.56]);
+      return poly(hp);
+    }
+    if (shape === "bolt") {
+      return poly([[cx + 0.12 * d, cy - 0.56 * d], [cx - 0.36 * d, cy + 0.08 * d], [cx - 0.04 * d, cy + 0.08 * d], [cx - 0.14 * d, cy + 0.56 * d], [cx + 0.38 * d, cy - 0.14 * d], [cx + 0.04 * d, cy - 0.14 * d]]);
+    }
+    if (shape === "heart") {
+      var u = d * 1.05;
+      return "M" + f(cx) + " " + f(cy + 0.46 * u) + "C" + f(cx - 0.62 * u) + " " + f(cy + 0.02 * u) + " " + f(cx - 0.5 * u) + " " + f(cy - 0.46 * u) + " " + f(cx - 0.25 * u) + " " + f(cy - 0.46 * u) +
+        "C" + f(cx - 0.1 * u) + " " + f(cy - 0.46 * u) + " " + f(cx) + " " + f(cy - 0.36 * u) + " " + f(cx) + " " + f(cy - 0.26 * u) +
+        "C" + f(cx) + " " + f(cy - 0.36 * u) + " " + f(cx + 0.1 * u) + " " + f(cy - 0.46 * u) + " " + f(cx + 0.25 * u) + " " + f(cy - 0.46 * u) +
+        "C" + f(cx + 0.5 * u) + " " + f(cy - 0.46 * u) + " " + f(cx + 0.62 * u) + " " + f(cy + 0.02 * u) + " " + f(cx) + " " + f(cy + 0.46 * u) + "Z";
+    }
     if (shape === "square") return "M" + f(x) + " " + f(y) + "h" + f(c) + "v" + f(c) + "h" + f(-c) + "Z";
     if (shape === "circle") return circ(cx, cy, (c * o.scale) / 2);
     if (shape === "diamond") return diamond(cx, cy, (c * o.scale) / 2 * 1.08);
@@ -227,15 +249,32 @@
     return rr(p.x, p.y, p.size, p.size, p.size * 0.2);
   }
   function dotFill(ctx, o, box) {
-    if (o.grad === "none" || o.dot1 === o.dot2) return o.dot1;
+    if (o.grad === "none" || (o.dot1 === o.dot2 && !o.dot3)) return o.dot1;
     var g;
     if (o.grad === "radial") g = ctx.createRadialGradient(box.x + box.size / 2, box.y + box.size / 2, 0, box.x + box.size / 2, box.y + box.size / 2, box.size * 0.7);
     else if (o.grad === "horizontal") g = ctx.createLinearGradient(box.x, box.y, box.x + box.size, box.y);
     else if (o.grad === "vertical") g = ctx.createLinearGradient(box.x, box.y, box.x, box.y + box.size);
     else g = ctx.createLinearGradient(box.x, box.y, box.x + box.size, box.y + box.size);
     g.addColorStop(0, o.dot1);
+    if (o.dot3) g.addColorStop(0.5, o.dot3);
     g.addColorStop(1, o.dot2);
     return g;
+  }
+  /** Marca de agua: el escudo (o el centro elegido) grande y difuminado detrás de los puntos. */
+  function drawWatermark(ctx, st, o, box) {
+    var color = o.dot1;
+    var key = "wm|" + color + "|" + (st.logoImg ? 1 : 0);
+    var bmp = logoCache[key];
+    if (!bmp) { bmp = bitmapFromImage(st.logoImg, color); if (bmp) logoCache[key] = bmp; }
+    if (!bmp) return;
+    var side = box.size * 0.82;
+    var ratio = bmp.width / bmp.height;
+    var w = ratio >= 1 ? side : side * ratio, h = ratio >= 1 ? side / ratio : side;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0.04, Math.min(0.3, st.wmarkAlpha / 100));
+    try { ctx.filter = "blur(" + Math.round(box.size * 0.006) + "px)"; } catch (e) { /* sin desenfoque */ }
+    ctx.drawImage(bmp, box.x + (box.size - w) / 2, box.y + (box.size - h) / 2, w, h);
+    ctx.restore();
   }
 
   /** Dibuja el QR completo (fondo, puntos, esquinas, escudo). opts: background, radius, reveal (0–1 para la animación). */
@@ -248,6 +287,7 @@
       ctx.fill(new Path2D(rr(x, y, size, size, opts.radius || 0)));
     }
     var list = g.dots;
+    if (st.wmark) drawWatermark(ctx, st, o, g.box);
     if (opts.reveal !== undefined && opts.reveal < 1) {
       var sorted = list.slice().sort(function (a, b) { return a.r2 - b.r2; });
       list = sorted.slice(0, Math.round(sorted.length * opts.reveal));
@@ -310,31 +350,117 @@
     ctx.fillText(text, cx, ry + rh * 0.66);
     ctx.textAlign = "left";
   }
-  function drawSparks(ctx, x, y, size, P) {
+  var SPARK_COLORS = { acento: null, filamento: "#FFB627", blanco: "#FFFFFF", rojo: "#E03C26", arco: "#A9ADFF", noche: "#0D1230" };
+  function sparkHex(st, P) { return st.mono ? "#000000" : SPARK_COLORS[st.sparkColor] || P.accentHex; }
+  function sparkReach(st, size) { return size * 0.2 * (st.sparkSize / 100); }
+  /** Chispas alrededor del recuadro: rayos quebrados, destellos de 4 puntas o estelas de puntos. */
+  function drawSparks(ctx, x, y, size, P, st) {
     var cx = x + size / 2, cy = y + size / 2;
+    var color = sparkHex(st, P);
+    var sc = st.sparkSize / 100;
+    var n = Math.max(4, Math.min(20, Number(st.sparkCount) || 8));
+    var style = st.sparkStyle || "rayos";
+    var seed = 7;
+    var rnd = function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
     ctx.save();
-    ctx.strokeStyle = P.accentHex;
-    ctx.shadowColor = P.accentHex;
-    ctx.shadowBlur = size * 0.03;
-    ctx.lineWidth = Math.max(2, size * 0.01);
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = size * 0.035;
+    ctx.lineWidth = Math.max(3, size * 0.012 * sc);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    [25, 65, 115, 155, 205, 245, 295, 335].forEach(function (deg, i) {
+    for (var i = 0; i < n; i++) {
+      var deg = (i + 0.5) * (360 / n) + (rnd() - 0.5) * (180 / n);
       var a = (deg * Math.PI) / 180;
       var cos = Math.cos(a), sin = Math.sin(a);
       var edge = (size / 2) / Math.max(Math.abs(cos), Math.abs(sin));
-      var d = edge + size * 0.07;
-      var len = size * (i % 2 ? 0.1 : 0.14);
-      var sx = cx + cos * d, sy = cy + sin * d;
-      // rayo quebrado que se aleja del recuadro
-      ctx.beginPath();
-      ctx.moveTo(sx, sy);
-      ctx.lineTo(sx + cos * len * 0.45 - sin * len * 0.18, sy + sin * len * 0.45 + cos * len * 0.18);
-      ctx.lineTo(sx + cos * len * 0.55 + sin * len * 0.12, sy + sin * len * 0.55 - cos * len * 0.12);
-      ctx.lineTo(sx + cos * len, sy + sin * len);
-      ctx.stroke();
-    });
+      var sx = cx + cos * (edge + size * 0.045), sy = cy + sin * (edge + size * 0.045);
+      var kind = style === "mixto" ? ["rayos", "destellos", "puntos"][i % 3] : style;
+      // en la animación (st.__t, en segundos) cada chispa parpadea a su propio ritmo
+      ctx.globalAlpha = st.__t === undefined ? 1 : 0.15 + 0.85 * Math.pow(0.5 + 0.5 * Math.sin(st.__t * 7 + i * 2.3), 2);
+      if (kind === "rayos") {
+        var len = size * (i % 2 ? 0.1 : 0.14) * sc;
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx + cos * len * 0.45 - sin * len * 0.2, sy + sin * len * 0.45 + cos * len * 0.2);
+        ctx.lineTo(sx + cos * len * 0.55 + sin * len * 0.14, sy + sin * len * 0.55 - cos * len * 0.14);
+        ctx.lineTo(sx + cos * len, sy + sin * len);
+        ctx.stroke();
+      } else if (kind === "destellos") {
+        var r = size * (i % 2 ? 0.035 : 0.055) * sc;
+        ctx.fill(new Path2D(star4(sx + cos * r, sy + sin * r, r, 0.55)));
+      } else {
+        for (var k = 0; k < 3; k++) {
+          ctx.beginPath();
+          ctx.arc(sx + cos * size * 0.035 * k * sc, sy + sin * size * 0.035 * k * sc, Math.max(1.5, size * (0.016 - k * 0.0045) * sc), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
     ctx.restore();
+  }
+  /** Dibujo de fondo del recuadro en el color del borde, muy suave para no estorbar la lectura. */
+  function drawPlatePattern(ctx, kind, x, y, size, radius, color) {
+    ctx.save();
+    ctx.clip(new Path2D(rr(x, y, size, size, radius)));
+    ctx.globalAlpha = 0.14;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = Math.max(1.5, size * 0.005);
+    var i, j;
+    if (kind === "ondas") {
+      for (i = 0; i < 14; i++) {
+        ctx.beginPath();
+        for (j = 0; j <= 40; j++) {
+          var px = x + (size * j) / 40, py = y + (size * (i + 0.5)) / 14 + Math.sin(j * 0.45 + i * 0.6) * size * 0.022;
+          if (j) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+        }
+        ctx.stroke();
+      }
+    } else if (kind === "rejilla") {
+      for (i = -20; i < 20; i++) {
+        ctx.beginPath(); ctx.moveTo(x + i * size * 0.07, y); ctx.lineTo(x + i * size * 0.07 + size, y + size); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x + i * size * 0.07 + size, y); ctx.lineTo(x + i * size * 0.07, y + size); ctx.stroke();
+      }
+    } else if (kind === "puntos") {
+      for (i = 0; i < 20; i++) for (j = 0; j < 20; j++) { ctx.beginPath(); ctx.arc(x + (i + 0.5) * size / 20, y + (j + 0.5) * size / 20, size * 0.007, 0, Math.PI * 2); ctx.fill(); }
+    } else if (kind === "rayos") {
+      for (i = 0; i < 36; i++) {
+        var a = (i * Math.PI) / 18;
+        ctx.beginPath(); ctx.moveTo(x + size / 2, y + size / 2); ctx.lineTo(x + size / 2 + Math.cos(a) * size, y + size / 2 + Math.sin(a) * size); ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+  /** Insignia en una esquina del recuadro (por ejemplo "2027"). Su tamaño nunca llega a las esquinas de posición del código. */
+  function drawBadge(ctx, st, P, x, y, size, pad, n, accent) {
+    var text = String(st.badgeText).trim();
+    var cell = (size - 2 * pad) / (n + st.quiet * 2);
+    var r = Math.min(size * 0.1, (pad + st.quiet * cell) * 0.92);
+    var pos = st.badgePos || "sd";
+    var bx = pos.charAt(1) === "d" ? x + size : x, by = pos.charAt(0) === "s" ? y : y + size;
+    var shape = st.badgeShape || "circulo";
+    var path;
+    if (shape === "sol") {
+      var pts = [];
+      for (var k = 0; k < 24; k++) { var rad = k % 2 ? r * 0.82 : r * 1.06; pts.push([bx + Math.cos((k * Math.PI) / 12) * rad, by + Math.sin((k * Math.PI) / 12) * rad]); }
+      path = poly(pts);
+    } else if (shape === "rombo") path = diamond(bx, by, r * 1.12);
+    else path = circ(bx, by, r);
+    ctx.save();
+    ctx.shadowColor = "rgba(0,0,0,0.35)";
+    ctx.shadowBlur = size * 0.02;
+    ctx.shadowOffsetY = size * 0.008;
+    ctx.fillStyle = st.mono ? "#000000" : P.accentHex;
+    ctx.fill(new Path2D(path));
+    ctx.restore();
+    ctx.fillStyle = st.mono ? "#FFFFFF" : P.onAccent;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    var fs = fitSize(ctx, text, r * 1.45, r * 0.8, 800, "Bricolage Grotesque");
+    ctx.fillText(text, bx, by + fs * 0.34);
+    ctx.textAlign = "left";
   }
   function plateWithQR(ctx, m, x, y, size, st, P) {
     var o = qopts(st);
@@ -349,6 +475,15 @@
       ctx.rotate((st.tilt * Math.PI) / 180);
       ctx.translate(-cx, -cy);
     }
+    var gl = { none: 0, suave: 1, fuerte: 2 }[st.glow] || 0;
+    if (gl) {
+      ctx.save();
+      ctx.shadowColor = st.mono ? "#000000" : SPARK_COLORS[st.glowColor] || P.accentHex;
+      ctx.shadowBlur = size * (gl === 2 ? 0.22 : 0.12);
+      ctx.fillStyle = o.bg || C.blanco;
+      for (var gi = 0; gi < (gl === 2 ? 3 : 2); gi++) ctx.fill(new Path2D(rr(x, y, size, size, radius)));
+      ctx.restore();
+    }
     var sh = { none: 0, soft: 1, strong: 2 }[st.shadow] || 0;
     if (sh) {
       ctx.save();
@@ -361,9 +496,10 @@
     }
     ctx.fillStyle = o.bg || C.blanco;
     ctx.fill(new Path2D(rr(x, y, size, size, radius)));
-    var accent = st.mono ? "#000000" : P.accentHex;
+    var accent = st.mono ? "#000000" : st.frameColor && st.frameColor !== "acento" ? (PALETTE[st.frameColor] || [0, P.accentHex])[1] : P.accentHex;
+    if (st.plateBg && st.plateBg !== "none" && !st.mono) drawPlatePattern(ctx, st.plateBg, x, y, size, radius, accent);
     ctx.strokeStyle = accent;
-    ctx.lineWidth = Math.max(4, size * 0.015);
+    ctx.lineWidth = Math.max(4, size * 0.015 * ({ fino: 0.5, normal: 1, grueso: 2.2 }[st.frameW] || 1));
     if (st.frame === "dashed") ctx.setLineDash([size * 0.04, size * 0.025]);
     ctx.stroke(new Path2D(rr(x + ctx.lineWidth / 2, y + ctx.lineWidth / 2, size - ctx.lineWidth, size - ctx.lineWidth, radius)));
     ctx.setLineDash([]);
@@ -374,10 +510,11 @@
       ctx.stroke(new Path2D(rr(x - gap, y - gap, size + 2 * gap, size + 2 * gap, radius + gap)));
       ctx.globalAlpha = 1;
     }
-    drawQR(ctx, m, x + pad, y + pad, size - 2 * pad, st, { background: false });
+    drawQR(ctx, m, x + pad, y + pad, size - 2 * pad, st, { background: false, reveal: st.__reveal });
+    if (String(st.badgeText || "").trim()) drawBadge(ctx, st, P, x, y, size, pad, m.length, accent);
     if (rh) drawRibbon(ctx, st, P, cx, y, size, top);
+    if (st.sparks) drawSparks(ctx, x, y, size, P, st);
     ctx.restore();
-    if (st.sparks && !st.tilt) drawSparks(ctx, x, y, size, P);
   }
 
   /* ───────── texto ───────── */
@@ -620,7 +757,7 @@
     var rh = ribbonHeight(st, size) * 0.9;
     var top = st.ribbonPos === "top";
     // las chispas se extienden fuera del recuadro: se les reserva espacio para que no pisen otros elementos
-    var sp = st.sparks && !st.tilt ? size * 0.17 : 0;
+    var sp = st.sparks ? sparkReach(st, size) : 0;
     return { h: size + lh + rh + 2 * sp, qr: true, qrOffset: top ? rh : 0, draw: function (x, y, cw) {
       var py = y + sp + (top ? rh : 0);
       plateWithQR(ctx, matrix, x + (cw - size) / 2, py, size, st, P);
@@ -870,12 +1007,13 @@
     var g = geometry(prepare(st), margin, margin, size - 2 * margin, o);
     var defs = "";
     var dotFillAttr = o.dot1;
-    if (o.grad !== "none" && o.dot1 !== o.dot2) {
+    var stops = '<stop offset="0" stop-color="' + o.dot1 + '"/>' + (o.dot3 ? '<stop offset="0.5" stop-color="' + o.dot3 + '"/>' : "") + '<stop offset="1" stop-color="' + o.dot2 + '"/>';
+    if (o.grad !== "none" && (o.dot1 !== o.dot2 || o.dot3)) {
       var b = g.box;
       var coords = o.grad === "vertical" ? [b.x, b.y, b.x, b.y + b.size] : o.grad === "horizontal" ? [b.x, b.y, b.x + b.size, b.y] : [b.x, b.y, b.x + b.size, b.y + b.size];
       defs = o.grad === "radial"
-        ? '<radialGradient id="g" gradientUnits="userSpaceOnUse" cx="' + f(b.x + b.size / 2) + '" cy="' + f(b.y + b.size / 2) + '" r="' + f(b.size * 0.7) + '"><stop offset="0" stop-color="' + o.dot1 + '"/><stop offset="1" stop-color="' + o.dot2 + '"/></radialGradient>'
-        : '<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="' + f(coords[0]) + '" y1="' + f(coords[1]) + '" x2="' + f(coords[2]) + '" y2="' + f(coords[3]) + '"><stop offset="0" stop-color="' + o.dot1 + '"/><stop offset="1" stop-color="' + o.dot2 + '"/></linearGradient>';
+        ? '<radialGradient id="g" gradientUnits="userSpaceOnUse" cx="' + f(b.x + b.size / 2) + '" cy="' + f(b.y + b.size / 2) + '" r="' + f(b.size * 0.7) + '">' + stops + '</radialGradient>'
+        : '<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="' + f(coords[0]) + '" y1="' + f(coords[1]) + '" x2="' + f(coords[2]) + '" y2="' + f(coords[3]) + '">' + stops + '</linearGradient>';
       dotFillAttr = "url(#g)";
     }
     var logo = "";
@@ -1025,7 +1163,7 @@
     // contraste
     var bg = o.bg || "#FFFFFF";
     // los puntos y el marco son lo que más pesa; el centro de las esquinas es pequeño y tolera menos contraste
-    var colors = [o.dot1].concat(o.grad !== "none" ? [o.dot2] : [], [o.ring]);
+    var colors = [o.dot1].concat(o.grad !== "none" ? [o.dot2].concat(o.dot3 ? [o.dot3] : []) : [], [o.ring]);
     var min = Math.min.apply(null, colors.map(function (c) { return ratio(c, bg); }));
     var ballLow = ratio(o.ball, bg) < 3;
     var inverted = lum(o.dot1) > lum(bg);
@@ -1051,7 +1189,11 @@
 
     // forma de puntos y esquinas
     var risky = [];
-    if (s.dotShape === "diamond" || s.dotShape === "star") risky.push("puntos en forma de " + (s.dotShape === "star" ? "estrella" : "rombo"));
+    var SHAPE_NAME = { diamond: "rombo", star: "estrella", cross: "cruz", heart: "corazón", bolt: "rayo", hex: "hexágono" };
+    if (SHAPE_NAME[s.dotShape]) risky.push("puntos en forma de " + SHAPE_NAME[s.dotShape]);
+    if (s.wmark) risky.push("marca de agua detrás de los puntos");
+    if (s.plateBg && s.plateBg !== "none" && !s.mono) risky.push("dibujo de fondo en el recuadro");
+    if (String(s.badgeText || "").trim() && s.quiet < 4) risky.push("insignia en la esquina con poco margen");
     if (s.dotScale < 85 && s.dotShape !== "liquid" && s.dotShape !== "square") risky.push("puntos muy pequeños");
     if (s.eyeOuter === "circle" || s.eyeOuter === "drop" || s.eyeInner === "diamond") risky.push("esquinas con formas muy distintas a un cuadrado");
     if (s.ringThick !== "normal") risky.push("marco de las esquinas " + (s.ringThick === "fino" ? "fino" : "grueso"));
@@ -1132,6 +1274,9 @@
     var c = document.createElement("canvas");
     c.width = size; c.height = size;
     var ctx = c.getContext("2d");
+    var P = palette(s);
+    var plate = size * (s.sparks ? 0.6 : 0.72);
+    s = Object.assign({}, s, { tilt: s.tilt });
     var stream = c.captureStream(30);
     var rec = new MediaRecorder(stream, { mimeType: window.MediaRecorder.isTypeSupported("video/webm;codecs=vp9") ? "video/webm;codecs=vp9" : "video/webm" });
     var chunks = [];
@@ -1145,10 +1290,11 @@
       var t = (now - start) / 1000;
       var r = Math.min(1, t / 2.2);
       ctx.clearRect(0, 0, size, size);
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(0, 0, size, size);
-      drawQR(ctx, m, 20, 20, size - 40, s, { background: true, reveal: r });
-      if (t < 3.6) requestAnimationFrame(frame); else rec.stop();
+      drawBackground(ctx, size, size, s, P);
+      s.__t = t;
+      s.__reveal = r;
+      plateWithQR(ctx, m, (size - plate) / 2, (size - plate) / 2, plate, s, P);
+      if (t < 5) requestAnimationFrame(frame); else rec.stop();
     }
     rec.start();
     requestAnimationFrame(frame);
@@ -1169,12 +1315,14 @@
     eyeOuter: "rounded", eyeInner: "rounded", ringThick: "normal", ringColor: "marino", ballColor: "rojo",
     logoMode: "shield", logoText: "2027", logoUp: null, logoUpData: "", logoArea: 7, logoShape: "rounded", logoBorder: "filamento", logoBorderW: "normal", logoMono: false,
     plateRadius: 7, shadow: "soft", frame: "none", tilt: 0, sparks: false, ribbonText: "", ribbonPos: "bottom", ribbonStyle: "cinta",
+    sparkStyle: "rayos", sparkCount: 8, sparkSize: 100, sparkColor: "acento", glow: "none", glowColor: "acento", frameColor: "acento", frameW: "normal",
+    dotColor3: "none", wmark: false, wmarkAlpha: 12, plateBg: "none", badgeText: "", badgePos: "sd", badgeShape: "circulo",
     scale: 2, site: null, logoImg: null, url: "", display: "",
   };
   var KEYS = ["format", "theme", "accent", "photoOverlay", "waves", "align", "showLockup", "title1", "title2", "titleUpper", "titleScale", "subtitle", "showChips", "chips", "showBullets", "bullets", "showDeadline", "deadline", "showUrl", "qrSize", "qrLabel",
     "showWhatsapp", "whatsapp", "showAddress", "address", "extra", "showFooter", "footer", "contentType", "channel", "custom", "base", "waNumber", "waMessage", "telNumber", "mailTo", "mailSubject", "mapQuery", "freeText",
     "vcName", "vcOrg", "vcPhone", "vcEmail", "vcAddress", "wifiSsid", "wifiPass", "wifiType", "ec", "quiet", "dotShape", "dotScale", "dotRound", "dotColor", "gradient", "dotColor2", "qrBg", "mono", "eyeOuter", "eyeInner", "ringThick", "ringColor", "ballColor",
-    "logoMode", "logoText", "logoArea", "logoShape", "logoBorder", "logoBorderW", "logoMono", "plateRadius", "shadow", "frame", "tilt", "sparks", "ribbonText", "ribbonPos", "ribbonStyle", "scale"];
+    "logoMode", "logoText", "logoArea", "logoShape", "logoBorder", "logoBorderW", "logoMono", "plateRadius", "shadow", "frame", "tilt", "sparks", "ribbonText", "ribbonPos", "ribbonStyle", "sparkStyle", "sparkCount", "sparkSize", "sparkColor", "glow", "glowColor", "frameColor", "frameW", "dotColor3", "wmark", "wmarkAlpha", "plateBg", "badgeText", "badgePos", "badgeShape", "scale"];
 
   function computeUrl() {
     var base = encodeURI(String(st.base || "").trim().replace(/\/+$/, ""));
@@ -1192,6 +1340,10 @@
     suave: { label: "Suave (círculos)", set: { dotShape: "circle", dotScale: 92, dotColor: "marino", gradient: "none", eyeOuter: "rounded", eyeInner: "circle", ringThick: "normal", ringColor: "marino", ballColor: "rojo", mono: false, qrBg: "blanco", logoShape: "circle", sparks: false } },
     energia: { label: "Energía", set: { dotShape: "rounded", dotScale: 94, dotRound: 30, dotColor: "noche", gradient: "diagonal", dotColor2: "marino", eyeOuter: "leaf", eyeInner: "leaf", ringThick: "normal", ringColor: "rojo700", ballColor: "noche", mono: false, qrBg: "blanco", logoShape: "rounded", logoBorder: "filamento", sparks: true } },
     tesla: { label: "Tesla (rombos)", set: { dotShape: "diamond", dotScale: 96, dotColor: "noche", gradient: "none", eyeOuter: "square", eyeInner: "square", ringThick: "normal", ringColor: "marino", ballColor: "rojo", mono: false, qrBg: "blanco", logoShape: "square", logoBorder: "rojo", sparks: false } },
+    neon: { label: "Neón ⚡", set: { dotShape: "rounded", dotScale: 94, dotRound: 30, dotColor: "morado", gradient: "diagonal", dotColor3: "azul", dotColor2: "fucsia", eyeOuter: "leaf", eyeInner: "leaf", ringThick: "normal", ringColor: "morado", ballColor: "fucsia", mono: false, qrBg: "blanco", logoShape: "circle", logoBorder: "filamento",
+      glow: "fuerte", glowColor: "arco", frameColor: "acento", frameW: "grueso", sparks: true, sparkStyle: "destellos", sparkCount: 10, sparkColor: "arco", plateBg: "ondas" } },
+    fiesta: { label: "Fiesta 🎉", set: { dotShape: "circle", dotScale: 94, dotColor: "rojo", gradient: "horizontal", dotColor3: "naranja", dotColor2: "fucsia", eyeOuter: "rounded", eyeInner: "circle", ringThick: "normal", ringColor: "rojo700", ballColor: "morado", mono: false, qrBg: "blanco", logoShape: "circle", logoBorder: "filamento",
+      glow: "suave", glowColor: "filamento", frameColor: "filamento", frameW: "grueso", sparks: true, sparkStyle: "mixto", sparkCount: 14, sparkSize: 110, sparkColor: "filamento", plateBg: "puntos", badgeText: "2027", badgePos: "sd", badgeShape: "sol", wmark: false, tilt: 4, ribbonText: "¡ESCANÉAME!", ribbonStyle: "burbuja" } },
     tinta: { label: "Una tinta (negro)", set: { dotShape: "square", dotScale: 100, gradient: "none", eyeOuter: "square", eyeInner: "square", ringThick: "normal", mono: true, qrBg: "blanco", logoShape: "square", logoMono: true, sparks: false, shadow: "none" } },
   };
 
@@ -1255,6 +1407,7 @@
       { key: "wifiPass", type: "text", label: "Contraseña", max: 60, showIf: onType("wifi") },
       { key: "wifiType", type: "select", label: "Tipo de seguridad", options: function () { return [["WPA", "WPA / WPA2"], ["WEP", "WEP"], ["nopass", "Sin contraseña"]]; }, showIf: onType("wifi") },
       { key: "freeText", type: "textarea", label: "Texto", rows: 3, showIf: onType("text") },
+      { key: "introPreview", type: "intro", label: "Animación al escanear (vista previa)", hint: "Al escanear, la familia ve unos segundos una animación y luego entra a la web. Se ve en un enlace de la web (no en Wi-Fi, llamada, etc.). La que queda activa se elige en Datos del colegio → pestaña “Animación del QR” (botón de abajo).", showIf: onType("url") },
       { key: "ec", type: "select", label: "Nivel de corrección de errores", options: function () { return [["H", "H · máxima (permite escudo grande)"], ["Q", "Q · alta"], ["M", "M · media (código más simple)"], ["L", "L · baja (código muy simple, sin escudo)"]]; }, hint: "Más corrección tolera más daño, pero hace el código más denso. Con escudo grande usa H." },
       { key: "quiet", type: "range", min: 3, max: 6, unit: " módulos", label: "Margen blanco alrededor", hint: "Mínimo recomendado: 4." },
       { key: "qrSize", type: "range", min: 70, max: 130, unit: "%", label: "Tamaño del QR en el afiche" },
@@ -1262,12 +1415,15 @@
       { key: "showUrl", type: "check", label: "Mostrar el enlace o dato escrito" },
     ] },
     { id: "puntos", title: "🎨 QR · Puntos y colores", fields: [
-      { key: "dotShape", type: "select", label: "Forma de los puntos", options: function () { return [["rounded", "Cuadrados redondeados"], ["square", "Cuadrados"], ["circle", "Círculos"], ["liquid", "Líquido (puntos unidos)"], ["diamond", "Rombos"], ["star", "Estrellas"]]; } },
+      { key: "dotShape", type: "select", label: "Forma de los puntos", options: function () { return [["rounded", "Cuadrados redondeados"], ["square", "Cuadrados"], ["circle", "Círculos"], ["liquid", "Líquido (puntos unidos)"], ["diamond", "Rombos"], ["star", "Estrellas"], ["hex", "Hexágonos"], ["cross", "Cruces"], ["heart", "Corazones"], ["bolt", "Rayos ⚡"]]; }, hint: "Las formas decorativas (rombos, cruces, corazones, rayos…) se leen peor: usa el semáforo y la prueba de lectura." },
       { key: "dotScale", type: "range", min: 75, max: 100, unit: "%", label: "Tamaño de cada punto", showIf: function () { return st.dotShape !== "liquid" && st.dotShape !== "square"; }, hint: "Menos de 85 % puede dificultar la lectura." },
       { key: "dotRound", type: "range", min: 0, max: 50, unit: "%", label: "Qué tan redondeados", showIf: function () { return st.dotShape === "rounded"; } },
       { key: "dotColor", type: "select", label: "Color de los puntos", options: paletteOpts(DARKS) },
       { key: "gradient", type: "select", label: "Degradado en los puntos", options: function () { return [["none", "Sin degradado"], ["vertical", "De arriba a abajo"], ["horizontal", "De izquierda a derecha"], ["diagonal", "En diagonal"], ["radial", "Del centro hacia afuera"]]; } },
       { key: "dotColor2", type: "select", label: "Segundo color del degradado", options: paletteOpts(DARKS), showIf: function () { return st.gradient !== "none"; } },
+      { key: "dotColor3", type: "select", label: "Color del medio (degradado de tres colores)", options: function () { return [["none", "Ninguno (dos colores)"]].concat(paletteOpts(DARKS)()); }, showIf: function () { return st.gradient !== "none"; } },
+      { key: "wmark", type: "check", label: "Marca de agua: escudo difuminado detrás de los puntos", hint: "Se ve en PNG y PDF; no se incluye en el SVG." },
+      { key: "wmarkAlpha", type: "range", min: 5, max: 30, unit: " %", label: "Fuerza de la marca de agua", showIf: function () { return st.wmark; }, hint: "Más de 15 % puede dificultar la lectura." },
       { key: "qrBg", type: "select", label: "Fondo del QR", options: function () { return Object.keys(BGS).map(function (k) { return [k, BGS[k][0]]; }); } },
       { key: "mono", type: "check", label: "Una sola tinta (todo en negro, para fotocopias y sellos)" },
     ] },
@@ -1293,7 +1449,19 @@
       { key: "shadow", type: "select", label: "Sombra del recuadro", options: function () { return [["soft", "Suave"], ["strong", "Fuerte"], ["none", "Sin sombra"]]; } },
       { key: "frame", type: "select", label: "Marco decorativo", options: function () { return [["none", "Normal"], ["double", "Doble línea"], ["dashed", "Línea punteada"]]; } },
       { key: "tilt", type: "range", min: -8, max: 8, unit: "°", label: "Inclinación del recuadro", hint: "Hasta 8°: sigue leyéndose bien." },
-      { key: "sparks", type: "check", label: "Chispas de energía alrededor", hint: "Rayos del color de acento. Se apagan si inclinas el recuadro." },
+      { key: "sparks", type: "check", label: "Chispas de energía alrededor", hint: "Adornos fuera del recuadro; no tapan el código." },
+      { key: "sparkStyle", type: "select", label: "Tipo de chispas", options: function () { return [["rayos", "Rayos quebrados"], ["destellos", "Destellos ✦"], ["puntos", "Estelas de puntos"], ["mixto", "Mezcla de todo"]]; }, showIf: function () { return st.sparks; } },
+      { key: "sparkCount", type: "range", min: 4, max: 20, unit: " chispas", label: "Cantidad de chispas", showIf: function () { return st.sparks; } },
+      { key: "sparkSize", type: "range", min: 60, max: 160, unit: "%", label: "Tamaño de las chispas", showIf: function () { return st.sparks; } },
+      { key: "sparkColor", type: "select", label: "Color de las chispas", options: function () { return [["acento", "El color de acento"], ["filamento", "Amarillo"], ["blanco", "Blanco"], ["rojo", "Rojo"], ["arco", "Lila"], ["noche", "Azul noche"]]; }, showIf: function () { return st.sparks; } },
+      { key: "glow", type: "select", label: "Resplandor neón alrededor", options: function () { return [["none", "Sin resplandor"], ["suave", "Suave"], ["fuerte", "Fuerte"]]; } },
+      { key: "glowColor", type: "select", label: "Color del resplandor", options: function () { return [["acento", "El color de acento"], ["filamento", "Amarillo"], ["blanco", "Blanco"], ["rojo", "Rojo"], ["arco", "Lila"]]; }, showIf: function () { return st.glow !== "none"; } },
+      { key: "frameColor", type: "select", label: "Color del borde del recuadro", options: function () { return [["acento", "El color de acento"], ["filamento", "Amarillo"], ["rojo", "Rojo"], ["marino", "Azul marino"], ["noche", "Azul noche"], ["blanco", "Blanco"]]; } },
+      { key: "frameW", type: "select", label: "Grosor del borde del recuadro", options: function () { return [["fino", "Fino"], ["normal", "Normal"], ["grueso", "Grueso"]]; } },
+      { key: "plateBg", type: "select", label: "Dibujo de fondo del recuadro", options: function () { return [["none", "Liso"], ["ondas", "Líneas de energía (ondas)"], ["rejilla", "Rejilla en diagonal"], ["puntos", "Puntos"], ["rayos", "Rayos desde el centro"]]; }, hint: "Muy suave, del color del borde. No se usa en “Una sola tinta”." },
+      { key: "badgeText", type: "text", label: "Insignia en una esquina (opcional)", max: 8, example: "2027", hint: "Un círculo, sol o rombo con texto corto, por ejemplo “✦ NUEVO”. Para no tapar el código, su tamaño se limita al margen." },
+      { key: "badgePos", type: "select", label: "Esquina de la insignia", options: function () { return [["sd", "Arriba a la derecha"], ["si", "Arriba a la izquierda"], ["id", "Abajo a la derecha"], ["ii", "Abajo a la izquierda"]]; }, showIf: function () { return !!String(st.badgeText || "").trim(); } },
+      { key: "badgeShape", type: "select", label: "Forma de la insignia", options: function () { return [["circulo", "Círculo"], ["sol", "Sol (con picos)"], ["rombo", "Rombo"]]; }, showIf: function () { return !!String(st.badgeText || "").trim(); } },
       { key: "ribbonText", type: "text", label: "Etiqueta pegada al QR (opcional)", max: 24, example: "ESCANÉAME" },
       { key: "ribbonPos", type: "select", label: "Dónde va la etiqueta", options: function () { return [["bottom", "Debajo del QR"], ["top", "Encima del QR"]]; }, showIf: function () { return !!String(st.ribbonText || "").trim(); } },
       { key: "ribbonStyle", type: "select", label: "Estilo de la etiqueta", options: function () { return [["cinta", "Cinta"], ["burbuja", "Burbuja con flecha"]]; }, showIf: function () { return !!String(st.ribbonText || "").trim(); } },
@@ -1362,6 +1530,30 @@
               b.setAttribute("aria-label", ACCENTS[k][0]);
               input.appendChild(b);
             });
+          } else if (fd.type === "intro") {
+            // vista previa de la animación que se ve al escanear (la que queda activa se elige en “Datos del colegio”)
+            input = document.createElement("div");
+            input.className = "qintro";
+            var sel = document.createElement("select");
+            [["atomo", "⚛️ Átomo"], ["rayos", "⚡ Rayos"], ["bobina", "🔮 Bobina Tesla"], ["energia", "〰️ Línea de energía"], ["chispas", "✨ Chispas"]].forEach(function (o) { var opt = document.createElement("option"); opt.value = o[0]; opt.textContent = o[1]; sel.appendChild(opt); });
+            var go = document.createElement("button");
+            go.type = "button";
+            go.className = "btn small";
+            go.textContent = "▶ Ver la animación";
+            go.addEventListener("click", function () {
+              var base = String(st.base || "").trim().replace(/\/+$/, "");
+              if (base && !/^https?:\/\//i.test(base)) base = "https://" + base;
+              window.open((base || location.origin) + "/qr/prueba?anim=" + encodeURIComponent(sel.value), "_blank", "noopener");
+            });
+            var act = document.createElement("a");
+            act.className = "btn small ghost";
+            act.href = "/admin/#/collections/colegio/entries/settings";
+            act.target = "_blank";
+            act.rel = "noopener";
+            act.textContent = "⚙️ Elegir la animación activa";
+            input.appendChild(sel);
+            input.appendChild(go);
+            input.appendChild(act);
           } else if (fd.type === "image") {
             input = document.createElement("div");
             input.className = "photo";
@@ -1399,6 +1591,7 @@
         if (fd.type === "check") input.addEventListener("change", function () { set(fd.key, input.checked); });
         else if (fd.type === "range") input.addEventListener("input", function () { set(fd.key, Number(input.value)); });
         else if (fd.type === "swatches") input.addEventListener("click", function (e) { var b = e.target.closest("[data-v]"); if (b) set(fd.key, b.dataset.v); });
+        else if (fd.type === "intro") { /* solo vista previa: no guarda nada */ }
         else if (fd.type === "image") bindImage(input, fd.key, fd.max || 1600);
         else input.addEventListener(fd.type === "select" ? "change" : "input", function () {
           var v = input.value;
@@ -1410,7 +1603,7 @@
       mount.appendChild(det);
     });
   }
-  var NUMERIC = { photoOverlay: 1, titleScale: 1, qrSize: 1, quiet: 1, dotScale: 1, dotRound: 1, logoArea: 1, plateRadius: 1, tilt: 1, scale: 1 };
+  var NUMERIC = { wmarkAlpha: 1, sparkCount: 1, sparkSize: 1, photoOverlay: 1, titleScale: 1, qrSize: 1, quiet: 1, dotScale: 1, dotRound: 1, logoArea: 1, plateRadius: 1, tilt: 1, scale: 1 };
   function syncControls() {
     GROUPS.forEach(function (g) {
       g.fields.forEach(function (fd) {
@@ -1480,6 +1673,8 @@
   function applyPreset(name) {
     var p = PRESETS[name];
     if (!p) return;
+    // los efectos nuevos vuelven a su valor neutro para que una plantilla no arrastre los de la anterior
+    Object.assign(st, { glow: "none", glowColor: "acento", frameColor: "acento", frameW: "normal", dotColor3: "none", wmark: false, plateBg: "none", badgeText: "", sparkStyle: "rayos", sparkCount: 8, sparkSize: 100, sparkColor: "acento", tilt: 0, ribbonText: "", ribbonStyle: "cinta" });
     Object.keys(p.set).forEach(function (k) { st[k] = p.set[k]; });
     refresh();
   }
@@ -1798,6 +1993,8 @@
     Object.assign(st, PRESETS.marca.set);
     st.dotRound = 22; st.dotScale = 94; st.dotColor2 = "marino"; st.logoText = String(site.year || "2027"); st.logoArea = 7; st.logoBorderW = "normal"; st.logoMono = false;
     st.plateRadius = 7; st.shadow = "soft"; st.frame = "none"; st.tilt = 0; st.sparks = false; st.ribbonText = ""; st.ribbonPos = "bottom"; st.ribbonStyle = "cinta";
+    st.sparkStyle = "rayos"; st.sparkCount = 8; st.sparkSize = 100; st.sparkColor = "acento"; st.glow = "none"; st.glowColor = "acento"; st.frameColor = "acento"; st.frameW = "normal";
+    st.dotColor3 = "none"; st.wmark = false; st.wmarkAlpha = 12; st.plateBg = "none"; st.badgeText = ""; st.badgePos = "sd"; st.badgeShape = "circulo";
     st.whatsapp = waFormat((site.whatsapp || [])[0]);
     st.address = [site.location && site.location.address, site.location && site.location.district, site.location && site.location.province].filter(Boolean).join(", ");
     st.extra = "";

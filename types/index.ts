@@ -65,6 +65,13 @@ export interface SiteSettings {
     share: string | null;
   };
   stats: Stat[];
+  /** Animación breve al escanear un QR (antes de entrar a la web). */
+  qrIntro: {
+    animation: "ninguna" | "atomo" | "rayos" | "bobina" | "energia" | "chispas";
+    /** Frase bajo el nombre del colegio durante la animación. */
+    text: string;
+    seconds: number;
+  };
 }
 
 export interface Stat {
