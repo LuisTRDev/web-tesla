@@ -16,6 +16,11 @@
   "shortName": "Nikola Tesla",
   "siteUrl": "colegionikolatesla.netlify.app",
   "concept": "Educación que despierta la curiosidad y prepara para el futuro.",
+  "qrIntro": {
+    "animation": "rayos",
+    "text": "Admisión 2027",
+    "seconds": 3.5
+  },
   "name": "Institución Educativa Privada “Nikola Tesla” - CAÑETE",
   "social": {
     "facebook": "https://www.facebook.com/search/top?q=instituci%C3%B3n%20educativa%20privada%20%22nikola%20tesla%22",
@@ -27,11 +32,6 @@
   "kicker": "Institución Educativa Privada",
   "footerPhrase": "Disciplina, liderazgo, excelencia",
   "showDraftBadges": true,
-  "qrIntro": {
-    "animation": "atomo",
-    "text": "Admisión 2027",
-    "seconds": 2.8
-  },
   "location": {
     "address": "Asociación - \"Las Casuarinas\"",
     "district": "Nuevo Imperial",
