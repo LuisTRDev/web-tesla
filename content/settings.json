@@ -1,29 +1,34 @@
 {
   "contact": {
     "whatsapp": [
-      "51960209798",
-      "51982565433"
+      "51982565433",
+      "51915948449"
     ],
-    "hours": null
+    "hours": "Consultas de lunes a viernes de 8:00 a.m. - 1:00 p.m.",
+    "whatsappButton": {
+      "label": "Agenda tu visita",
+      "side": "derecha",
+      "defaultMessage": "Bienvenido, querido visitante. Te saluda el equipo de la I.E.Pr. Nikola Tesla, estamos para guiarte ante cualquier duda. ¿Deseas mayor información? Escríbenos"
+    }
   },
-  "admissionDeadline": "2027-02-26",
+  "admissionDeadline": "2026-11-26",
   "admissionYear": 2027,
   "shortName": "Nikola Tesla",
   "siteUrl": "colegionikolatesla.netlify.app",
   "concept": "Educación que despierta la curiosidad y prepara para el futuro.",
-  "name": "Institución Educativa Privada “Nikola Tesla”",
+  "name": "Institución Educativa Privada “Nikola Tesla” - CAÑETE",
   "social": {
     "facebook": "https://www.facebook.com/search/top?q=instituci%C3%B3n%20educativa%20privada%20%22nikola%20tesla%22",
     "instagram": null,
     "tiktok": "https://www.tiktok.com/@colegio.tesla.canete",
     "youtube": null
   },
-  "tagline": "Donde la curiosidad se convierte en futuro.",
+  "tagline": "Pasión por educar",
   "kicker": "Institución Educativa Privada",
-  "footerPhrase": "Educación, curiosidad y futuro.",
+  "footerPhrase": "Disciplina, liderazgo, excelencia",
   "showDraftBadges": true,
   "location": {
-    "address": "Mz. B Lote 13",
+    "address": "Asociación - \"Las Casuarinas\"",
     "district": "Nuevo Imperial",
     "province": "Cañete",
     "region": "Lima",
@@ -39,24 +44,24 @@
     "share": null
   },
   "legal": {
-    "resolution": "RESOLUCION LUISILLO",
+    "resolution": "",
     "modularCode": null
   },
   "description": "Institución Educativa Privada “Nikola Tesla” en Nuevo Imperial, Cañete. Conoce nuestra propuesta educativa, actividades, comunidad y proceso de admisión.",
   "stats": [
     {
       "id": "trayectoria",
-      "value": null,
+      "value": "8",
       "label": "Años de trayectoria"
     },
     {
       "id": "estudiantes",
-      "value": null,
+      "value": "1000 +",
       "label": "Estudiantes"
     },
     {
       "id": "docentes",
-      "value": null,
+      "value": "50",
       "label": "Docentes"
     }
   ]
