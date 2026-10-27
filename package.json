@@ -6,10 +6,11 @@
     "dev": "next dev",
     "predev": "npm run build:admin-css",
     "build": "next build",
-    "prebuild": "npm run build:admin-css && node scripts/check-images.mjs",
+    "prebuild": "npm run build:admin-css && node scripts/check-images.mjs && node scripts/check-panel.mjs",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "check:panel": "node scripts/check-panel.mjs",
     "test:qr": "node scripts/test-qr-designer.mjs",
     "build:admin-css": "tailwindcss -c tailwind.admin.config.ts -i scripts/admin-preview.css -o public/admin/preview.css --minify",
     "panel": "npm run build:admin-css && concurrently -k -n web,cms \"next dev\" \"decap-server\""

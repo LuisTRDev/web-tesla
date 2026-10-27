@@ -32,6 +32,8 @@ export interface SiteSettings {
     hours: string | null;
     /** Botón flotante de WhatsApp: texto, lado de la pantalla y mensajes según la página. */
     whatsappButton: {
+      /** Horario de atención del botón: fuera de él, el botón avisa que se responde después. */
+      hours: { enabled: boolean; from: string; to: string; days: "lun-vie" | "lun-sab" | "todos"; offLabel: string };
       label: string;
       side: "derecha" | "izquierda";
       defaultMessage: string;
@@ -61,12 +63,17 @@ export interface SiteSettings {
     admission: string | null;
     /** Video del hero (archivo .mp4 o .webm). Si existe, reemplaza a la foto de portada. */
     heroVideo: string | null;
+    /** Logo propio (reemplaza al escudo del menú y del pie) e ícono de la pestaña del navegador. null = los oficiales. */
+    logo: string | null;
+    favicon: string | null;
     /** Imagen que aparece al compartir el sitio en redes. null = imagen generada automáticamente. */
     share: string | null;
   };
   stats: Stat[];
-  /** Formularios al correo (Web3Forms). */
-  forms: { emailKey: string | null };
+  /** Formularios: correo (Web3Forms), mensaje de gracias y pregunta opcional "¿cómo nos conociste?". */
+  forms: { emailKey: string | null; thanks: string; source: { enabled: boolean; question: string; options: string[] } };
+  /** Aviso de cookies y privacidad. Con "enabled", Google Analytics solo se carga si la persona acepta. */
+  privacy: { enabled: boolean; text: string; acceptLabel: string; rejectLabel: string; linkLabel: string; linkHref: string | null };
   /** Calendario para agendar la visita (Calendly o Cal.com). */
   booking: { url: string | null };
   /** Animación breve al escanear un QR (antes de entrar a la web). */
@@ -162,6 +169,13 @@ export interface NewsPost {
   excerpt: string;
   /** Párrafos del cuerpo de la publicación. */
   body: string[];
+  /** Texto original con formato (negritas, listas, enlaces…). */
+  bodyRaw: string;
+  /** Quién la escribió (opcional) y cuándo se actualizó por última vez (AAAA-MM-DD). */
+  author: string | null;
+  updated: string | null;
+  /** Desde esta fecha la noticia deja de mostrarse (AAAA-MM-DD). */
+  hideAfter: string | null;
   /** Fecha ISO (AAAA-MM-DD). */
   date: string;
   category: string;

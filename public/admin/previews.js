@@ -428,7 +428,7 @@
         h("h1", { key: "t", className: "mt-3 text-balance font-display text-5xl font-extrabold leading-[0.95] tracking-[-0.035em] text-noche" }, t(d.title)),
         h("p", { key: "e", className: "mt-4 text-xl leading-relaxed text-niebla" }, t(d.excerpt, "")),
         d.image ? h("div", { key: "i", className: "mt-8 aspect-[16/9] overflow-hidden rounded-3xl" }, Photo(props, d.image, d.title, "", false, ["Foto (opcional)"])) : null,
-        h("div", { key: "b", className: "mt-8 space-y-5 text-[18px] leading-relaxed text-tinta/90" }, body.map(function (p, i) { return h("p", { key: i }, p); })),
+        h("div", { key: "b", className: "mt-8 space-y-5 text-[18px] leading-relaxed text-tinta/90 preview-md" }, props.widgetFor ? props.widgetFor("body") : body.map(function (p, i) { return h("p", { key: i }, p); })),
         d.isPlaceholder ? h("div", { key: "d", className: "mt-6" }, Draft("Noticia de ejemplo")) : null,
       ]),
     ]);

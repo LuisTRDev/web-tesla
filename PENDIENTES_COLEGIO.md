@@ -33,6 +33,20 @@ Con esto la web queda completa y lista para publicar. Todo se carga desde el pan
 - [ ] 3 logros recientes (concursos, deportes, cultura) con año.
 - [ ] 2 a 4 noticias recientes.
 
+## Para activar las funciones nuevas (se hace desde el panel)
+- [ ] **Correo del colegio** para recibir los formularios, y crear la clave en web3forms.com (*Datos del colegio → Formularios al correo*).
+- [ ] **Calendario de visitas:** cuenta gratis en calendly.com o cal.com con los días y horas de visita, y su enlace.
+- [ ] **Texto de la política de privacidad** (para una página nueva `/p/privacidad`) y decidir si se activa el aviso de cookies.
+- [ ] **Horario de atención** del botón de WhatsApp (desde, hasta y días).
+- [ ] **Fotos panorámicas 360°** de 4 a 6 lugares (patio, aulas, biblioteca, entrada), con el modo “Panorama 360” del celular o una cámara 360°.
+- [ ] **Fotos reales de 3 o 4 eventos** para que aparezcan las “stories” de la galería (hoy los eventos son de ejemplo y no se muestran).
+- [ ] **Decidir la animación al escanear el QR** y a dónde llevan los QR (campaña, WhatsApp, Contacto o Inicio).
+- [ ] **Enlaces cortos** que quieran usar en afiches (por ejemplo `/matricula`).
+- [ ] **Logo para fondo oscuro** (PNG transparente) y un ícono cuadrado si quieren cambiar el favicon.
+- [ ] **Probar con un celular real** la web, el panel, `/escanear` y los QR impresos antes de la campaña.
+- [ ] **Tareas de la campaña** (imprimir volantes, publicar en redes…) cargadas en *Notas y tareas del equipo* para verlas en el Inicio del panel.
+- [ ] Programar la **reconstrucción diaria** (secreto `NETLIFY_BUILD_HOOK`, ver `docs/CONFIGURAR_PANEL.md`) para que las noticias con fecha futura aparezcan solas.
+
 ## Publicación
 - [ ] Dominio (p. ej. colegionikolatesla.edu.pe).
 - [ ] Confirmar el punto exacto en el mapa.

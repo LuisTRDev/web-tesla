@@ -1,0 +1,36 @@
+# Copia de seguridad mensual de todo el contenido y las fotos del colegio.
+# Se ejecuta el día 1 de cada mes (y a mano desde GitHub → Actions → "Copia mensual" → Run workflow).
+# El ZIP queda 90 días en la ejecución (Actions → la ejecución → Artifacts) y se abre un aviso (Issue) para recordar descargarlo:
+# GitHub lo envía por correo a quien administra el repositorio.
+name: Copia mensual
+on:
+  schedule:
+    - cron: "0 13 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  copia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprimir contenido y fotos
+        run: |
+          fecha=$(date +%Y-%m-%d)
+          zip -r "copia-colegio-$fecha.zip" content public/images public/documentos -x "*.DS_Store" || true
+          echo "FECHA=$fecha" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: copia-colegio-${{ env.FECHA }}
+          path: copia-colegio-${{ env.FECHA }}.zip
+          retention-days: 90
+      - name: Avisar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Copia mensual lista ($FECHA)" \
+            --body "La copia de seguridad de $FECHA está lista. Descárgala desde Actions → esta ejecución → Artifacts: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

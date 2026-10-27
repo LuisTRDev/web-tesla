@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { levels } from "@/data/levels";
 import { settings } from "@/data/settings";
+import { SourceField, Thanks } from "@/components/ui/FormExtras";
 import { sendToEmail } from "@/lib/send-form";
 import { campaignTag, trackEvent } from "@/lib/track";
 import { whatsappLink } from "@/lib/utils";
@@ -18,6 +19,8 @@ export default function ContactForm() {
   const [name, setName] = useState("");
   const [level, setLevel] = useState("");
   const [message, setMessage] = useState("");
+  const [source, setSource] = useState("");
+  const [sent, setSent] = useState(false);
   const hasWhatsapp = settings.contact.whatsapp.length > 0;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -26,6 +29,7 @@ export default function ContactForm() {
       `Hola, soy ${name}.`,
       level ? `Me interesa el nivel ${level}.` : "",
       message,
+      source ? `Me enteré por: ${source}.` : "",
     ]
       .filter(Boolean)
       .join(" ");
@@ -33,7 +37,8 @@ export default function ContactForm() {
     trackEvent("contact_form_submit", { level });
     if (url) window.open(url, "_blank", "noopener,noreferrer");
     // respaldo por correo (solo si el colegio puso su clave); no depende de que WhatsApp abra
-    void sendToEmail("Solicitud de información", { nombre: name, nivel: level || "No indica", mensaje: message });
+    void sendToEmail("Solicitud de información", { nombre: name, nivel: level || "No indica", mensaje: message, como_nos_conocio: source || "No indica" });
+    setSent(true);
   };
 
   const field =
@@ -66,6 +71,7 @@ export default function ContactForm() {
         </label>
         <textarea id="contacto-mensaje" name="mensaje" rows={4} value={message} onChange={(e) => setMessage(e.target.value)} className={field} />
       </div>
+      <SourceField id="contacto-origen" value={source} onChange={setSource} />
       <button
         type="submit"
         disabled={!hasWhatsapp}
@@ -73,6 +79,7 @@ export default function ContactForm() {
       >
         Enviar por WhatsApp
       </button>
+      <Thanks show={sent} />
       {!hasWhatsapp && (
         <p className="text-sm text-niebla">
           [WHATSAPP OFICIAL] pendiente: el envío se activará cuando se configure el número.

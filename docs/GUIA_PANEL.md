@@ -191,11 +191,13 @@ Desmarca **Publicada** para guardarla como borrador: nadie la verá hasta que la
 
 ## 15. Personalizar la web
 
-En **Personalizar la web** hay tres formularios:
+En **Personalizar la web** hay cinco formularios (los dos últimos se explican en la sección 20):
 
 - **Orden de la portada:** arrastra las secciones para ordenarlas y desmarca “Mostrar” para ocultar las que aún no tienen contenido (testimonios, logros, documentos, preguntas, eventos).
 - **Menú y pie de página:** oculta secciones del menú, añade enlaces extra (calendario, documentos, tus páginas nuevas, un enlace externo), cambia el texto y el enlace del botón destacado y agrega los enlaces del pie (Libro de reclamaciones, Política de privacidad…) y un texto legal. Con más de 10 enlaces el menú se llena: Inicio te avisa.
 - **Colores y efectos:** elige una paleta lista (**Tesla**, Océano, Bosque, Vino o Grafito) o cambia colores sueltos. Apaga los efectos que no quieras: rayos, chispas, línea de progreso, cortina de color o el botón de WhatsApp.
+
+- **Redirecciones y enlaces cortos** y **Notas y tareas del equipo** (sección 20).
 
 > Después de cambiar colores, publica y revisa la web en el celular. Si algo no se lee bien, vuelve a la paleta **Tesla** y borra los colores sueltos.
 
@@ -204,22 +206,75 @@ En **Personalizar la web** hay tres formularios:
 - **Botón flotante de WhatsApp:** en **Datos del colegio → Contacto → Botón flotante de WhatsApp** cambias el texto, el lado de la pantalla y el mensaje que se envía. Puedes poner un mensaje distinto por página (por ejemplo, en Admisión: “Quisiera información sobre la Admisión {año}”) y así saber desde dónde escribió cada familia.
 - **Título e imagen en Google y redes:** en **Títulos, portada y aviso → Títulos de cada página** cada sección tiene un **título para Google** y una **imagen al compartir** (la que se ve al enviar el enlace por WhatsApp o Facebook). Las páginas nuevas tienen los mismos campos.
 
-## 17. Qué NO se puede cambiar desde el panel
+## 17. Letras, esquinas y velocidad de la web
+
+En **Personalizar la web → Colores y efectos**:
+
+- **Letras:** elige entre *Tesla* (la actual), *Clásica*, *Moderna* o *Redondeada*, y el tamaño (normal, un poco más grande o grande).
+- **Forma de botones y tarjetas:** esquinas suaves, rectas (más formal) o muy redondas.
+- **Fondo y cursor eléctricos:** puntos de luz que siguen al mouse o al dedo. Elige *Suave*, *Normal*, *Intenso* o apágalo si la web se siente lenta en celulares viejos.
+- **Velocidad de las apariciones** al hacer scroll: rápida, normal, lenta o sin animación.
+- **Logo y favicon propios:** en **Datos del colegio → Fotos y video principales** (opcionales; si no subes nada, se usa el escudo oficial).
+
+> Después de cambiar algo, publica y revisa la web en el celular.
+
+## 18. QR, animación al escanear y Escáner Tesla
+
+- **A dónde llevan los QR impresos:** **Datos del colegio → Animación del QR → A dónde llevan los QR impresos** (la campaña, WhatsApp con mensaje, Contacto o Inicio). Los QR ya impresos **no cambian**, pero su destino sí. Pasada la fecha de cierre siempre llevan a Admisión.
+- **Animación al escanear:** en esa misma pestaña elige una de 9 (átomo, rayos, bobina Tesla, línea de energía, chispas, constelaciones, circuito, fuegos artificiales, bandera del Perú) o *Ninguna*, la frase y la duración. En **Campaña y QR** hay un botón para verlas.
+- **Escáner Tesla:** la dirección `/escanear` abre la cámara y muestra el efecto sobre el QR en el momento de escanear. Sirve para ferias o la puerta del colegio (las familias tienen que abrir esa página).
+- **Entradas con nombre:** en **Campaña y QR → 🎟 Entradas con nombre** escribe un nombre por línea y descarga un ZIP con un QR por familia. En la puerta, abre `/escanear` en un celular: marca **✓ Entrada válida** o **⚠ ya ingresó**, y se puede descargar la lista de ingresos. Los ingresos se guardan **solo en ese celular**: usa uno por puerta y no borres los datos del navegador.
+- **Hoja para la imprenta:** en **Series numeradas y todos los lugares → Hoja para la imprenta** se descarga un PDF con 20 códigos por hoja.
+
+## 19. Formularios, calendario y aviso de privacidad
+
+En **Datos del colegio**:
+
+- **Formularios al correo:** además de abrir WhatsApp, cada formulario llega al correo del colegio. Entra a web3forms.com, escribe el correo y pega la clave que te llega. Aquí también puedes cambiar el **mensaje de gracias** y activar la pregunta **“¿Cómo nos conociste?”** con tus opciones.
+- **Agendar visita en calendario:** crea una cuenta gratis en calendly.com o cal.com, configura tus horarios y pega el enlace. En la página de campaña aparece “Ver horarios disponibles”.
+- **Aviso de privacidad y cookies:** actívalo y escribe el texto. Con el aviso activo, Google Analytics solo mide a quienes aceptan. Enlaza una página creada en *Páginas nuevas* (por ejemplo `/p/privacidad`).
+- **Horario de atención del botón de WhatsApp:** en *Contacto → Botón flotante de WhatsApp → Horario de atención del botón*. Fuera del horario el botón avisa que se responde después.
+
+## 20. Noticias con formato, recorrido 360° y enlaces cortos
+
+- **Noticias:** el texto tiene botones para negrita, cursiva, enlaces, títulos, citas y listas. Opcionales: **Escrita por**, **Última actualización** (se ve “Actualizada el…”) y **Ocultar desde el día** (para avisos que ya vencieron).
+- **Recorrido virtual 360°:** en **Galería de fotos → Recorrido virtual 360°** añade cada lugar con una foto panorámica (la del modo “Panorama 360” del celular o de una cámara 360°). Mientras no haya ninguno, la página no aparece.
+- **Redirecciones y enlaces cortos:** en **Personalizar la web → Redirecciones y enlaces cortos**. Ejemplo: `/matricula` → `/admision-2027`. No se pueden usar `/admin`, `/api` ni `/qr`. Déjalo como *no definitiva* mientras pruebas.
+- **Notas y tareas del equipo:** en **Personalizar la web → Notas y tareas del equipo**. Las pendientes salen en el **Inicio**; las que vencen en 3 días o menos aparecen como urgentes.
+
+## 21. Usar el panel en el celular
+
+- La pantalla del formulario es una sola columna. Para ver cómo queda, toca **👁 Ver cómo queda** (y **✏️ Volver a editar**).
+- Abajo hay cuatro accesos: **Inicio, Noticia, Campaña y Contenido**.
+- En la computadora, sobre la vista previa puedes alternar **📱 Celular** y **💻 Pantalla**.
+- El botón **Aa** (arriba a la derecha) agranda la letra y sube el contraste del panel.
+- **Ctrl + K** o la tecla **/** abren el buscador “¿Qué quieres cambiar?” desde cualquier pantalla.
+
+## 22. Errores y avisos al publicar
+
+- Si faltan datos obligatorios aparece **“Faltan N cosas para publicar”** con un botón por cada campo que lleva directo a él.
+- Antes de publicar, la ventana “Revisar y publicar” puede sugerir correcciones (espacios dobles, MAYÚSCULAS, tildes olvidadas); no son obligatorias.
+- Sin internet aparece un aviso fijo: **lo que escribes no se pierde**. Además el borrador se guarda en tu aparato; si se cierra el navegador, Decap ofrece recuperarlo al volver.
+- En **Inicio**, el globo rojo junto a “Inicio” cuenta los pendientes urgentes, y puedes **ocultar o fijar** las tarjetas con “⚙️ Personalizar estas tarjetas”.
+
+## 23. Qué NO se puede cambiar desde el panel
 
 - El diseño de cada sección y las animaciones (los colores y los efectos sí, en **Personalizar la web**).
 - Mover bloques dentro de una página (el orden de la **portada** sí se puede cambiar).
 - Las ilustraciones (solo puedes elegir cuál se muestra mientras no hay foto).
-- Las solicitudes de visita llegan por WhatsApp: la web no guarda una bandeja de solicitudes.
+- Las solicitudes de visita llegan por WhatsApp (y por correo si activaste *Formularios al correo*): la web no guarda una bandeja de solicitudes.
+- Un modo oscuro del panel: se probó y no queda bien.
+- Armar páginas con bloques libres, ocultar cada sección de todas las páginas, duplicar una noticia o importar desde Excel: todavía no.
 
 Para eso, escribe a quien administra la web.
 
-## 18. Si algo sale mal
+## 24. Si algo sale mal
 
 | Problema | Qué hacer |
 |---|---|
 | No abre el panel con los 5 clics | Haz los clics más rápido y sobre el logo del **pie de página** (no el del menú de arriba). También puedes escribir la dirección de la web seguida de `/admin`. |
 | Publiqué y no veo el cambio | Espera 2 minutos y recarga con **Ctrl + F5**. |
 | No sé cómo hacer algo | Pulsa **“? Ayuda”** (abajo a la derecha) o entra a **Ayuda**: hay un tutorial por tarea y un buscador. |
-| Sale “Error” al publicar | Revisa que los campos obligatorios estén completos (se marcan en rojo) y vuelve a intentar. |
+| Sale “Error” al publicar | Mira el aviso **“Faltan N cosas para publicar”**: cada botón te lleva al campo. Si dice que no hay conexión, espera a tener internet: lo que escribiste no se pierde. |
 | El WhatsApp no deja guardar | Escribe solo números: **51** y los 9 dígitos del celular. Ejemplo: 51960209798. |
 | Me equivoqué y ya publiqué | Vuelve a la sección, corrige y publica de nuevo. Todo cambio queda guardado en un historial: quien administra la web puede recuperar cualquier versión anterior. |

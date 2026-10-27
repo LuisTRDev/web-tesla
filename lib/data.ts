@@ -31,7 +31,8 @@ import { sortEvents } from "@/lib/gallery";
 import { todayISO } from "@/lib/utils";
 
 /** Noticias y eventos con fecha futura no se muestran hasta ese día (publicación programada). */
-const published = <T extends { date: string }>(items: T[]) => items.filter((item) => !item.date || item.date <= todayISO());
+const published = <T extends { date: string; hideAfter?: string | null }>(items: T[]) =>
+  items.filter((item) => (!item.date || item.date <= todayISO()) && (!item.hideAfter || item.hideAfter >= todayISO()));
 
 export async function getGalleryEvents(limit?: number): Promise<GalleryEvent[]> {
   const sorted = sortEvents(published(galleryEvents));

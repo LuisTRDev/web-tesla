@@ -206,7 +206,7 @@ Las entradas más recientes van al final.
 - **Plantillas de textos** (`public/admin/plantillas.html`, menú “Plantillas”): 6 modelos con huecos (reunión, admisión, logro, aviso, recordatorio, evento); copiar o abrir en WhatsApp.
 - **Atajos**: Ctrl + K o `/` abren el buscador del Inicio desde cualquier pantalla.
 - **Copia de seguridad**: acción en Inicio que descarga el ZIP del repositorio (contenido y fotos) desde GitHub; hay que haber iniciado sesión en GitHub.
-- **Ya existían** (no se rehicieron): el tablero de Inicio con porcentaje y pendientes por prioridad, el buscador “¿Qué quieres cambiar?”, y la publicación programada (noticias y eventos con fecha futura se ocultan hasta ese día; **al ser una web estática, solo aparecen cuando se vuelve a construir el sitio** — conviene una construcción diaria programada en Netlify).
+- **Ya existían** (no se rehicieron): el tablero de Inicio con porcentaje y pendientes por prioridad, el buscador “¿Qué quieres cambiar?”, y la publicación programada (noticias y eventos con fecha futura se ocultan hasta ese día; **al ser una web estática, solo aparecen cuando se vuelve a construir el sitio**: ya existe `.github/workflows/rebuild-diario.yml`, que necesita el secreto `NETLIFY_BUILD_HOOK`; si no está configurado, esas publicaciones no aparecen solas).
 
 **No se hizo**: WebAR sobre el afiche impreso (exige celular real para ajustar), importar noticias/docentes desde Excel o CSV (Decap no tiene API para crear entradas desde una página propia), vista previa móvil en vivo dentro del editor (depende de clases internas de Decap que no se pudieron comprobar aquí).
 **Probado**: `tsc`, `npm run build`, `npm run test:qr`, capturas en Edge de las animaciones nuevas, línea de tiempo, tarjeta de compartir y fondo eléctrico; escáner con cámara falsa (URL y entrada válida/repetida); descarga real de la hoja PDF y del ZIP de entradas. **No probado en celulares reales.** Sin commit.
@@ -220,3 +220,38 @@ Se probó **en el panel real** (Decap con `npm run panel`, Edge controlado por s
 - **Errores y guardado** (`panel-errors.js`, `local_backup`): al publicar con campos obligatorios vacíos aparece **“Faltan N cosas para publicar”** con un botón por campo que lleva a él; avisos rojos de Decap reescritos en lenguaje claro (sin conexión, sesión vencida, conflicto, demasiadas publicaciones); aviso fijo **sin internet** y otro al volver; **copia automática del borrador** en el aparato (`local_backup: true`): se comprobó que un título escrito sobrevive a recargar el navegador.
 - **Fallo corregido**: cuando faltaban campos, el panel decía “Revisa tu conexión a internet” (engañoso). Y “Publicar ahora” ya no se rinde a los 350 ms si el menú de Decap tarda en abrir (espera hasta 3 s y, si no abre, explica qué hacer).
 - **No se hizo / límites**: no se probó en un celular real (solo emulación de Edge: tamaño, toque y viewport; no el teclado ni la cámara del aparato); las pruebas con `local_backup` cubren recargar, no cerrar el navegador por completo; el panel sigue cargando Decap desde unpkg (sin internet no abre). Sin commit.
+
+## 2026-10-27 · Personalización y edición del panel (tanda grande)
+
+**Aspecto de la web** (Personalizar la web → Colores y efectos)
+- **Letras**: 4 pares (Tesla, Clásica, Moderna, Redondeada) y tamaño base (normal / +6 % / +12 %). `app/fonts.ts` (Next exige cada fuente como constante con valores literales; las no elegidas no se precargan). Probado: la clásica se aplica y se ve.
+- **Forma**: esquinas de tarjetas (variable `--r-panel`) y de los botones de `ButtonLink` y del aviso de privacidad (clase `btn-shape`). **No cambia** otros botones sueltos (p. ej. “Admisiones” del menú).
+- **Velocidad de las apariciones** al hacer scroll (rápida / normal / lenta / sin animación).
+- **Logo y favicon propios** (Datos del colegio → Fotos y video principales).
+
+**Estructura y contenido**
+- **Redirecciones y enlaces cortos** (`content/redirects.json` → `next.config.mjs`): validadas (se descartan rutas del sistema, caracteres raros, duplicadas y destinos no https). Probado con casos buenos y malos.
+- **Noticias con formato** (negrita, cursiva, listas, enlaces, títulos, citas) con `lib/markdown.tsx` (sin HTML; enlaces seguros), más **autor**, **fecha de actualización** y **ocultar desde el día**. Las noticias anteriores en texto plano siguen igual.
+- **Notas y tareas del equipo** (`content/tareas.json`): aparecen en el Inicio del panel con prioridad según la fecha (probado).
+
+**Familias**
+- **Aviso de privacidad y cookies** (texto editable): con él activo, Google Analytics solo carga si la persona acepta.
+- **Formularios**: mensaje de gracias editable y pregunta opcional “¿Cómo nos conociste?” con opciones editables (llega en el mensaje y el correo).
+- **Botón de WhatsApp con horario de atención** (hora de Lima): fuera de horario cambia su texto y avisa en el mensaje.
+
+**Panel**
+- **Inicio**: ocultar y fijar tarjetas (se recuerda en el aparato) y **globo rojo** en “Inicio” con los pendientes urgentes.
+- **Menú “Aa”**: letra grande y más contraste. **El modo oscuro se probó y se descartó** (Decap tiene demasiados colores fijos y quedaba roto).
+- **Comprobador de calidad** al publicar: espacios dobles, MAYÚSCULAS, títulos en minúscula y tildes olvidadas en ~17 palabras comunes.
+- **Recordatorio mensual de copia** (`.github/workflows/copia-mensual.yml`): ZIP en GitHub Actions + un Issue que avisa por correo. **Ya existía** `backup-semanal.yml` (copia semanal); este flujo solo añade el aviso. No se pudo probar (solo corre dentro de GitHub).
+- **Revisión del panel antes de publicar** (`scripts/check-panel.mjs`, `npm run check:panel`, ya en `prebuild`): durante esta tanda un error de sangría en `config.yml` dejó el panel en blanco (“Error loading the CMS configuration”); ahora el build falla antes de llegar a producción.
+
+**Ya existía o quedó parcial**: historial de cambios (Inicio ya muestra “Tus últimos cambios”), resultados de campaña (Looker/Analytics), biblioteca de fotos (pestaña Medios de Decap), compresión de fotos al subir.
+**No se hizo**: constructor de páginas por bloques, mostrar/ocultar cada sección de todas las páginas, duplicar página o noticia, páginas de mantenimiento, borradores con aprobación (el modo editorial de Decap no funciona con el servidor local, solo `simple`, y no se pudo probar), importar CSV/Excel, restaurar versiones desde el panel, pruebas A/B, cuentas por promotor con metas, generador de piezas para redes, tutoriales en video, avisos de publicación por correo (se configuran en Netlify), asistente de IA (servicio de pago). Sin commit.
+
+## 2026-10-27 · Documentación y cierre de la tanda
+
+- Se documentó todo lo hecho en la sesión: **`README.md`** (estructura, comandos, QR y escáner, personalización, tabla “dónde se edita cada cosa”), **`docs/GUIA_PANEL.md`** (secciones 17–22 nuevas para la clienta: letras y esquinas, QR y Escáner Tesla, formularios y calendario, noticias con formato y 360°, panel en celular, errores al publicar; “Qué NO se puede” y “Si algo sale mal” actualizadas), **`docs/CONFIGURAR_PANEL.md`** (qué activar y cómo se comporta cada función, archivos nuevos, límites) y **`PENDIENTES_COLEGIO.md`** (lo que el colegio debe aportar para activar las funciones nuevas).
+- Se creó **`CLAUDE.md`** con la guía para trabajar en el proyecto: comandos, mapa, trampas conocidas (CRLF, sangría de `config.yml`, `next/font`, plantillas con JS, UTF-8 en QR, `MutationObserver` en Decap), cómo probar el panel real y la preferencia de no añadir coautor en los commits.
+- Verificación final: `tsc`, `npm run check:panel`, `npm run test:qr` y `npm run build` sin errores.
+- **Pendiente técnico (para la próxima sesión):** probar todo en celulares reales (web, panel, `/escanear`, QR impresos); probar `editorial_workflow` contra GitHub real; servir Decap desde la propia web (hoy depende de unpkg); configurar `NETLIFY_BUILD_HOOK` para las publicaciones programadas; las opciones no hechas de la lista de personalización (constructor de bloques, ocultar secciones por página, duplicar, importar CSV, restaurar versiones, pruebas A/B, generador de piezas, avisos por correo al publicar).

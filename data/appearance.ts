@@ -100,6 +100,8 @@ const mixWithWhite = (hex: string, amount: number) => toHex(toRgb(hex).map((c) =
 const r = rec(raw);
 const colors = rec(r.colors);
 const effects = rec(r.effects);
+const typography = rec(r.typography);
+const shape = rec(r.shape);
 
 export const preset = oneOf(colors.preset, PRESETS, "tesla");
 
@@ -137,6 +139,13 @@ export const isDefaultPalette = JSON.stringify(palette) === JSON.stringify(prese
 
 export const appearance = {
   preset,
+  /** Par de letras (títulos + texto) y tamaño base en % (100 = normal). */
+  typography: {
+    pair: oneOf(typography.pair, ["tesla", "clasica", "moderna", "redondeada"] as const, "tesla"),
+    scale: ({ "100": 100, "106": 106, "112": 112 } as Record<string, number>)[String(typography.scale ?? "100")] ?? 100,
+  },
+  /** Esquinas de tarjetas y botones. */
+  shape: { corners: oneOf(shape.corners, ["suaves", "rectas", "redondas"] as const, "suaves") },
   effects: {
     /** Chispas al pasar el cursor sobre botones y tarjetas. */
     sparks: bool(effects.sparks, true),
@@ -150,6 +159,8 @@ export const appearance = {
     pageTransitions: bool(effects.pageTransitions, true),
     /** Fondo y cursor eléctricos (partículas que reaccionan al mouse o al dedo). */
     electric: oneOf(effects.electric, ["apagado", "suave", "normal", "intenso"] as const, "suave"),
+    /** Velocidad con que aparecen los bloques al hacer scroll. */
+    revealSpeed: oneOf(effects.revealSpeed, ["rapida", "normal", "lenta", "apagada"] as const, "normal"),
     /** Botón flotante de WhatsApp. */
     whatsappFloat: bool(effects.whatsappFloat, true),
   },

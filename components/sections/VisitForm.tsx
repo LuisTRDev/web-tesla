@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import { levels } from "@/data/levels";
 import { settings } from "@/data/settings";
 import BookingEmbed from "@/components/ui/BookingEmbed";
+import { SourceField, Thanks } from "@/components/ui/FormExtras";
 import { sendToEmail } from "@/lib/send-form";
 import { campaignTag, trackEvent } from "@/lib/track";
 import { formatDate, whatsappLink } from "@/lib/utils";
@@ -28,6 +29,8 @@ export default function VisitForm() {
   const [level, setLevel] = useState("");
   const [date, setDate] = useState("");
   const [shift, setShift] = useState<string>(SHIFTS[0]);
+  const [source, setSource] = useState("");
+  const [sent, setSent] = useState(false);
   const hasWhatsapp = settings.contact.whatsapp.length > 0;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -37,13 +40,15 @@ export default function VisitForm() {
       `Quisiera agendar una visita al colegio${date ? ` el ${formatDate(date)}` : ""}, ${shift.toLowerCase()}.`,
       level ? `Me interesa el nivel ${level}.` : "",
       `Es para la Admisión ${settings.admissionYear}.`,
+      source ? `Me enteré por: ${source}.` : "",
     ]
       .filter(Boolean)
       .join(" ");
     const url = whatsappLink(settings.contact.whatsapp[0] ?? null, `${text}${campaignTag()}`);
     trackEvent("visit_request", { level, shift });
     if (url) window.open(url, "_blank", "noopener,noreferrer");
-    void sendToEmail("Solicitud de visita", { nombre: name, dia: date ? formatDate(date) : "", turno: shift, nivel: level || "No indica", admision: String(settings.admissionYear) });
+    void sendToEmail("Solicitud de visita", { nombre: name, dia: date ? formatDate(date) : "", turno: shift, nivel: level || "No indica", admision: String(settings.admissionYear), como_nos_conocio: source || "No indica" });
+    setSent(true);
   };
 
   const field =
@@ -90,6 +95,7 @@ export default function VisitForm() {
           ))}
         </select>
       </div>
+      <SourceField id="visita-origen" value={source} onChange={setSource} />
       <button
         type="submit"
         disabled={!hasWhatsapp}
@@ -98,6 +104,7 @@ export default function VisitForm() {
       >
         Agendar por WhatsApp
       </button>
+      <Thanks show={sent} />
       <p className="text-sm text-niebla">
         {hasWhatsapp ? "Te confirmamos el horario por el mismo chat." : "[WHATSAPP OFICIAL] pendiente: el envío se activará cuando se configure el número."}
       </p>

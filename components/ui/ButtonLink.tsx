@@ -21,7 +21,7 @@ interface ButtonLinkProps {
 /** Botón-enlace. Detecta enlaces externos y los abre en otra pestaña. */
 export default function ButtonLink({ href, children, variant = "accent", className }: ButtonLinkProps) {
   const classes = cn(
-    "relative",
+    "relative btn-shape",
     "inline-flex min-h-[48px] items-center justify-center rounded-full px-6 text-[15px] font-semibold transition-colors duration-300",
     variants[variant],
     className,

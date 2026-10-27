@@ -37,6 +37,7 @@ const html = `<!doctype html>
     <script src="/admin/mobile.js"></script>
     <script src="/admin/preview-device.js"></script>
     <script src="/admin/panel-errors.js"></script>
+    <script src="/admin/panel-extras.js"></script>
   </body>
 </html>
 `;

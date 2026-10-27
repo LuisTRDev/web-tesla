@@ -86,6 +86,17 @@ collections:
                 fields:
                   - { label: Texto del botón, name: label, widget: string, required: false, default: '¿Consultas? Escríbenos', hint: 'Se ve en computadora. Déjalo vacío para mostrar solo el ícono.' }
                   - { label: Lado de la pantalla, name: side, widget: select, default: derecha, options: [{ label: Derecha, value: derecha }, { label: Izquierda, value: izquierda }] }
+                  - label: Horario de atención del botón
+                    name: hours
+                    widget: object
+                    collapsed: true
+                    hint: 'Fuera de este horario el botón avisa que se responde después y el mensaje lo aclara. La hora es la de Lima.'
+                    fields:
+                      - { label: Usar horario de atención, name: enabled, widget: boolean, default: false }
+                      - { label: Desde, name: from, widget: string, default: '08:00', pattern: ['^([01]\d|2[0-3]):[0-5]\d$', 'Escribe la hora así: 08:00'] }
+                      - { label: Hasta, name: to, widget: string, default: '17:00', pattern: ['^([01]\d|2[0-3]):[0-5]\d$', 'Escribe la hora así: 17:00'] }
+                      - { label: Días, name: days, widget: select, default: lun-vie, options: [{ label: Lunes a viernes, value: lun-vie }, { label: Lunes a sábado, value: lun-sab }, { label: Todos los días, value: todos }] }
+                      - { label: Texto del botón fuera de horario, name: offLabel, widget: string, default: 'Te respondemos en horario de atención' }
                   - { label: Mensaje general, name: defaultMessage, widget: string, default: 'Hola, quisiera información sobre la I.E.P. Nikola Tesla.', hint: 'Es lo que escribe la familia al tocar el botón. En el texto puedes usar {año} para poner el año de admisión.' }
                   - label: Mensajes según la página
                     name: messages
@@ -133,7 +144,30 @@ collections:
             summary: '{{fields.emailKey}}'
             hint: 'Además de abrir WhatsApp, cada formulario (información y visita) llega al correo del colegio. Gratis con Web3Forms.'
             fields:
+              - { label: Mensaje de gracias al enviar, name: thanks, widget: string, default: '¡Gracias! Te respondemos lo antes posible.', hint: 'Lo ve la familia debajo del formulario después de enviarlo.' }
+              - label: Pregunta “¿Cómo nos conociste?”
+                name: source
+                widget: object
+                collapsed: true
+                hint: 'Una pregunta opcional en los formularios para saber qué medio funciona mejor. La respuesta llega en el mensaje de WhatsApp y en el correo.'
+                fields:
+                  - { label: Mostrar la pregunta, name: enabled, widget: boolean, default: false }
+                  - { label: Pregunta, name: question, widget: string, default: '¿Cómo nos conociste?' }
+                  - { label: Opciones, name: options, widget: list, field: { label: Opción, name: option, widget: string }, default: [Facebook, Instagram, TikTok, Volante o afiche, Un conocido, Otro] }
               - { label: Clave de acceso de Web3Forms, name: emailKey, widget: string, required: false, hint: 'Entra a web3forms.com, escribe el correo del colegio y te llega una clave. Pégala aquí. Déjala vacía para no enviar correos.' }
+          - label: Aviso de privacidad y cookies
+            name: privacy
+            widget: object
+            collapsed: true
+            summary: '{{fields.enabled}}'
+            hint: 'Un aviso que se ve la primera vez que alguien entra. Si lo activas, Google Analytics solo mide a quienes aceptan.'
+            fields:
+              - { label: Mostrar el aviso, name: enabled, widget: boolean, default: false }
+              - { label: Texto, name: text, widget: text, default: 'Usamos cookies para medir cuántas familias visitan la web y mejorarla. Puedes aceptarlas o dejar solo lo necesario.' }
+              - { label: Botón de aceptar, name: acceptLabel, widget: string, default: Aceptar }
+              - { label: Botón de rechazar, name: rejectLabel, widget: string, default: Solo lo necesario }
+              - { label: Texto del enlace a la política, name: linkLabel, widget: string, default: Política de privacidad }
+              - { label: Dirección de la política, name: linkHref, widget: string, required: false, hint: 'Una página creada en Páginas nuevas, por ejemplo /p/privacidad. Déjalo vacío para no mostrar enlace.' }
           - label: Agendar visita en calendario
             name: booking
             widget: object
@@ -181,6 +215,8 @@ collections:
             widget: object
             hint: 'Recomendado: fotos horizontales, de menos de 2 MB, sin logo ni texto encima.'
             fields:
+              - { label: Logo de la web, name: logo, widget: image, required: false, hint: 'Opcional. Si lo subes, reemplaza al escudo del menú y del pie. Mejor un PNG con fondo transparente, más alto que ancho.' }
+              - { label: Ícono de la pestaña (favicon), name: favicon, widget: image, required: false, hint: 'Opcional. Un cuadrado de 256 × 256 px o más, en PNG.' }
               - { label: Foto de la portada, name: hero, widget: image, required: false }
               - { label: Video de la portada, name: heroVideo, widget: file, required: false, hint: 'Archivo .mp4 de 10 a 15 segundos y menos de 8 MB. Si lo pones, reemplaza a la foto.' }
               - { label: Foto de Nosotros, name: about, widget: image, required: false }
@@ -566,7 +602,10 @@ collections:
       - { label: Fecha, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: 'Para programar una noticia, pon una fecha futura: aparecerá sola ese día.' }
       - { label: Categoría, name: category, widget: select, options: [Admisión, Actividades, Comunicados, Deportes, Logros, Cultura], default: Comunicados }
       - { label: Resumen (1 o 2 líneas), name: excerpt, widget: text }
-      - { label: Texto completo, name: body, widget: text, hint: 'Deja una línea en blanco entre un párrafo y el siguiente.' }
+      - { label: Texto completo, name: body, widget: markdown, buttons: [bold, italic, link, heading-two, quote, bulleted-list, numbered-list], editor_components: [], hint: 'Usa los botones de arriba para negrita, listas o enlaces. Deja una línea en blanco entre un párrafo y el siguiente.' }
+      - { label: Escrita por, name: author, widget: string, required: false, hint: 'Opcional. Ejemplo: Dirección, Coordinación de primaria.' }
+      - { label: Última actualización, name: updated, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Opcional. Si corriges la noticia después de publicarla, pon aquí la fecha y se verá “Actualizada el…”.' }
+      - { label: Ocultar desde el día, name: hideAfter, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Opcional. A partir de esa fecha la noticia deja de mostrarse (por ejemplo, un aviso que ya venció).' }
       - { label: Foto, name: image, widget: image, required: false }
       - { label: Es una noticia de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando la noticia sea real. Las de ejemplo no aparecen en Google.' }
 
@@ -676,6 +715,36 @@ collections:
     media_folder: /public/images/generales
     public_folder: /images/generales
     files:
+      - name: redirecciones
+        label: Redirecciones y enlaces cortos
+        file: content/redirects.json
+        fields:
+          - label: Enlaces
+            name: items
+            widget: list
+            required: false
+            summary: '{{fields.from}} → {{fields.to}}'
+            hint: 'Un enlace corto lleva a otra página: por ejemplo, /matricula lleva a /admision-2027. Úsalo para afiches y mensajes fáciles de escribir. No se pueden usar rutas del sistema (/admin, /api, /qr).'
+            fields:
+              - { label: Dirección corta, name: from, widget: string, pattern: ['^/[A-Za-z0-9/_-]*[A-Za-z0-9_-]$', 'Empieza con / y solo letras, números, guion o guion bajo. Ejemplo: /matricula'], hint: 'Ejemplo: /matricula' }
+              - { label: A dónde lleva, name: to, widget: string, pattern: ['^(/[^\s]*|https://[^\s]+)$', 'Una dirección de esta web (/admision-2027) o un enlace https://…'], hint: 'Ejemplo: /admision-2027' }
+              - { label: Es definitiva, name: permanent, widget: boolean, default: false, hint: 'Déjalo apagado mientras pruebas; Google guarda las definitivas por mucho tiempo.' }
+      - name: tareas
+        label: Notas y tareas del equipo
+        file: content/tareas.json
+        fields:
+          - label: Notas y tareas
+            name: items
+            widget: list
+            required: false
+            summary: '{{fields.done}} · {{fields.title}}'
+            hint: 'Apuntes entre quienes editan la web (“falta la foto del patio”) y tareas de la campaña con fecha (“imprimir volantes”). Las pendientes aparecen en el Inicio del panel.'
+            fields:
+              - { label: Qué hay que hacer o recordar, name: title, widget: string }
+              - { label: Tipo, name: kind, widget: select, default: tarea, options: [{ label: Tarea, value: tarea }, { label: Nota, value: nota }] }
+              - { label: Para el día, name: due, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', required: false }
+              - { label: Quién, name: who, widget: string, required: false }
+              - { label: Ya está hecha, name: done, widget: boolean, default: false }
       - name: portada
         label: Orden de la portada
         file: content/portada.json
@@ -777,6 +846,40 @@ collections:
               - { label: 'Color rojo', name: rojo, widget: color, required: false, allowInput: true, enableAlpha: false }
               - { label: 'Color azul marino', name: marino, widget: color, required: false, allowInput: true, enableAlpha: false }
               - { label: 'Color de líneas y detalles fríos', name: arco, widget: color, required: false, allowInput: true, enableAlpha: false }
+          - label: Letras
+            name: typography
+            widget: object
+            hint: 'Cambia el tipo de letra de toda la web. Pruébalo con la vista previa y publica cuando te guste.'
+            fields:
+              - label: Par de letras
+                name: pair
+                widget: select
+                default: tesla
+                options:
+                  - { label: 'Tesla: títulos con carácter y texto amable (actual)', value: tesla }
+                  - { label: 'Clásica: títulos con serifa elegante', value: clasica }
+                  - { label: 'Moderna: geométrica y limpia', value: moderna }
+                  - { label: 'Redondeada: cercana y suave', value: redondeada }
+              - label: Tamaño de las letras
+                name: scale
+                widget: select
+                default: '100'
+                options:
+                  - { label: Normal, value: '100' }
+                  - { label: Un poco más grande, value: '106' }
+                  - { label: Grande (más fácil de leer), value: '112' }
+          - label: Forma de botones y tarjetas
+            name: shape
+            widget: object
+            fields:
+              - label: Esquinas
+                name: corners
+                widget: select
+                default: suaves
+                options:
+                  - { label: 'Suaves (actual)', value: suaves }
+                  - { label: 'Rectas (más formal)', value: rectas }
+                  - { label: 'Muy redondas (más juguetón)', value: redondas }
           - label: Efectos
             name: effects
             widget: object
@@ -788,4 +891,5 @@ collections:
               - { label: Fondo y cursor eléctricos (partículas que siguen al mouse o al dedo), name: electric, widget: select, default: suave, options: [{ label: Apagado, value: apagado }, { label: Suave (recomendado), value: suave }, { label: Normal, value: normal }, { label: Intenso, value: intenso }], hint: 'Puntos de luz unidos por líneas que reaccionan al cursor. Si la web se siente lenta en celulares viejos, elige Suave o Apagado.' }
               - { label: Línea de progreso bajo el menú, name: scrollProgress, widget: boolean, default: true }
               - { label: Cortina de color al cambiar de sección, name: pageTransitions, widget: boolean, default: true }
+              - { label: Velocidad de las apariciones al hacer scroll, name: revealSpeed, widget: select, default: normal, options: [{ label: Rápida, value: rapida }, { label: Normal, value: normal }, { label: Lenta y elegante, value: lenta }, { label: Sin animación, value: apagada }] }
               - { label: Botón flotante de WhatsApp, name: whatsappFloat, widget: boolean, default: true }

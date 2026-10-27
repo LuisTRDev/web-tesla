@@ -23,13 +23,31 @@ export default function WhatsAppFloat() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const { defaultMessage, messages, label, side } = settings.contact.whatsappButton;
+  const { defaultMessage, messages, label: baseLabel, side, hours } = settings.contact.whatsappButton;
+  // ¿Estamos dentro del horario? (hora de Lima). Se calcula al montar para no desajustar la carga.
+  const [open, setOpen] = useState(true);
+  useEffect(() => {
+    if (!hours.enabled) return;
+    const check = () => {
+      const now = new Intl.DateTimeFormat("en-GB", { timeZone: "America/Lima", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+      const part = (type: string) => now.find((p) => p.type === type)?.value ?? "";
+      const day = part("weekday");
+      const minutes = Number(part("hour")) * 60 + Number(part("minute"));
+      const toMin = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3));
+      const dayOk = hours.days === "todos" || (hours.days === "lun-sab" ? day !== "Sun" : !["Sat", "Sun"].includes(day));
+      setOpen(dayOk && minutes >= toMin(hours.from) && minutes < toMin(hours.to));
+    };
+    check();
+    const timer = window.setInterval(check, 60_000);
+    return () => window.clearInterval(timer);
+  }, [hours]);
+  const label = open ? baseLabel : hours.offLabel;
   // Mensaje de la página: el de la ruta más específica; si no hay, el de admisión o el general.
   const match = messages
     .filter((entry) => (entry.path === "/" ? pathname === "/" : pathname === entry.path || pathname.startsWith(`${entry.path}/`)))
     .sort((a, b) => b.path.length - a.path.length)[0];
   const message = (match?.message ?? (pathname.startsWith("/admision") ? "Hola, quisiera información sobre la Admisión {año} en la I.E.P. Nikola Tesla." : defaultMessage)).split("{año}").join(String(settings.admissionYear));
-  const href = whatsappLink(settings.contact.whatsapp[0] ?? null, message);
+  const href = whatsappLink(settings.contact.whatsapp[0] ?? null, open ? message : `${message} (Escribo fuera del horario de atención; respóndanme cuando puedan, gracias.)`);
   if (!href || !appearance.effects.whatsappFloat) return null;
 
   return (

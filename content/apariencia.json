@@ -2,7 +2,15 @@
   "colors": {
     "preset": "tesla"
   },
+  "typography": {
+    "pair": "tesla",
+    "scale": "100"
+  },
+  "shape": {
+    "corners": "suaves"
+  },
   "effects": {
+    "revealSpeed": "normal",
     "sparks": true,
     "electric": "suave",
     "fieldAnimation": true,

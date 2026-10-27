@@ -85,6 +85,8 @@ window.TESLA = (function () {
       cards: [
         { file: "portada", icon: "🧩", title: "Orden de la portada", desc: "Elige qué secciones se ven en la portada y en qué orden.", chips: ["Mostrar u ocultar", "Orden"], web: "/" },
         { file: "navegacion", icon: "🧭", title: "Menú y pie de página", desc: "Oculta secciones del menú, añade enlaces, cambia el botón destacado y los enlaces del pie.", chips: ["Menú", "Botón", "Pie de página"], web: "/" },
+        { file: "redirecciones", icon: "🔗", title: "Redirecciones y enlaces cortos", desc: "Crea direcciones fáciles (/matricula) que llevan a otra página.", chips: ["Enlaces cortos"], web: "/" },
+        { file: "tareas", icon: "📝", title: "Notas y tareas del equipo", desc: "Apuntes y tareas de la campaña con fecha; las pendientes salen en el Inicio.", chips: ["Tareas", "Notas"], web: "/" },
         { file: "apariencia", icon: "🎨", title: "Colores y efectos", desc: "Elige una paleta de colores y apaga los efectos que no quieras.", chips: ["Paleta", "Colores", "Efectos"], web: "/" },
       ],
     },
@@ -212,7 +214,7 @@ window.TESLA = (function () {
     "colegio/settings": [
       { label: "Nombre y frases", icon: "✏️", fields: ["Nombre oficial", "Nombre corto", "Rótulo sobre el nombre", "Frase principal", "Concepto", "Frase del pie de página", "Descripción para Google"] },
       { label: "Admisión", icon: "📅", fields: ["Año de admisión", "Último día de inscripciones", "Mostrar etiquetas “Por confirmar”"] },
-      { label: "Contacto y ubicación", icon: "📍", fields: ["Dirección de la web", "Ubicación", "Contacto", "Respaldo oficial", "Formularios al correo", "Agendar visita en calendario"] },
+      { label: "Contacto y ubicación", icon: "📍", fields: ["Dirección de la web", "Ubicación", "Contacto", "Respaldo oficial", "Formularios al correo", "Agendar visita en calendario", "Aviso de privacidad y cookies"] },
       { label: "Redes y fotos", icon: "📷", fields: ["Redes sociales", "Fotos y video principales"] },
       { label: "Cifras", icon: "🔢", fields: ["Cifras del colegio"] },
       { label: "Animación del QR", icon: "⚡", fields: ["Animación al escanear el QR"] },

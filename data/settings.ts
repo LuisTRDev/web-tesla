@@ -18,6 +18,10 @@ const whatsappButton = rec(contact.whatsappButton);
 const images = rec(r.images);
 const qrIntro = rec(r.qrIntro);
 const forms = rec(r.forms);
+const formSource = rec(forms.source);
+const privacy = rec(r.privacy);
+const waHours = rec(whatsappButton.hours);
+const hhmm = (value: unknown, fallback: string) => (typeof value === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(value.trim()) ? value.trim() : fallback);
 const booking = rec(r.booking);
 
 /** Solo se aceptan calendarios de Calendly o Cal.com (https). */
@@ -56,6 +60,13 @@ export const settings: SiteSettings = {
       .filter(Boolean),
     hours: text(contact.hours),
     whatsappButton: {
+      hours: {
+        enabled: bool(waHours.enabled),
+        from: hhmm(waHours.from, "08:00"),
+        to: hhmm(waHours.to, "17:00"),
+        days: oneOf(waHours.days, ["lun-vie", "lun-sab", "todos"] as const, "lun-vie"),
+        offLabel: str(waHours.offLabel, "Te respondemos en horario de atención"),
+      },
       label: str(whatsappButton.label, "¿Consultas? Escríbenos"),
       side: oneOf(whatsappButton.side, ["derecha", "izquierda"] as const, "derecha"),
       defaultMessage: str(whatsappButton.defaultMessage, "Hola, quisiera información sobre la I.E.P. Nikola Tesla."),
@@ -82,8 +93,26 @@ export const settings: SiteSettings = {
     aboutDetail: text(images.aboutDetail),
     admission: text(images.admission),
     share: text(images.share),
+    logo: text(images.logo),
+    favicon: text(images.favicon),
   },
-  forms: { emailKey: text(forms.emailKey) },
+  forms: {
+    emailKey: text(forms.emailKey),
+    thanks: str(forms.thanks, "¡Gracias! Te respondemos lo antes posible."),
+    source: {
+      enabled: bool(formSource.enabled),
+      question: str(formSource.question, "¿Cómo nos conociste?"),
+      options: strings(formSource.options).map((option) => option.trim()).filter(Boolean).slice(0, 10),
+    },
+  },
+  privacy: {
+    enabled: bool(privacy.enabled),
+    text: str(privacy.text, "Usamos cookies para medir cuántas familias visitan la web y mejorarla. Puedes aceptarlas o dejar solo lo necesario."),
+    acceptLabel: str(privacy.acceptLabel, "Aceptar"),
+    rejectLabel: str(privacy.rejectLabel, "Solo lo necesario"),
+    linkLabel: str(privacy.linkLabel, "Política de privacidad"),
+    linkHref: text(privacy.linkHref),
+  },
   booking: { url: bookingUrl(booking.url) },
   qrIntro: {
     animation: oneOf(qrIntro.animation, QR_ANIMATIONS, "atomo"),

@@ -6,6 +6,7 @@ import ModuleHeader from "@/components/ui/ModuleHeader";
 import SchoolImage from "@/components/ui/SchoolImage";
 import { getModule } from "@/data/modules";
 import { getNews, getNewsBySlug } from "@/lib/data";
+import Markdown from "@/lib/markdown";
 import { formatDate } from "@/lib/utils";
 
 interface PageProps {
@@ -57,11 +58,14 @@ export default async function NewsPostPage({ params }: PageProps) {
           />
           <div className="mx-auto mt-12 max-w-[68ch]">
             <p className="text-xl font-medium leading-relaxed text-noche md:text-2xl">{post.excerpt}</p>
-            {post.body.map((paragraph) => (
-              <p key={paragraph} className="mt-6 text-lg leading-[1.75] text-tinta/85">
-                {paragraph}
+            {(post.author || post.updated) && (
+              <p className="mt-4 text-sm text-niebla">
+                {post.author && <>Por {post.author}</>}
+                {post.author && post.updated && " · "}
+                {post.updated && <>Actualizada el {formatDate(post.updated)}</>}
               </p>
-            ))}
+            )}
+            <Markdown text={post.bodyRaw} />
             <ButtonLink href="/noticias" variant="outline-dark" className="mt-12">
               Volver a noticias
             </ButtonLink>

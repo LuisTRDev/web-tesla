@@ -22,6 +22,17 @@
   }
 }
 
+/* Forma de los botones según Personalizar la web → Colores y efectos → Forma */
+html[data-corners="rectas"] .btn-shape {
+  border-radius: 10px;
+}
+html[data-corners="redondas"] .btn-shape {
+  border-radius: 9999px;
+}
+html[data-corners="suaves"] .btn-shape {
+  border-radius: 9999px;
+}
+
 @layer utilities {
   /* Entrada del hero: desenfoque a nítido, con retraso por variable --d */
   .hero-in {

@@ -254,6 +254,27 @@
     }, 250);
     return true;
   }
+  /* Revisión rápida de lo escrito: espacios dobles, MAYÚSCULAS, tildes olvidadas en palabras muy comunes y títulos en minúscula. */
+  var TYPOS = [["tambien", "también"], ["informacion", "información"], ["admision", "admisión"], ["matricula", "matrícula"], ["educacion", "educación"], ["direccion", "dirección"], ["telefono", "teléfono"], ["ingles", "inglés"], ["ultimo", "último"], ["pagina", "página"], ["mañana", "mañana"], ["manana", "mañana"], ["proximo", "próximo"], ["publico", "público"], ["ademas", "además"], ["horario de atencion", "horario de atención"], ["inscripcion", "inscripción"]];
+  function quality() {
+    var out = [];
+    $$('[class*="ControlContainer"]').forEach(function (box) {
+      var labelEl = box.querySelector("label");
+      var label = labelEl ? labelEl.textContent.trim() : "Un campo";
+      var el = box.querySelector('input[type="text"], textarea');
+      if (!el || !el.value) return;
+      var v = el.value;
+      if (/^(\/|https?:|mailto:|tel:)/i.test(v.trim())) return;
+      if (/ {2,}/.test(v)) out.push(label + ": hay espacios dobles");
+      var letters = v.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, "");
+      if (letters.length > 25 && v.replace(/[^A-ZÁÉÍÓÚÑ]/g, "").length / letters.length > 0.6) out.push(label + ": está casi todo en MAYÚSCULAS (se lee como gritos)");
+      if (/(^|\s)(t[ií]tulo|nombre|titular)/i.test(label) && /^[a-záéíóúñ]/.test(v.trim())) out.push(label + ": empieza con minúscula");
+      TYPOS.forEach(function (t) {
+        if (new RegExp("(^|[^A-Za-zÁÉÍÓÚÑáéíóúñ])" + t[0] + "(?![A-Za-zÁÉÍÓÚÑáéíóúñ])", "i").test(v) && t[0] !== t[1]) out.push(label + ": “" + t[0] + "” → ¿“" + t[1] + "”?");
+      });
+    });
+    return out.slice(0, 8);
+  }
   function reviewAndPublish() {
     if (window.TeslaGuide && window.TeslaGuide.isPractice()) return window.TeslaGuide.practiceNotice();
     var list = changes();
@@ -263,6 +284,8 @@
       ? '<ul class="tesla-changes">' + list.slice(0, 12).map(function (c) { return "<li>✏️ " + esc(c.text) + "</li>"; }).join("") + (list.length > 12 ? "<li>… y " + (list.length - 12) + " más</li>" : "") + "</ul>"
       : "<p><strong>Cambiaste fotos u otras opciones</strong> (no solo textos).</p>";
     if (warn.length) body += '<div class="tesla-warn">⚠️ ' + (warn.length === 1 ? "Este campo todavía dice <strong>[PENDIENTE]</strong>: " : "Estos campos todavía dicen <strong>[PENDIENTE]</strong>: ") + warn.map(function (w) { return esc(w.text); }).join(", ") + ". Puedes publicar igual, pero las familias lo verán.</div>";
+    var tips = quality();
+    if (tips.length) body += '<div class="tesla-warn">📝 Revisa antes de publicar (no es obligatorio):<ul class="tesla-changes">' + tips.map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul></div>";
     body += "<p class=\"tesla-note\">Los cambios aparecen en la web en <strong>1 o 2 minutos</strong>. Mientras no publiques, nadie los ve.</p>";
     openModal({
       icon: "🚀",

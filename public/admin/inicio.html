@@ -134,6 +134,32 @@
         font-weight: 500;
       }
       /* acciones */
+      .actwrap {
+        position: relative;
+        display: flex;
+      }
+      .actwrap > .action {
+        flex: 1;
+      }
+      .actbar {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        gap: 6px;
+      }
+      .actbar button {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 18, 48, 0.25);
+        background: #fff;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      .actbar button[aria-pressed="true"] {
+        background: #ffb627;
+      }
       .actions {
         display: grid;
         gap: 14px;
@@ -433,6 +459,7 @@
       </div>
 
       <h2 class="sec">¿Qué quieres hacer hoy?</h2>
+      <p style="text-align: right; margin: 0 0 8px"><button class="btn ghost small" id="act-edit" type="button">⚙️ Personalizar estas tarjetas</button></p>
       <div class="actions" id="actions"></div>
 
       <section id="first-wrap" hidden>
@@ -505,9 +532,38 @@
           { e: "🌐", t: "Ver cómo está la web", d: "Ábrela como la ven las familias.", href: "/", blank: true },
           { e: "🆘", t: "Pedir ayuda", d: "Tutoriales paso a paso.", run: function () { go("", null, "ayuda"); } },
         ];
-        $("actions").innerHTML = ACTIONS.map(function (a, i) {
-          return (a.href ? '<a class="action" href="' + a.href + '"' + (a.blank ? ' target="_blank" rel="noopener"' : "") : '<button class="action" type="button"') + ' data-i="' + i + '"><span class="big">' + a.e + "</span><strong>" + a.t + '</strong><span class="d">' + a.d + "</span>" + (a.href ? "</a>" : "</button>");
-        }).join("");
+        /* Cada persona puede ocultar las tarjetas que no usa y fijar las que sí (se recuerda en este aparato). */
+        var AP = { hidden: [], pinned: [] };
+        try { AP = Object.assign(AP, JSON.parse(localStorage.getItem("tesla-actions") || "{}")); } catch (e) {}
+        var editingActions = false;
+        function renderActions() {
+          var order = ACTIONS.map(function (a, i) { return i; }).filter(function (i) { return editingActions || AP.hidden.indexOf(ACTIONS[i].t) < 0; });
+          order.sort(function (x, y) { return (AP.pinned.indexOf(ACTIONS[y].t) >= 0) - (AP.pinned.indexOf(ACTIONS[x].t) >= 0); });
+          $("actions").innerHTML = order.map(function (i) {
+            var a = ACTIONS[i];
+            var pinned = AP.pinned.indexOf(a.t) >= 0, hidden = AP.hidden.indexOf(a.t) >= 0;
+            var card = (a.href ? '<a class="action" href="' + a.href + '"' + (a.blank ? ' target="_blank" rel="noopener"' : "") : '<button class="action" type="button"') + ' data-i="' + i + '"' + (hidden ? ' style="opacity:.4"' : "") + '><span class="big">' + a.e + "</span><strong>" + (pinned ? "★ " : "") + a.t + '</strong><span class="d">' + a.d + "</span>" + (a.href ? "</a>" : "</button>");
+            var bar = editingActions ? '<span class="actbar"><button type="button" data-pin="' + i + '" aria-pressed="' + pinned + '" title="Fijar al principio">★</button><button type="button" data-hide="' + i + '" aria-pressed="' + hidden + '" title="' + (hidden ? "Mostrar" : "Ocultar") + '">' + (hidden ? "🙈" : "👁") + "</button></span>" : "";
+            return '<div class="actwrap">' + card + bar + "</div>";
+          }).join("");
+        }
+        function saveActions() { try { localStorage.setItem("tesla-actions", JSON.stringify(AP)); } catch (e) {} renderActions(); }
+        renderActions();
+        $("act-edit").addEventListener("click", function () {
+          editingActions = !editingActions;
+          this.textContent = editingActions ? "✓ Listo" : "⚙️ Personalizar estas tarjetas";
+          renderActions();
+        });
+        $("actions").addEventListener("click", function (ev) {
+          var pin = ev.target.closest("[data-pin]"), hide = ev.target.closest("[data-hide]");
+          var el = pin || hide;
+          if (!el) return;
+          ev.stopPropagation();
+          var t = ACTIONS[Number(el.dataset.pin || el.dataset.hide)].t;
+          var list = pin ? AP.pinned : AP.hidden, at = list.indexOf(t);
+          if (at >= 0) list.splice(at, 1); else list.push(t);
+          saveActions();
+        }, true);
         $("actions").addEventListener("click", function (ev) {
           var el = ev.target.closest("[data-i]");
           if (!el) return;

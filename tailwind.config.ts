@@ -36,7 +36,7 @@ const config: Config = {
         display: ["var(--font-display)", "var(--font-body)", "system-ui", "sans-serif"],
       },
       maxWidth: { site: "1400px" },
-      borderRadius: { panel: "28px" },
+      borderRadius: { panel: "var(--r-panel, 28px)" },
     },
   },
   plugins: [],

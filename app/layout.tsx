@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
+import { fontPairs } from "@/app/fonts";
 import type { CSSProperties, ReactNode } from "react";
 import Analytics from "@/components/layout/Analytics";
+import ConsentGate from "@/components/layout/ConsentGate";
+import CookieNotice from "@/components/layout/CookieNotice";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import ClickTracker from "@/components/layout/ClickTracker";
 import Footer from "@/components/layout/Footer";
@@ -15,9 +17,9 @@ import { banners, hasGlobalBanner } from "@/data/banner";
 import { settings } from "@/data/settings";
 import "./globals.css";
 
-// Títulos: Bricolage Grotesque (con carácter, cálida). Texto: Figtree (clara y amable).
-const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const body = Figtree({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+// Letras: por defecto Bricolage Grotesque (títulos) + Figtree (texto); se cambian desde el panel.
+const [display, body] = fontPairs[appearance.typography.pair];
+const CORNERS = { suaves: 28, rectas: 8, redondas: 44 } as const;
 
 const title = `${settings.name} | ${settings.location.district}, ${settings.location.province}`;
 
@@ -26,6 +28,7 @@ export const metadata: Metadata = {
   title: { default: title, template: `%s | ${settings.name}` },
   description: settings.description,
   applicationName: settings.name,
+  ...(settings.images.favicon ? { icons: { icon: settings.images.favicon, apple: settings.images.favicon } } : {}),
   keywords: [
     "Institución Educativa Privada Nikola Tesla",
     "colegio en Nuevo Imperial",
@@ -80,7 +83,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es-PE" className={`${display.variable} ${body.variable}`} style={{ "--bar-h": hasGlobalBanner() ? "40px" : "0px" } as CSSProperties}>
+    <html lang="es-PE" className={`${display.variable} ${body.variable}`} data-corners={appearance.shape.corners} style={{ "--bar-h": hasGlobalBanner() ? "40px" : "0px", "--r-panel": `${CORNERS[appearance.shape.corners]}px`, fontSize: `${appearance.typography.scale}%` } as CSSProperties}>
       <head>
         {/* Paleta elegida en el panel (Personalizar la web → Colores y efectos). */}
         <style dangerouslySetInnerHTML={{ __html: cssVariables() }} />
@@ -98,7 +101,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main id="contenido">{children}</main>
         <Footer />
         <WhatsAppFloat />
-        <Analytics />
+        <ConsentGate>
+          <Analytics />
+        </ConsentGate>
+        <CookieNotice />
         <ClickTracker />
         {appearance.effects.sparks && <SparkTrail />}
         {appearance.effects.electric !== "apagado" && <ElectricField level={appearance.effects.electric} />}

@@ -146,6 +146,26 @@ Todo es contenido en `content/` (sin base de datos) y se edita desde el panel.
 - **Volver a una versión anterior:** GitHub → repositorio → `content/<archivo>.json` → *History* → abrir el commit bueno → *… → Revert*, o pedir a quien administre que haga `git revert` del commit “Panel: …”.
 - **Avisos cuando ella publica:** Netlify → Site configuration → Build & deploy → *Deploy notifications* (correo o Slack al terminar cada deploy) y, en GitHub, *Watch → Custom → Commits* del repositorio.
 
+## Funciones nuevas: qué hay que activar y cómo se comportan
+
+| Función | Qué activar | Notas técnicas |
+|---|---|---|
+| **Formularios al correo** | Clave de Web3Forms en *Datos del colegio → Formularios al correo* | `lib/send-form.ts` envía además de abrir WhatsApp; nunca lanza errores. La clave es pública por diseño. Sin clave no hace nada. |
+| **Calendario de visitas** | Enlace de Calendly o Cal.com en *Agendar visita en calendario* | `components/ui/BookingEmbed.tsx`; `data/settings.ts` solo acepta https en `calendly.com` o `cal.com`. Se incrusta al tocar el botón. |
+| **Aviso de privacidad** | *Aviso de privacidad y cookies → Mostrar el aviso* | `ConsentGate` solo monta `Analytics` si la persona aceptó (`localStorage` `tesla-consent`). Sin aviso, Analytics carga como antes (si existe `NEXT_PUBLIC_GA_ID`). |
+| **Animación y destino de los QR** | *Datos del colegio → Animación del QR* | `lib/qr-redirect.ts` + `lib/qr-splash.ts`. `?anim=nombre` prueba otra; `?freeze=ms` congela un instante (solo pruebas). WhatsApp directo usa el primer número y `defaultMessage`; sin número cae a la campaña. |
+| **Escáner Tesla y entradas** | Nada; abrir `/escanear` por **HTTPS** (la cámara lo exige; `localhost` sirve) | `lib/qr-scanner.ts` usa jsQR de `/admin/vendor/jsQR.js`. Las entradas (`TESLA-TICKET|evento|nombre|n`) se guardan en `localStorage` (`tesla-entradas`) del celular. |
+| **Recorrido 360°** | Cargar lugares en *Galería → Recorrido virtual 360°* | `public/vendor/pannellum/` (Pannellum 2.5.6, MIT). Fotos equirectangulares (2:1), idealmente de menos de 6 MB. |
+| **Redirecciones** | Panel: *Personalizar la web → Redirecciones…* | `next.config.mjs` las lee al construir (`redirects()`); descarta rutas del sistema, duplicadas, con caracteres especiales o que apunten a sí mismas. Requiere un nuevo deploy. |
+| **Letras, esquinas y velocidad** | Panel: *Colores y efectos* | `app/fonts.ts` declara los 4 pares; `app/layout.tsx` aplica el elegido; esquinas con la variable `--r-panel` y la clase `btn-shape`; `Reveal` lee `revealSpeed`. |
+| **Logo y favicon propios** | *Datos del colegio → Fotos y video principales* | `components/ui/Logo.tsx` y `metadata.icons` en `app/layout.tsx`. |
+| **Horario del botón de WhatsApp** | *Contacto → Botón flotante → Horario* | Calculado en el navegador con la hora de Lima (`components/ui/WhatsAppFloat.tsx`). |
+| **Recordatorio mensual de copia** | Nada | `.github/workflows/copia-mensual.yml` (además de la copia semanal): ZIP y un Issue que GitHub envía por correo. |
+
+**Panel en el celular y en pantalla ancha** (`mobile.css`, `mobile.js`, `preview-device.js`): Decap fuerza 800 px de ancho y muestra formulario y vista previa lado a lado; en ≤ 860 px se pasa a una columna, la vista previa va a pantalla completa con un botón flotante y aparece una barra inferior. En pantallas anchas la vista previa se puede ver como celular de 390 px (`body.tesla-phone`). **Errores** (`panel-errors.js`): lee `[class*="ControlErrorsList"]` de Decap para armar “Faltan N cosas”; reescribe avisos de `.Toastify__toast`. **Borradores**: `local_backup: true` en `config.yml`. **Extras** (`panel-extras.js`): menú Aa y globo de pendientes (`/admin/api/pendientes`). **Tareas** (`content/tareas.json`) se suman a `lib/pending.ts`.
+
+**Antes de publicar cambios al panel:** `npm run check:panel` (también corre en `prebuild`). Un `config.yml` con una sangría mal puesta deja el panel en blanco.
+
 ## Usarlo en tu computadora (sin iniciar sesión)
 
 ```bash
@@ -171,6 +191,11 @@ carpeta, sin commit (haz el commit tú). Es la forma de probar campos nuevos o c
 | `public/admin/inicio.html`, `campana.html`, `resultados.html`, `ayuda.html` | Páginas propias del panel |
 | `public/admin/qr-designer.js`, `vendor/qrcode.js` | Generador del QR con la identidad del colegio |
 | `public/admin/photo-optimizer.js`, `tour.js`, `admin-theme.css`, `tools.css` | Optimizador de fotos, recorrido de bienvenida y estilos |
+| `public/admin/mobile.css`, `mobile.js`, `preview-device.js` | Panel en el celular y vista previa de celular/pantalla |
+| `public/admin/panel-errors.js`, `panel-extras.js` | “Faltan N cosas”, avisos claros, sin internet, menú Aa y globo de pendientes |
+| `public/admin/plantillas.html` | Plantillas de textos con huecos |
+| `lib/qr-splash.ts`, `lib/qr-scanner.ts`, `lib/qr-redirect.ts` | Animación al escanear, Escáner Tesla y destino de los QR |
+| `scripts/check-panel.mjs`, `scripts/test-qr-designer.mjs` | Revisión del panel y prueba del diseñador de QR |
 | `app/admin/api/*` | Datos del colegio y pendientes que leen las páginas del panel |
 | `data/banner.ts`, `components/layout/AnnouncementBar.tsx` | Aviso destacado |
 | `app/admin/route.ts` | Página `/admin` que carga Decap (versión fija; `noindex`) |
@@ -197,4 +222,8 @@ carpeta, sin commit (haz el commit tú). Es la forma de probar campos nuevos o c
 - **Un JSON con sintaxis inválida** (por editar a mano en GitHub) detiene el build de Netlify; la web publicada no se afecta. El panel siempre escribe JSON válido.
 - **Dos personas editando a la vez** pueden pisarse; Decap avisa si el archivo cambió. Con una sola editora no es un problema.
 - La versión de Decap está fija en `app/admin/route.ts` (`DECAP_VERSION`). Para actualizarla, cámbiala y vuelve a probar el panel.
-- Vistas previas: no muestran los efectos animados (rayos, chispas) ni las ilustraciones SVG; esas se ven al publicar.
+- Vistas previas: no muestran los efectos animados (rayos, chispas) ni las ilustraciones SVG; esas se ven al publicar. Son réplicas hechas a mano (`previews.js`): Decap no puede mostrar la web real con el borrador. El selector 📱/💻 solo cambia el ancho.
+- `editorial_workflow` (borradores con aprobación) **no funciona con el servidor local** de Decap (solo modo `simple`); habría que probarlo con GitHub real.
+- El panel carga Decap desde **unpkg**: sin internet no abre. Servirlo desde la propia web sería una mejora pendiente.
+- Modo oscuro del panel: se probó (filtro de inversión) y se descartó porque Decap tiene demasiados colores fijos.
+- No probado en celulares físicos (solo emulación de Edge a 390 px): teclado, cámara y subida de fotos desde la galería del aparato.

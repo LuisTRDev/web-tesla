@@ -10,7 +10,12 @@ import escudo from "@/public/images/logo-escudo.png";
 export default function Logo({ className, showKicker = true }: { className?: string; showKicker?: boolean }) {
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
-      <Image src={escudo} alt="" priority sizes="48px" className="h-12 w-auto shrink-0" />
+      {settings.images.logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={settings.images.logo} alt="" className="h-12 w-auto shrink-0" />
+      ) : (
+        <Image src={escudo} alt="" priority sizes="48px" className="h-12 w-auto shrink-0" />
+      )}
       <span className="flex flex-col leading-none">
         <span className="font-display text-[17px] font-extrabold uppercase tracking-[0.02em]">{settings.shortName}</span>
         {showKicker && <span className="mt-1 text-[10.5px] font-medium opacity-70">{settings.kicker}</span>}

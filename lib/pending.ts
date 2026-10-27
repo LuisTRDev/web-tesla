@@ -24,6 +24,8 @@ import { news } from "@/data/news";
 import { documents } from "@/data/documents";
 import { events } from "@/data/events";
 import { navLinks } from "@/data/navigation";
+import { teamTasks } from "@/data/tasks";
+import { todayISO } from "@/lib/utils";
 import { findBrokenLinks, heavyFiles, missingDocuments } from "@/lib/health";
 
 export type Priority = 1 | 2 | 3;
@@ -105,6 +107,15 @@ export function getPending() {
     item("Salud del sitio", "medios", 3, "Reducir las fotos de más de 2 MB", heavy.length === 0, undefined, heavy.length ? heavy.join(", ") : undefined),
     item("Salud del sitio", "personalizar/entries/navegacion", 3, "Mantener el menú corto (10 enlaces o menos)", navLinks.length <= 10, undefined, `${navLinks.length} enlaces`),
   ];
+
+  // Notas y tareas del equipo: vencidas o para los próximos 3 días = urgentes
+  const today = todayISO();
+  const soon = new Date(Date.now() + 3 * 86_400_000).toISOString().slice(0, 10);
+  teamTasks.forEach((task) => {
+    const priority: Priority = task.due && task.due <= soon ? 1 : task.due ? 2 : 3;
+    const detail = [task.due && (task.due < today ? "vencida · " + task.due : "para el " + task.due), task.who].filter(Boolean).join(" · ") || undefined;
+    items.push(item("Tareas del equipo", "personalizar/entries/tareas", priority, (task.kind === "nota" ? "Nota: " : "") + task.title, task.done, undefined, detail));
+  });
 
   const done = items.filter((entry) => entry.done).length;
   return {
