@@ -32,7 +32,7 @@
       "id": "cultura",
       "title": "Cultura",
       "description": "Identidad, tradiciones y fechas cívicas.",
-      "image": "/images/actividades/cultura/cultura-01.png",
+      "image": "/images/actividades/cultura/cultura-01.jpg",
       "confirmed": false
     },
     {
@@ -53,7 +53,7 @@
       "id": "escolares",
       "title": "Actividades escolares",
       "description": "Visitas, concursos y jornadas especiales.",
-      "image": "/images/actividades/escolares/actividad-escolar-01.png",
+      "image": "/images/actividades/escolares/actividad-escolar-01.jpg",
       "confirmed": false
     }
   ]
