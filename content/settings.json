@@ -4,7 +4,7 @@
       "51982565433",
       "51915948449"
     ],
-    "hours": "Consultas de lunes a viernes de 8:00 a.m. - 1:00 p.m.",
+    "hours": "Consultas de lunes a viernes de 8:30 a.m. - 1:00 p.m.",
     "whatsappButton": {
       "label": "Agenda tu visita",
       "side": "derecha",
@@ -37,7 +37,7 @@
   "footerPhrase": "Disciplina, liderazgo, excelencia",
   "showDraftBadges": false,
   "location": {
-    "address": "Asociación - \"Las Casuarinas\"",
+    "address": "Asociación - \"Las Casuarinas\" a espaldas de la posta médica de Nuevo Imperial",
     "district": "Nuevo Imperial",
     "province": "Cañete",
     "region": "Lima",
