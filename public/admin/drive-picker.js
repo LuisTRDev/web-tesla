@@ -70,7 +70,8 @@
         callback: function (response) {
           if (response.error) { window.alert("No se pudo conectar con Google Drive: " + response.error); return; }
           token = response.access_token;
-          picker = new window.google.picker.PickerBuilder()
+          try {
+            picker = new window.google.picker.PickerBuilder()
             .addView(new window.google.picker.DocsView().setIncludeFolders(true))
             .setOAuthToken(token)
             .setDeveloperKey(settings.apiKey)
@@ -81,7 +82,11 @@
               var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
               insertOrCopy(url);
             }).build();
-          picker.setVisible(true);
+            picker.setVisible(true);
+          } catch (error) {
+            console.error("No se pudo abrir el selector de Google Drive", error);
+            window.alert("No se pudo abrir el selector de Google Drive. Revisa la configuración de Google Picker y vuelve a intentarlo.");
+          }
         },
         error_callback: function () { window.alert("No se pudo abrir el acceso de Google. Comprueba que el navegador permita ventanas emergentes."); }
       });

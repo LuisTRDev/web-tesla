@@ -1,4 +1,7 @@
 /* Estilos de la capa amigable del panel (panel-ux.js y panel-ui.js). Solo cambia el aspecto; no toca los datos. */
+/* Google Picker se abre sobre la biblioteca de Decap, que ya es una ventana modal. */
+.picker-dialog-bg { z-index: 2147483645 !important; }
+.picker-dialog { z-index: 2147483646 !important; }
 
 /* ───────── menú izquierdo con íconos ───────── */
 [class*="SidebarHeading"] {

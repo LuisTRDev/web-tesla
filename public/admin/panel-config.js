@@ -15,5 +15,5 @@ window.PANEL = {
   // Los ids son: inicio, texto, foto, publicar, noticias, galeria, listas, admision, aviso, qr, version.
   videos: {},
   // Identificadores publicos de Google Cloud para el selector de Drive.
-  googleDrive: { clientId: "898831001638-i7deuab6gf314nkdrlpj7uskqaqkpuuf.apps.googleusercontent.com", apiKey: "AIzaSyCxfc19y6LEGbEofUQ3QXdVfYPJ5wLBe9E", projectNumber: "898831001638" },
+  googleDrive: { clientId: "898831001638-i7deuab6gf314nkdrlpj7uskqaqkpuuf.apps.googleusercontent.com", apiKey: "AIzaSyCxfc19y6LEGbEofUQ3QXdVFYPJ5wLBe9E", projectNumber: "898831001638" },
 };
