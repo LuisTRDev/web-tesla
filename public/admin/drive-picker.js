@@ -4,6 +4,15 @@
   var settings = window.PANEL && window.PANEL.googleDrive;
   if (!settings || !settings.clientId || !settings.apiKey || !settings.projectNumber) return;
   var token = null;
+  var tokenExpires = 0;
+  var sessionKey = "tesla-drive-session";
+  try {
+    var savedSession = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
+    if (savedSession && savedSession.expires > Date.now() + 30000) {
+      token = savedSession.token;
+      tokenExpires = savedSession.expires;
+    }
+  } catch (error) { /* La sesión sigue funcionando aunque el navegador bloquee el almacenamiento. */ }
   var picker = null;
   var loading;
   var urlButton = null;
@@ -103,7 +112,12 @@
     var response = await fetch("https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(file.id) + "?alt=media", {
       headers: { Authorization: "Bearer " + token }
     });
-    if (!response.ok) throw new Error("Google Drive no permitió descargar el archivo. Comprueba tus permisos e inténtalo otra vez.");
+    if (response.status === 401) {
+      token = null;
+      tokenExpires = 0;
+      try { sessionStorage.removeItem(sessionKey); } catch (error) { /* almacenamiento no disponible */ }
+    }
+    if (!response.ok) throw new Error("Google Drive no permitió descargar el archivo. Comprueba tus permisos o vuelve a iniciar sesión.");
     var blob = await response.blob();
     var name = file.name || "foto-drive.jpg";
     var type = blob.type || file.mimeType || "";
@@ -111,70 +125,97 @@
       throw new Error("Este formato no se puede usar como foto de la web. Convierte los archivos RAW, como CR2, a JPG o PNG.");
     }
     var image = new File([blob], name, { type: type });
-    if (mode === "original" && image.size > 2 * 1024 * 1024 && !window.confirm("La imagen original pesa " + (image.size / 1024 / 1024).toFixed(1) + " MB. Puede ralentizar la web y la publicación. ¿Quieres subirla así?")) return;
+    if (mode === "original" && image.size > 2 * 1024 * 1024 && !window.confirm("La imagen original pesa " + (image.size / 1024 / 1024).toFixed(1) + " MB. Puede ralentizar la web y la publicación. ¿Quieres subirla así?")) throw new Error("Importación cancelada.");
     if (mode === "optimized" && window.TeslaPhotoOptimizer && /^image\/(jpeg|png|webp)$/.test(image.type)) {
       image = (await window.TeslaPhotoOptimizer.optimize(image)).file;
     }
+    // Nombre único para no reemplazar archivos existentes sin querer.
+    var extension = image.name.match(/\.([a-z0-9]+)$/i);
+    var basename = image.name.replace(/\.[^.]+$/, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 45) || "foto";
+    var uniqueName = basename + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + "." + (extension ? extension[1].toLowerCase() : "jpg");
+    image = new File([image], uniqueName, { type: image.type });
     var transfer = new DataTransfer();
     transfer.items.add(image);
     input.files = transfer.files;
     // Evita que el optimizador automático vuelva a modificar el archivo original.
     input.__teslaPassThrough = true;
     input.dispatchEvent(new Event("change", { bubbles: true }));
-    window.alert("La importación comenzó. Cuando la foto aparezca en la biblioteca, selecciónala y pulsa Insertar para usarla en el campo.");
+    // Decap sube un archivo por evento; esperar a que aparezca evita solapar subidas.
+    var started = Date.now();
+    while (Date.now() - started < 60000) {
+      await new Promise(function (resolve) { setTimeout(resolve, 250); });
+      if (!input.isConnected) throw new Error("Se cerró la biblioteca durante la importación. Revisa si el archivo se guardó.");
+      if (document.body.textContent.toLowerCase().includes(uniqueName)) return uniqueName;
+    }
+    throw new Error("No se pudo confirmar la subida. Revisa la biblioteca antes de reintentar.");
   }
 
-  function importWithStatus(file, mode) {
+  async function importWithStatus(files, mode) {
     var status = document.createElement("div");
     status.setAttribute("role", "status");
     status.style.cssText = "position:fixed;z-index:2147483647;bottom:24px;left:24px;padding:14px 18px;border-radius:10px;background:#0d1230;color:white;font:600 14px system-ui;box-shadow:0 4px 20px #0005";
-    status.textContent = "Preparando la imagen de Google Drive…";
     document.body.appendChild(status);
-    return importFile(file, mode).catch(function (error) {
-      window.alert(error.message || "No se pudo importar la imagen.");
-    }).finally(function () { status.remove(); });
+    var failures = [];
+    var success = 0;
+    try {
+      for (var i = 0; i < files.length; i++) {
+        status.textContent = "Importando imagen " + (i + 1) + " de " + files.length + "…";
+        try { await importFile(files[i], mode); success++; }
+        catch (error) { failures.push((files[i].name || "Imagen") + ": " + (error.message || "No se pudo importar.")); }
+      }
+    } finally { status.remove(); }
+    window.alert(success + " de " + files.length + " imágenes importadas." + (failures.length ? "\n\nNo se pudieron importar:\n" + failures.join("\n") : "") + (success && urlButton ? "\n\nSelecciona una imagen y pulsa Confirmar selección para usarla en el campo." : ""));
   }
 
   function choose(mode) {
     loadGoogle().then(function () {
+      function showPicker() {
+        try {
+          var builder = new window.google.picker.PickerBuilder()
+            .addView(new window.google.picker.DocsView().setIncludeFolders(true))
+            .setOAuthToken(token)
+            .setDeveloperKey(settings.apiKey)
+            .setAppId(settings.projectNumber)
+            .setLocale("es")
+            .setCallback(function (result) {
+              if (result.action !== window.google.picker.Action.PICKED || !result.docs || !result.docs.length) return;
+              if (mode === "link") {
+                var file = result.docs[0];
+                var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
+                insertOrCopy(url);
+              } else {
+                importWithStatus(result.docs, mode);
+              }
+            });
+          if (mode !== "link") builder.enableFeature(window.google.picker.Feature.MULTISELECT_ENABLED);
+          picker = builder.build();
+          picker.setVisible(true);
+        } catch (error) {
+          console.error("No se pudo abrir el selector de Google Drive", error);
+          window.alert("No se pudo abrir el selector de Google Drive. Revisa la configuración de Google Picker y vuelve a intentarlo.");
+        }
+      }
+      if (token && tokenExpires > Date.now() + 30000) { showPicker(); return; }
       var client = window.google.accounts.oauth2.initTokenClient({
         client_id: settings.clientId,
         scope: "https://www.googleapis.com/auth/drive.file",
         callback: function (response) {
           if (response.error) { window.alert("No se pudo conectar con Google Drive: " + response.error); return; }
           token = response.access_token;
-          try {
-            picker = new window.google.picker.PickerBuilder()
-            .addView(new window.google.picker.DocsView().setIncludeFolders(true))
-            .setOAuthToken(token)
-            .setDeveloperKey(settings.apiKey)
-            .setAppId(settings.projectNumber)
-            .setCallback(function (result) {
-              if (result.action !== window.google.picker.Action.PICKED || !result.docs || !result.docs[0]) return;
-              var file = result.docs[0];
-              if (mode === "link") {
-                var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
-                insertOrCopy(url);
-              } else {
-                importWithStatus(file, mode);
-              }
-            }).build();
-            picker.setVisible(true);
-          } catch (error) {
-            console.error("No se pudo abrir el selector de Google Drive", error);
-            window.alert("No se pudo abrir el selector de Google Drive. Revisa la configuración de Google Picker y vuelve a intentarlo.");
-          }
+          tokenExpires = Date.now() + Math.max(0, Number(response.expires_in || 0) * 1000);
+          try { sessionStorage.setItem(sessionKey, JSON.stringify({ token: token, expires: tokenExpires })); } catch (error) { /* sesión temporal en memoria */ }
+          showPicker();
         },
         error_callback: function () { window.alert("No se pudo abrir el acceso de Google. Comprueba que el navegador permita ventanas emergentes."); }
       });
-      client.requestAccessToken({ prompt: token ? "" : "consent" });
+      client.requestAccessToken({ prompt: "" });
     }).catch(function () { window.alert("No se pudo cargar Google Drive. Comprueba tu conexión y vuelve a intentarlo."); });
   }
   function addButton() {
     var headings = document.querySelectorAll("h1, h2, h3");
     for (var i = 0; i < headings.length; i++) {
       var heading = headings[i];
-      if (heading.textContent.trim() !== "Archivos multimedia" || !heading.parentElement || heading.parentElement.querySelector("[data-drive-picker]")) continue;
+      if (["Archivos multimedia", "Imágenes", "Images", "Files", "Archivos"].indexOf(heading.textContent.trim()) < 0 || !heading.parentElement || heading.parentElement.querySelector("[data-drive-picker]")) continue;
       var button = document.createElement("button");
       button.type = "button";
       button.textContent = "Abrir Google Drive";
