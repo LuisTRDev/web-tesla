@@ -44,6 +44,18 @@
       var date = new Date(item.fecha);
       meta.textContent = (isNaN(date.getTime()) ? "Fecha desconocida" : date.toLocaleString("es-PE", { timeZone: "America/Lima" })) + " · " + item.seccion + " · " + item.accion + " · " + item.origen;
       article.appendChild(meta); list.appendChild(article);
+      var technical = document.createElement("details");
+      var summary = document.createElement("summary"); summary.textContent = "Detalles técnicos"; technical.appendChild(summary);
+      var content = document.createElement("pre");
+      var data = item.tecnico || {};
+      var lines = [];
+      if (data.tipoError) lines.push("Tipo: " + data.tipoError);
+      if (data.mensaje) lines.push("Detalle: " + data.mensaje);
+      if (data.estado) lines.push("Estado HTTP: " + data.estado);
+      if (data.servicio) lines.push("Servicio: " + data.servicio);
+      if (data.archivo) lines.push("Archivo: " + data.archivo);
+      content.textContent = lines.length ? lines.join("\n") : "Este evento no tiene detalles técnicos disponibles. Los errores anteriores a esta mejora no los registraban.";
+      technical.appendChild(content); article.appendChild(technical);
     });
   }
   copy.addEventListener("click", function () {

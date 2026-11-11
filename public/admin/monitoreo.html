@@ -22,6 +22,9 @@
     .entry h2 { font-size: 17px; margin: 0 0 5px; }
     .entry p { margin: 4px 0; }
     .meta { color: #59647a; font-size: 14px; }
+    details { margin-top: 12px; }
+    summary { cursor: pointer; font-weight: 600; color: #254c9b; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 12px; border-radius: 8px; background: #f2f4f9; font-size: 13px; }
     #message { min-height: 1.4em; color: #344866; }
   </style>
 </head>
@@ -29,7 +32,7 @@
 <main>
   <div class="intro"><h1>Monitoreo de errores</h1><p>Historial guardado en este navegador y dispositivo. No se envía automáticamente.</p></div>
   <div class="toolbar"><span id="count"></span><button id="copy" type="button">Copiar registro</button><button id="download" type="button">Descargar registro</button><button id="clear" class="danger" type="button">Borrar historial</button></div>
-  <p class="note">El registro guarda el tipo de error, la sección y la acción. No guarda mensajes técnicos, enlaces, datos de formularios ni contraseñas. Si borras los datos del navegador, también se borrará este historial.</p>
+  <p class="note">El registro incluye detalles técnicos filtrados cuando están disponibles, como el código HTTP y el archivo. No guarda mensajes completos, enlaces, datos de formularios ni contraseñas. Si borras los datos del navegador, también se borrará este historial.</p>
   <p id="message" role="status"></p>
   <div id="entries"></div>
 </main>

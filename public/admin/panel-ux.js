@@ -209,8 +209,16 @@
   var snap = new WeakMap();
   var wasDirty = false;
   var publishing = false;
+  var publishAttempt = false;
   var discarding = false;
   var dirtyHash = "";
+  // Solo el botón real de Decap confirma una publicación; cerrar o revertir una edición no lo es.
+  document.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target || !target.closest || target.closest(".tesla-modal")) return;
+    var control = target.closest('button, [role="menuitem"], li') || target;
+    if (/^Publicar ahora$/i.test(norm(control.textContent))) publishAttempt = true;
+  }, true);
   function isDirty() { return !!$('[class*="BackStatusChanged"]'); }
   function inputs() { var p = pane(); return p ? $$("input[type=text], input[type=number], textarea", p) : []; }
   function fieldLabel(input) {
@@ -475,12 +483,14 @@
     var text = dirty ? "✏️ Tienes cambios sin publicar" : isNew ? "📝 Entrada nueva: se publica al terminar" : "✓ Todo publicado · nada pendiente";
     if (label && label.textContent !== text) label.textContent = text;
     if (dirty) dirtyHash = location.hash;
-    if (wasDirty && !dirty && inEntry() && !discarding && dirtyHash === location.hash) {
+    if (wasDirty && !dirty && inEntry() && !discarding && dirtyHash === location.hash && publishAttempt) {
+      publishAttempt = false;
       publishing = false;
       showSuccess();
     }
     if (publishing && $(".Toastify__toast--error")) {
       // faltan campos obligatorios: no es un problema de internet; panel-errors.js muestra qué falta
+      publishAttempt = false;
       if ($('[class*="ControlErrorsList"]')) publishing = false;
       else showError();
     }
@@ -492,7 +502,7 @@
     scheduled = true;
     setTimeout(tick, 200);
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
-  window.addEventListener("hashchange", function () { activeTab = {}; setTimeout(tick, 300); });
+  window.addEventListener("hashchange", function () { activeTab = {}; publishAttempt = false; setTimeout(tick, 300); });
   window.TeslaUX = { openModal: openModal, closeModal: closeModal, reviewAndPublish: reviewAndPublish, isDirty: isDirty, reloadWithoutAsking: reloadWithoutAsking };
   setInterval(tick, 1500);
 })();

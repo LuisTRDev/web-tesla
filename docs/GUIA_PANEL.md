@@ -92,7 +92,7 @@ Para borrar una noticia, ábrela y pulsa **Eliminar entrada**.
 
 ## Monitoreo de errores
 
-En el menú superior, entra a **Errores** para revisar los problemas detectados en este navegador. Puedes copiar o descargar el registro para compartirlo con soporte, o borrar el historial. Se conservan hasta 100 eventos en el dispositivo; borrar los datos del navegador también borra el historial. El registro no incluye enlaces, textos de los formularios, contraseñas ni detalles técnicos completos, y no se envía automáticamente.
+En el menú superior, entra a **Errores** para revisar los problemas detectados en este navegador. Despliega **Detalles técnicos** para consultar, cuando estén disponibles, el tipo de error, el código HTTP, el servicio y el archivo donde ocurrió. Puedes copiar o descargar el registro para compartirlo con soporte, o borrar el historial. Se conservan hasta 100 eventos en el dispositivo; borrar los datos del navegador también borra el historial. El registro no incluye enlaces, textos de los formularios, contraseñas ni mensajes técnicos completos, y no se envía automáticamente.
 
 ## 7. Galería de fotos y videos
 
