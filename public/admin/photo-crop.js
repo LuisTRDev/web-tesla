@@ -17,7 +17,8 @@
     }
   };
   function supported(file) { return !!file && /^image\/(jpeg|png|webp)$/.test(file.type); }
-  function edit(file) {
+  function edit(file, options) {
+    options = options || {};
     if (!supported(file) || !window.Cropper) return Promise.resolve(file);
     return new Promise(function (resolve) {
       var previous = document.activeElement;
@@ -25,7 +26,7 @@
       var overlay = document.createElement("div"); overlay.className = "tesla-crop-overlay";
       var box = document.createElement("div"); box.className = "tesla-crop-dialog"; box.setAttribute("role", "dialog"); box.setAttribute("aria-modal", "true"); box.setAttribute("aria-label", "Ajustar imagen");
       var title = document.createElement("h2"); title.textContent = "Ajustar imagen"; box.appendChild(title);
-      var hint = document.createElement("p"); hint.textContent = "Arrastra el marco para elegir qué parte se verá. Puedes cambiar su tamaño o usar una proporción."; box.appendChild(hint);
+      var hint = document.createElement("p"); hint.textContent = options.hint || "Arrastra el marco para elegir qué parte se verá. Puedes cambiar su tamaño o usar una proporción."; box.appendChild(hint);
       var stage = document.createElement("div"); stage.className = "tesla-crop-stage";
       var image = document.createElement("img"); image.alt = "Vista previa para recortar"; image.src = objectUrl; stage.appendChild(image); box.appendChild(stage);
       var tools = document.createElement("div"); tools.className = "tesla-crop-tools"; box.appendChild(tools);
@@ -53,7 +54,7 @@
       button(tools, "Alejar", function () { if (cropper) cropper.zoom(-.1); });
       button(tools, "Restablecer", function () { if (cropper) cropper.reset(); });
       button(actions, "Cancelar", function () { finish(null); });
-      button(actions, "Usar imagen completa", function () { finish(file); });
+      button(actions, options.fullLabel || "Usar imagen completa", function () { finish(file); });
       var apply = button(actions, "Usar recorte", function () {
         if (!cropper) return;
         apply.disabled = true;

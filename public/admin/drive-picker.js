@@ -83,7 +83,7 @@
     [
       ["optimized", "Importar optimizada (recomendado)", "Guarda una copia ligera en la biblioteca de la web."],
       ["original", "Importar original", "Conserva el archivo completo. Puede pesar mucho y ralentizar la web."],
-      ["link", "Usar enlace de Drive", "No copia ni recorta el archivo. Para recortarlo, elige una opción de importación."],
+      ["link", "Usar enlace de Drive", "Previsualiza la foto; usa el enlace completo o guarda una copia recortada."],
       ["cancel", "Cancelar", ""]
     ].forEach(function (option) {
       var button = document.createElement("button");
@@ -125,12 +125,17 @@
       throw new Error("Este formato no se puede usar como foto de la web. Convierte los archivos RAW, como CR2, a JPG o PNG.");
     }
     var image = new File([blob], name, { type: type });
+    var originalImage = image;
     if (window.TeslaPhotoCrop && window.TeslaPhotoCrop.supported(image)) {
-      image = await window.TeslaPhotoCrop.edit(image);
-      if (!image) throw new Error("Importación cancelada.");
+      image = await window.TeslaPhotoCrop.edit(image, mode === "link" ? { fullLabel: "Usar enlace sin recortar", hint: "Ajusta el marco para guardar una copia recortada, o usa la imagen completa mediante su enlace de Drive." } : undefined);
+      if (!image) {
+        if (mode === "link") return { kind: "cancel" };
+        throw new Error("Importación cancelada.");
+      }
     }
+    if (mode === "link" && image === originalImage) return { kind: "link" };
     if (mode === "original" && image.size > 2 * 1024 * 1024 && !window.confirm("La imagen original pesa " + (image.size / 1024 / 1024).toFixed(1) + " MB. Puede ralentizar la web y la publicación. ¿Quieres subirla así?")) throw new Error("Importación cancelada.");
-    if (mode === "optimized" && window.TeslaPhotoOptimizer && /^image\/(jpeg|png|webp)$/.test(image.type)) {
+    if ((mode === "optimized" || mode === "link") && window.TeslaPhotoOptimizer && /^image\/(jpeg|png|webp)$/.test(image.type)) {
       image = (await window.TeslaPhotoOptimizer.optimize(image)).file;
     }
     // Nombre único para no reemplazar archivos existentes sin querer.
@@ -150,9 +155,37 @@
     while (Date.now() - started < 60000) {
       await new Promise(function (resolve) { setTimeout(resolve, 250); });
       if (!input.isConnected) throw new Error("Se cerró la biblioteca durante la importación. Revisa si el archivo se guardó.");
-      if (document.body.textContent.toLowerCase().includes(uniqueName)) return uniqueName;
+      if (document.body.textContent.toLowerCase().includes(uniqueName)) return { kind: "uploaded", name: uniqueName };
     }
     throw new Error("No se pudo confirmar la subida. Revisa la biblioteca antes de reintentar.");
+  }
+
+  async function previewLink(file) {
+    var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
+    var status = document.createElement("div");
+    status.setAttribute("role", "status");
+    status.style.cssText = "position:fixed;z-index:2147483647;bottom:24px;left:24px;padding:14px 18px;border-radius:10px;background:#0d1230;color:white;font:600 14px system-ui;box-shadow:0 4px 20px #0005";
+    status.textContent = "Preparando vista previa de Drive…";
+    document.body.appendChild(status);
+    var result;
+    try { result = await importFile(file, "link"); }
+    catch (error) {
+      status.remove();
+      if (window.confirm((error.message || "No se pudo abrir la vista previa.") + "\n\n¿Quieres usar el enlace sin recortarlo?")) insertOrCopy(url);
+      return;
+    }
+    status.remove();
+    if (result.kind === "cancel") return;
+    if (result.kind === "link") { insertOrCopy(url); return; }
+    if (urlButton && urlButton.isConnected) {
+      // Decap selecciona la última subida al terminar de actualizar su biblioteca.
+      await new Promise(function (resolve) { setTimeout(resolve, 350); });
+      var confirm = Array.from(document.querySelectorAll("button")).find(function (button) {
+        return button.offsetParent !== null && !button.disabled && /^(confirmar selección|insert selected|insertar selección)$/i.test(button.textContent.trim());
+      });
+      if (confirm) { confirm.click(); urlButton = null; return; }
+    }
+    window.alert("La copia recortada se guardó en la biblioteca. Selecciónala para usarla en el campo.");
   }
 
   async function importWithStatus(files, mode) {
@@ -185,9 +218,7 @@
             .setCallback(function (result) {
               if (result.action !== window.google.picker.Action.PICKED || !result.docs || !result.docs.length) return;
               if (mode === "link") {
-                var file = result.docs[0];
-                var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
-                insertOrCopy(url);
+                previewLink(result.docs[0]);
               } else {
                 importWithStatus(result.docs, mode);
               }
