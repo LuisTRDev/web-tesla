@@ -5,26 +5,26 @@
     {
       "id": "informacion",
       "title": "Solicita información",
-      "description": "[PASO POR CONFIRMAR] Escríbenos por WhatsApp o visítanos para resolver tus dudas.",
+      "description": "Escríbenos por WhatsApp o visítanos para resolver tus dudas.",
       "confirmed": true
     },
     {
       "id": "visita",
       "title": "Conoce el colegio",
-      "description": "[PASO POR CONFIRMAR] Coordinamos una visita para que conozcas nuestros espacios.",
-      "confirmed": false
+      "description": "Coordinamos una visita para que conozcas nuestros espacios.",
+      "confirmed": true
     },
     {
       "id": "documentos",
-      "title": "Presenta los documentos",
-      "description": "[PASO POR CONFIRMAR] Lista de requisitos y documentos solicitados.",
+      "title": "Presenta los documentos para Pre - matrícula",
+      "description": "Lista de requisitos y documentos solicitados.\nComo primer paso se solicita las copias de los DNI del apoderado y del alumno",
       "confirmed": false
     },
     {
       "id": "matricula",
       "title": "Matrícula",
-      "description": "[PASO POR CONFIRMAR] Fechas y condiciones de matrícula.",
-      "confirmed": false
+      "description": "Fechas y condiciones de matrícula.\nSe añade al proceso la entrega de boletas de notas del último año y constancia de buena conducta. Con ello, se hará entrega de constancia de vacante que deberá ser entregada a su Institución educativa previa.",
+      "confirmed": true
     }
   ],
   "info": [
