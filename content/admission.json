@@ -6,7 +6,7 @@
       "id": "informacion",
       "title": "Solicita información",
       "description": "[PASO POR CONFIRMAR] Escríbenos por WhatsApp o visítanos para resolver tus dudas.",
-      "confirmed": false
+      "confirmed": true
     },
     {
       "id": "visita",
