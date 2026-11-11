@@ -1,3 +1,4 @@
+import imageUrl from "@/public/admin/image-url";
 import raw from "@/content/gallery.json";
 import type { GalleryEvent, GalleryMedia } from "@/types";
 import { bool, isoDate, list, rec, str, text } from "@/lib/content";
@@ -13,8 +14,8 @@ export const galleryEvents: GalleryEvent[] = list(rec(raw).items).map((event, in
   const media: GalleryMedia[] = list(event.media).map((item, position) => ({
     id: str(item.id, `${id}-${position + 1}`),
     type: item.type === "video" ? "video" : "image",
-    url: text(item.url),
-    thumbnail: text(item.thumbnail),
+    url: item.type === "video" ? text(item.url) : imageUrl(text(item.url)),
+    thumbnail: imageUrl(text(item.thumbnail)),
     caption: text(item.caption) ?? undefined,
     date: isoDate(item.date, date) || undefined,
   }));
@@ -24,7 +25,7 @@ export const galleryEvents: GalleryEvent[] = list(rec(raw).items).map((event, in
     description: str(event.description),
     date,
     category: str(event.category, "Eventos"),
-    coverImage: text(event.coverImage),
+    coverImage: imageUrl(text(event.coverImage)),
     media,
     isPlaceholder: bool(event.isPlaceholder),
   };

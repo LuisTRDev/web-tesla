@@ -21,6 +21,7 @@
   }
   function src(props, path) {
     if (!path) return "";
+    path = window.teslaImageUrl(path);
     try {
       var asset = props.getAsset(path);
       return (asset && asset.toString()) || path;

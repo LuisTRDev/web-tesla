@@ -1,3 +1,4 @@
+import imageUrl from "@/public/admin/image-url";
 import Image from "next/image";
 import { settings } from "@/data/settings";
 import { cn } from "@/lib/utils";
@@ -12,7 +13,7 @@ export default function Logo({ className, showKicker = true }: { className?: str
     <span className={cn("inline-flex items-center gap-3", className)}>
       {settings.images.logo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={settings.images.logo} alt="" className="h-12 w-auto shrink-0" />
+        <img src={imageUrl(settings.images.logo)} alt="" className="h-12 w-auto shrink-0" />
       ) : (
         <Image src={escudo} alt="" priority sizes="48px" className="h-12 w-auto shrink-0" />
       )}

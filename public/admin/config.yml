@@ -554,7 +554,7 @@ collections:
               - { label: Fecha, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD', hint: 'Importa: ubica el evento en su año y mes. Con fecha futura, el evento aparece solo ese día.' }
               - { label: Categoría, name: category, widget: string, hint: 'Ejemplo: Eventos, Deportes, Ciencia.' }
               - { label: Descripción, name: description, widget: text }
-              - { label: Foto de portada, name: coverImage, widget: image, required: false }
+              - { label: Foto de portada, name: coverImage, widget: image, required: false, hint: "Puedes pegar un enlace de Google Drive; comparte la imagen con cualquier persona con el enlace." }
               - { label: Es un evento de ejemplo, name: isPlaceholder, widget: boolean, default: false, hint: 'Desmárcalo cuando el evento sea real.' }
               - label: Fotos y videos
                 name: media

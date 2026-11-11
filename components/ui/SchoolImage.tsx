@@ -1,3 +1,4 @@
+import imageUrl from "@/public/admin/image-url";
 import Image from "next/image";
 import Illustration, { hasIllustration } from "@/components/ui/Illustration";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,8 @@ export default function SchoolImage({
   priority = false,
   illustration,
 }: SchoolImageProps) {
+  const imageSrc = imageUrl(src ?? null);
+  const isDrive = imageSrc?.startsWith("https://drive.google.com/thumbnail?") ?? false;
   return (
     <div
       className={cn(
@@ -48,8 +51,8 @@ export default function SchoolImage({
         className,
       )}
     >
-      {src ? (
-        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={cn("object-cover", imgClassName)} />
+      {imageSrc ? (
+        <Image src={imageSrc} unoptimized={isDrive} alt={alt} fill sizes={sizes} priority={priority} className={cn("object-cover", imgClassName)} />
       ) : hasIllustration(illustration) ? (
         <Illustration name={illustration} tone={tone} />
       ) : (

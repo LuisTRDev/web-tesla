@@ -23,6 +23,8 @@ const html = `<!doctype html>
     <link rel="stylesheet" href="/admin/mobile.css" />
   </head>
   <body>
+    <script src="/admin/image-url.js"></script>
+    <script src="/admin/drive-preview.js"></script>
     <script src="https://unpkg.com/decap-cms@${DECAP_VERSION}/dist/decap-cms.js"></script>
     <script src="/admin/panel-config.js"></script>
     <script src="/admin/previews.js"></script>
