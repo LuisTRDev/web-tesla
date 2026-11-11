@@ -106,12 +106,12 @@
       "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
       "date": "2026-10-09",
       "category": "Ciencia",
-      "coverImage": "https://drive.google.com/file/d/1U-ruAR3S5sQzxfrt7pY7z2dEw1SH3JP-/view?usp=sharing",
+      "coverImage": "https://drive.google.com/file/d/1hjsZfrHOBjp0pcv_0SM_T9cWKJeYBGkq/view?usp=sharing",
       "media": [
         {
           "id": "2026-10-actividad-cientifica-foto-1",
           "type": "image",
-          "url": null,
+          "url": "https://drive.google.com/file/d/1hjsZfrHOBjp0pcv_0SM_T9cWKJeYBGkq/view?usp=sharing",
           "caption": "[FOTO 1 DEL EVENTO]",
           "date": "2026-10-09"
         },
