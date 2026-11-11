@@ -51,7 +51,7 @@ export default function About() {
                 “{aboutText.quote}”
               </blockquote>
             </Reveal>
-            <Reveal delay={0.2} className="hidden lg:block">
+            <Reveal delay={0.2}>
               <SchoolImage
                 src={settings.images.aboutDetail}
                 alt="Detalle de una actividad escolar"

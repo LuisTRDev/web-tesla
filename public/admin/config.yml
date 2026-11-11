@@ -220,8 +220,8 @@ collections:
               - { label: Foto de la portada, name: hero, widget: image, required: false }
               - { label: Video de la portada, name: heroVideo, widget: file, required: false, hint: 'Archivo .mp4 de 10 a 15 segundos y menos de 8 MB. Si lo pones, reemplaza a la foto.' }
               - { label: Foto de Nosotros, name: about, widget: image, required: false }
-              - { label: Foto de detalle de Nosotros, name: aboutDetail, widget: image, required: false }
-              - { label: Foto de Admisión, name: admission, widget: image, required: false }
+              - { label: Foto de detalle de Nosotros, name: aboutDetail, widget: image, required: false, hint: 'Aparece en la página Nosotros, debajo de la cita.' }
+              - { label: Foto de Admisión, name: admission, widget: image, required: false, hint: 'Aparece en la sección de Admisión de la web.' }
               - { label: Imagen al compartir en redes, name: share, widget: image, required: false, hint: 'Medida ideal: 1200 × 630 px. Si la dejas vacía, se genera una automática.' }
           - label: Cifras del colegio
             name: stats

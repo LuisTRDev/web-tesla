@@ -41,7 +41,8 @@ export default function SchoolImage({
   illustration,
 }: SchoolImageProps) {
   const imageSrc = imageUrl(src ?? null);
-  const isDrive = imageSrc?.startsWith("https://drive.google.com/thumbnail?") ?? false;
+  // Las imágenes externas se cargan directamente: Next solo optimiza dominios autorizados.
+  const isExternal = imageSrc ? /^https?:\/\//i.test(imageSrc) : false;
   return (
     <div
       className={cn(
@@ -52,7 +53,7 @@ export default function SchoolImage({
       )}
     >
       {imageSrc ? (
-        <Image src={imageSrc} unoptimized={isDrive} alt={alt} fill sizes={sizes} priority={priority} className={cn("object-cover", imgClassName)} />
+        <Image src={imageSrc} unoptimized={isExternal} alt={alt} fill sizes={sizes} priority={priority} className={cn("object-cover", imgClassName)} />
       ) : hasIllustration(illustration) ? (
         <Illustration name={illustration} tone={tone} />
       ) : (

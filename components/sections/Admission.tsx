@@ -2,6 +2,7 @@ import ButtonLink from "@/components/ui/ButtonLink";
 import Countdown from "@/components/ui/Countdown";
 import DraftBadge from "@/components/ui/DraftBadge";
 import Reveal from "@/components/ui/Reveal";
+import SchoolImage from "@/components/ui/SchoolImage";
 import { admissionHeadline, admissionIntro, admissionSteps } from "@/data/admission";
 import { settings } from "@/data/settings";
 import { cn, whatsappLink } from "@/lib/utils";
@@ -64,6 +65,19 @@ export default function Admission({ showProcessLink = true, showIntro = true }: 
             </ButtonLink>
           )}
         </Reveal>
+
+        {settings.images.admission && (
+          <Reveal className="mt-12 md:mt-16">
+            <SchoolImage
+              src={settings.images.admission}
+              alt="Estudiantes del colegio"
+              label="Fotografía de admisión"
+              tone="light"
+              className="aspect-[4/3] max-h-[560px] rounded-panel md:aspect-[16/9]"
+              sizes="(min-width: 1024px) 90vw, 100vw"
+            />
+          </Reveal>
+        )}
 
         <div className="mt-16 md:mt-24">
           {hasDrafts && <DraftBadge label="Proceso propuesto, por confirmar" className="mb-5" />}
