@@ -16,29 +16,26 @@
   "shortName": "Nikola Tesla",
   "siteUrl": "colegionikolatesla.netlify.app",
   "concept": "Educación que despierta la curiosidad y prepara para el futuro.",
-  "name": "Institución Educativa Privada “Nikola Tesla” - CAÑETE",
-  "social": {
-    "facebook": "https://www.facebook.com/search/top?q=instituci%C3%B3n%20educativa%20privada%20%22nikola%20tesla%22",
-    "instagram": null,
-    "tiktok": "https://www.tiktok.com/@colegio.tesla.canete",
-    "youtube": null
-  },
-  "tagline": "Pasión por educar",
-  "kicker": "Institución Educativa Privada",
-  "footerPhrase": "Disciplina, liderazgo, excelencia",
-  "showDraftBadges": true,
-  "forms": {
-    "emailKey": null
-  },
-  "booking": {
-    "url": null
-  },
   "qrIntro": {
     "animation": "atomo",
     "text": "Admisión 2027",
     "seconds": 2.8,
     "destination": "campana"
   },
+  "name": "Institución Educativa Privada “Nikola Tesla” - CAÑETE",
+  "social": {
+    "facebook": "https://www.facebook.com/profile.php?id=100034441975555",
+    "instagram": null,
+    "tiktok": "https://www.tiktok.com/@colegio.tesla.canete",
+    "youtube": null
+  },
+  "tagline": "Pasión por educar",
+  "forms": {
+    "emailKey": null
+  },
+  "kicker": "Institución Educativa Privada",
+  "footerPhrase": "Disciplina, liderazgo, excelencia",
+  "showDraftBadges": true,
   "location": {
     "address": "Asociación - \"Las Casuarinas\"",
     "district": "Nuevo Imperial",
@@ -54,6 +51,9 @@
     "admission": null,
     "heroVideo": null,
     "share": null
+  },
+  "booking": {
+    "url": null
   },
   "legal": {
     "resolution": "",
