@@ -3,7 +3,8 @@
   function update(img) {
     var original = img.getAttribute("src");
     if (!original) return;
-    var converted = window.teslaImageUrl(original);
+    var converted = window.TeslaDraftPhotos ? window.TeslaDraftPhotos.resolve(original) : original;
+    converted = window.teslaImageUrl(converted);
     if (converted !== original) img.setAttribute("src", converted);
   }
   function scan(node) {

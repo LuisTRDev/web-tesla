@@ -1,0 +1,14 @@
+.tesla-crop-overlay { position: fixed; inset: 0; z-index: 2147483647; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(4, 9, 29, .82); }
+.tesla-crop-dialog { display: flex; flex-direction: column; width: min(920px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; background: #fff; color: #101736; border-radius: 16px; padding: 20px; box-shadow: 0 14px 50px #0008; font: 15px/1.4 system-ui, sans-serif; }
+.tesla-crop-dialog h2 { margin: 0 0 4px; font-size: 22px; }
+.tesla-crop-dialog p { margin: 4px 0 12px; }
+.tesla-crop-stage { height: min(48vh, 480px); min-height: 180px; background: #20283b; overflow: hidden; }
+.tesla-crop-stage img { display: block; max-width: 100%; }
+.tesla-crop-tools, .tesla-crop-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.tesla-crop-actions { justify-content: flex-end; }
+.tesla-crop-dialog button { border: 1px solid #cbd2df; border-radius: 8px; background: #fff; color: #101736; padding: 9px 12px; font: inherit; font-weight: 600; cursor: pointer; }
+.tesla-crop-dialog button[aria-pressed="true"] { border-color: #253f99; background: #e9eefc; }
+.tesla-crop-dialog button:disabled { opacity: .5; cursor: default; }
+.tesla-crop-dialog .primary { border-color: #ffb627; background: #ffb627; }
+.tesla-crop-message { min-height: 1.4em; color: #9e2b2b; }
+@media (max-width: 600px) { .tesla-crop-overlay { padding: 8px; } .tesla-crop-dialog { padding: 14px; max-height: calc(100dvh - 16px); } .tesla-crop-stage { height: 36vh; } }

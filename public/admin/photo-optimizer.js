@@ -64,14 +64,25 @@
       var files = Array.prototype.slice.call(input.files || []);
       if (!files.some(isCandidate)) return;
 
-      // Detiene el evento original, optimiza y lo vuelve a lanzar con los archivos nuevos.
+      // Permite ajustar cada foto antes de optimizar y entregarla a Decap.
       event.stopImmediatePropagation();
-      Promise.all(files.map(function (file) { return isCandidate(file) ? optimize(file) : Promise.resolve({ file: file, changed: false }); })).then(function (results) {
+      (async function () {
+        var results = [];
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          if (isCandidate(file) && window.TeslaPhotoCrop) {
+            file = await window.TeslaPhotoCrop.edit(file);
+            if (!file) { input.value = ""; return; }
+          }
+          results.push(isCandidate(file) ? await optimize(file) : { file: file, changed: false });
+        }
+        if (!input.isConnected) return;
         var transfer = new DataTransfer();
         var saved = 0;
         var count = 0;
         var before = 0;
         results.forEach(function (r) {
+          if (isCandidate(r.file) && window.TeslaDraftPhotos) window.TeslaDraftPhotos.remember(r.file);
           transfer.items.add(r.file);
           if (r.changed) { count++; before += r.before; saved += r.after; }
         });
@@ -79,7 +90,7 @@
         input.__teslaPassThrough = true;
         input.dispatchEvent(new Event("change", { bubbles: true }));
         if (count > 0) toast("Foto optimizada: " + mb(before) + " → " + mb(saved) + (count > 1 ? " (" + count + " fotos)" : ""));
-      });
+      })().catch(function () { input.value = ""; window.alert("No se pudo preparar la imagen. Vuelve a intentarlo."); });
     },
     true
   );

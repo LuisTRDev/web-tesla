@@ -21,6 +21,8 @@
   }
   function src(props, path) {
     if (!path) return "";
+    if (window.TeslaDraftPhotos) path = window.TeslaDraftPhotos.resolve(path);
+    if (/^blob:/.test(path)) return path;
     path = window.teslaImageUrl(path);
     try {
       var asset = props.getAsset(path);

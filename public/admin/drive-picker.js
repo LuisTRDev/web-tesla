@@ -21,7 +21,7 @@
   // the control that opened the library so the chosen file goes to that field.
   document.addEventListener("click", function (event) {
     var button = event.target.closest("button");
-    if (!button || button.hasAttribute("data-drive-picker") || button.closest("[data-drive-options]")) return;
+    if (!button || button.hasAttribute("data-drive-picker") || button.hasAttribute("data-crop-library") || button.closest("[data-drive-options], .tesla-crop-overlay")) return;
     var control = button.closest("span");
     var candidate = control && Array.from(control.querySelectorAll("button")).find(function (item) {
       return /url/i.test(item.textContent);
@@ -83,7 +83,7 @@
     [
       ["optimized", "Importar optimizada (recomendado)", "Guarda una copia ligera en la biblioteca de la web."],
       ["original", "Importar original", "Conserva el archivo completo. Puede pesar mucho y ralentizar la web."],
-      ["link", "Usar enlace de Drive", "No copia el archivo. Debe estar compartido con cualquier persona con el enlace."],
+      ["link", "Usar enlace de Drive", "No copia ni recorta el archivo. Para recortarlo, elige una opción de importación."],
       ["cancel", "Cancelar", ""]
     ].forEach(function (option) {
       var button = document.createElement("button");
@@ -125,6 +125,10 @@
       throw new Error("Este formato no se puede usar como foto de la web. Convierte los archivos RAW, como CR2, a JPG o PNG.");
     }
     var image = new File([blob], name, { type: type });
+    if (window.TeslaPhotoCrop && window.TeslaPhotoCrop.supported(image)) {
+      image = await window.TeslaPhotoCrop.edit(image);
+      if (!image) throw new Error("Importación cancelada.");
+    }
     if (mode === "original" && image.size > 2 * 1024 * 1024 && !window.confirm("La imagen original pesa " + (image.size / 1024 / 1024).toFixed(1) + " MB. Puede ralentizar la web y la publicación. ¿Quieres subirla así?")) throw new Error("Importación cancelada.");
     if (mode === "optimized" && window.TeslaPhotoOptimizer && /^image\/(jpeg|png|webp)$/.test(image.type)) {
       image = (await window.TeslaPhotoOptimizer.optimize(image)).file;
@@ -134,6 +138,7 @@
     var basename = image.name.replace(/\.[^.]+$/, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 45) || "foto";
     var uniqueName = basename + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + "." + (extension ? extension[1].toLowerCase() : "jpg");
     image = new File([image], uniqueName, { type: image.type });
+    if (window.TeslaDraftPhotos) window.TeslaDraftPhotos.remember(image);
     var transfer = new DataTransfer();
     transfer.items.add(image);
     input.files = transfer.files;

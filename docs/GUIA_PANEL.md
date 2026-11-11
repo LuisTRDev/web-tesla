@@ -90,6 +90,10 @@ Muchas secciones son listas (noticias, equipo, preguntas, actividades, eventos�
 
 Para borrar una noticia, ábrela y pulsa **Eliminar entrada**.
 
+## Ajustar y recortar fotos
+
+Al subir una imagen JPG, PNG o WebP desde el dispositivo o importarla desde Google Drive, puedes arrastrar y ajustar el marco antes de usarla. Elige una proporción, **Usar recorte** o **Usar imagen completa**; **Cancelar** detiene la subida. Para una foto ya guardada, selecciónala en la biblioteca y pulsa **Recortar imagen seleccionada**: se crea una copia y se conserva el original. Si usas un enlace de Drive sin importar el archivo, la imagen no se puede recortar desde ese enlace; impórtala primero. Los GIF animados y los SVG se mantienen sin recortar.
+
 ## Monitoreo de errores
 
 En el menú superior, entra a **Errores** para revisar los problemas detectados en este navegador. Despliega **Detalles técnicos** para consultar, cuando estén disponibles, el tipo de error, el código HTTP, el servicio y el archivo donde ocurrió. Puedes copiar o descargar el registro para compartirlo con soporte, o borrar el historial. Se conservan hasta 100 eventos en el dispositivo; borrar los datos del navegador también borra el historial. El registro no incluye enlaces, textos de los formularios, contraseñas ni mensajes técnicos completos, y no se envía automáticamente.

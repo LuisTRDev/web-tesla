@@ -21,6 +21,8 @@ const html = `<!doctype html>
     <link rel="stylesheet" href="/admin/admin-ux.css" />
     <link rel="stylesheet" href="/admin/guide.css" />
     <link rel="stylesheet" href="/admin/mobile.css" />
+    <link rel="stylesheet" href="/admin/vendor/cropper/cropper.min.css" />
+    <link rel="stylesheet" href="/admin/photo-crop.css" />
   </head>
   <body>
     <script src="/admin/error-monitor.js"></script>
@@ -35,7 +37,10 @@ const html = `<!doctype html>
     <script src="/admin/tutoriales.js"></script>
     <script src="/admin/panel-ux.js"></script>
     <script src="/admin/panel-guide.js"></script>
+    <script src="/admin/vendor/cropper/cropper.min.js"></script>
+    <script src="/admin/photo-crop.js"></script>
     <script src="/admin/photo-optimizer.js"></script>
+    <script src="/admin/photo-crop-library.js"></script>
     <script src="/admin/tour.js"></script>
     <script src="/admin/es-fixes.js"></script>
     <script src="/admin/mobile.js"></script>
