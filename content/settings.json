@@ -11,7 +11,7 @@
       "defaultMessage": "Bienvenido, querido visitante. Te saluda el equipo de la I.E.Pr. Nikola Tesla, estamos para guiarte ante cualquier duda. ¿Deseas mayor información? Escríbenos"
     }
   },
-  "admissionDeadline": "2026-11-26",
+  "admissionDeadline": "2027-02-28",
   "admissionYear": 2027,
   "shortName": "Nikola Tesla",
   "siteUrl": "colegionikolatesla.netlify.app",
@@ -35,7 +35,7 @@
   },
   "kicker": "Institución Educativa Privada",
   "footerPhrase": "Disciplina, liderazgo, excelencia",
-  "showDraftBadges": true,
+  "showDraftBadges": false,
   "location": {
     "address": "Asociación - \"Las Casuarinas\"",
     "district": "Nuevo Imperial",
