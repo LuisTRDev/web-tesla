@@ -14,4 +14,6 @@ window.PANEL = {
   // Videos de los tutoriales de Ayuda: { id: "URL de inserción de YouTube" }. Ejemplo: { publicar: "https://www.youtube.com/embed/XXXXXXXXXXX" }.
   // Los ids son: inicio, texto, foto, publicar, noticias, galeria, listas, admision, aviso, qr, version.
   videos: {},
+  // Identificadores publicos de Google Cloud para el selector de Drive.
+  googleDrive: { clientId: "898831001638-i7deuab6gf314nkdrip7uskqaqkpuuf.apps.googleusercontent.com", apiKey: "AIzaSyCxfc19y6LEGbEofUQ3QXdVfYPJ5wLBe9E", projectNumber: "898831001638" },
 };

@@ -91,7 +91,7 @@ export default function Lightbox({ event, index, onIndexChange, onClose }: Light
       >
         <motion.div
           key={media.id}
-          className="relative h-full w-full overflow-hidden rounded-2xl"
+          className="relative flex h-full w-full items-center justify-center"
           initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -101,13 +101,16 @@ export default function Lightbox({ event, index, onIndexChange, onClose }: Light
               <iframe
                 src={embed}
                 title={media.caption ?? event.title}
-                className="absolute inset-0 h-full w-full"
+                className="absolute inset-0 h-full w-full rounded-2xl"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                 allowFullScreen
               />
             ) : (
-              <video src={media.url} poster={media.thumbnail ?? undefined} controls playsInline className="absolute inset-0 h-full w-full bg-black object-contain" />
+              <video src={media.url} poster={media.thumbnail ?? undefined} controls playsInline className="absolute inset-0 h-full w-full rounded-2xl bg-black object-contain" />
             )
+          ) : media.type === "image" && media.url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={media.url} alt={media.caption ?? event.title} className="h-auto max-h-full w-auto max-w-full rounded-2xl object-contain" />
           ) : (
             <SchoolImage
               cover
@@ -117,7 +120,7 @@ export default function Lightbox({ event, index, onIndexChange, onClose }: Light
               sizes="100vw"
               imgClassName="!object-contain"
               labelClassName="items-center justify-center text-center"
-              className="bg-noche-800"
+              className="rounded-2xl bg-noche-800"
             />
           )}
         </motion.div>

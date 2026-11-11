@@ -27,6 +27,7 @@ const html = `<!doctype html>
     <script src="/admin/drive-preview.js"></script>
     <script src="https://unpkg.com/decap-cms@${DECAP_VERSION}/dist/decap-cms.js"></script>
     <script src="/admin/panel-config.js"></script>
+    <script src="/admin/drive-picker.js"></script>
     <script src="/admin/previews.js"></script>
     <script src="/admin/secciones.js"></script>
     <script src="/admin/panel-ui.js"></script>
