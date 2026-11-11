@@ -12,7 +12,7 @@
   // the control that opened the library so the chosen file goes to that field.
   document.addEventListener("click", function (event) {
     var button = event.target.closest("button");
-    if (!button || button.hasAttribute("data-drive-picker")) return;
+    if (!button || button.hasAttribute("data-drive-picker") || button.closest("[data-drive-options]")) return;
     var control = button.closest("span");
     var candidate = control && Array.from(control.querySelectorAll("button")).find(function (item) {
       return /url/i.test(item.textContent);
@@ -62,7 +62,80 @@
     }
     return loading;
   }
-  function choose() {
+  function chooseMode() {
+    var overlay = document.createElement("div");
+    overlay.setAttribute("data-drive-options", "true");
+    overlay.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:20px";
+    var box = document.createElement("div");
+    box.style.cssText = "background:white;color:#17213a;padding:24px;border-radius:14px;max-width:480px;width:100%;font:15px system-ui;box-shadow:0 8px 35px #0005";
+    var title = document.createElement("h2");
+    title.textContent = "¿Cómo quieres usar la foto?";
+    box.appendChild(title);
+    [
+      ["optimized", "Importar optimizada (recomendado)", "Guarda una copia ligera en la biblioteca de la web."],
+      ["original", "Importar original", "Conserva el archivo completo. Puede pesar mucho y ralentizar la web."],
+      ["link", "Usar enlace de Drive", "No copia el archivo. Debe estar compartido con cualquier persona con el enlace."],
+      ["cancel", "Cancelar", ""]
+    ].forEach(function (option) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.style.cssText = "display:block;width:100%;text-align:left;margin-top:10px;padding:11px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#17213a;cursor:pointer";
+      var strong = document.createElement("strong");
+      strong.textContent = option[1];
+      button.appendChild(strong);
+      if (option[2]) {
+        var detail = document.createElement("small");
+        detail.style.cssText = "display:block;margin-top:4px";
+        detail.textContent = option[2];
+        button.appendChild(detail);
+      }
+      button.addEventListener("click", function () { overlay.remove(); if (option[0] !== "cancel") choose(option[0]); });
+      box.appendChild(button);
+    });
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  }
+
+  async function importFile(file, mode) {
+    var input = document.querySelector('.nc-fileUploadButton input[type="file"]');
+    if (!input) throw new Error("No se encontró el botón de subida de la biblioteca. Vuelve a abrir Medios.");
+    if (/\.(cr2|cr3|nef|arw|dng|raw)$/i.test(file.name || "")) throw new Error("Convierte los archivos RAW, como CR2, a JPG o PNG antes de importarlos.");
+    var response = await fetch("https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(file.id) + "?alt=media", {
+      headers: { Authorization: "Bearer " + token }
+    });
+    if (!response.ok) throw new Error("Google Drive no permitió descargar el archivo. Comprueba tus permisos e inténtalo otra vez.");
+    var blob = await response.blob();
+    var name = file.name || "foto-drive.jpg";
+    var type = blob.type || file.mimeType || "";
+    if (!/^image\/(jpeg|png|webp|gif|svg\+xml|avif|bmp)$/.test(type)) {
+      throw new Error("Este formato no se puede usar como foto de la web. Convierte los archivos RAW, como CR2, a JPG o PNG.");
+    }
+    var image = new File([blob], name, { type: type });
+    if (mode === "original" && image.size > 2 * 1024 * 1024 && !window.confirm("La imagen original pesa " + (image.size / 1024 / 1024).toFixed(1) + " MB. Puede ralentizar la web y la publicación. ¿Quieres subirla así?")) return;
+    if (mode === "optimized" && window.TeslaPhotoOptimizer && /^image\/(jpeg|png|webp)$/.test(image.type)) {
+      image = (await window.TeslaPhotoOptimizer.optimize(image)).file;
+    }
+    var transfer = new DataTransfer();
+    transfer.items.add(image);
+    input.files = transfer.files;
+    // Evita que el optimizador automático vuelva a modificar el archivo original.
+    input.__teslaPassThrough = true;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    window.alert("La importación comenzó. Cuando la foto aparezca en la biblioteca, selecciónala y pulsa Insertar para usarla en el campo.");
+  }
+
+  function importWithStatus(file, mode) {
+    var status = document.createElement("div");
+    status.setAttribute("role", "status");
+    status.style.cssText = "position:fixed;z-index:2147483647;bottom:24px;left:24px;padding:14px 18px;border-radius:10px;background:#0d1230;color:white;font:600 14px system-ui;box-shadow:0 4px 20px #0005";
+    status.textContent = "Preparando la imagen de Google Drive…";
+    document.body.appendChild(status);
+    return importFile(file, mode).catch(function (error) {
+      window.alert(error.message || "No se pudo importar la imagen.");
+    }).finally(function () { status.remove(); });
+  }
+
+  function choose(mode) {
     loadGoogle().then(function () {
       var client = window.google.accounts.oauth2.initTokenClient({
         client_id: settings.clientId,
@@ -79,8 +152,12 @@
             .setCallback(function (result) {
               if (result.action !== window.google.picker.Action.PICKED || !result.docs || !result.docs[0]) return;
               var file = result.docs[0];
-              var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
-              insertOrCopy(url);
+              if (mode === "link") {
+                var url = file.url || ("https://drive.google.com/file/d/" + encodeURIComponent(file.id) + "/view");
+                insertOrCopy(url);
+              } else {
+                importWithStatus(file, mode);
+              }
             }).build();
             picker.setVisible(true);
           } catch (error) {
@@ -103,7 +180,7 @@
       button.textContent = "Abrir Google Drive";
       button.setAttribute("data-drive-picker", "true");
       button.style.cssText = "margin-left:16px;padding:9px 14px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#1f2937;font-weight:600;cursor:pointer";
-      button.addEventListener("click", choose);
+      button.addEventListener("click", chooseMode);
       heading.insertAdjacentElement("afterend", button);
     }
   }
