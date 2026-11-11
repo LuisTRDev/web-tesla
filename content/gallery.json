@@ -4,9 +4,9 @@
       "id": "2026-10-aniversario",
       "title": "Aniversario",
       "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
-      "date": "2026-10-23",
+      "date": "2026-12-04",
       "category": "Eventos",
-      "coverImage": null,
+      "coverImage": "https://drive.google.com/file/d/1hjociImdyCYefl635noWBSAKEb9vdt26/view?usp=drive_link",
       "media": [
         {
           "id": "2026-10-aniversario-foto-1",
@@ -59,7 +59,7 @@
           "date": "2026-10-23"
         }
       ],
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "id": "2026-10-concurso",
@@ -158,7 +158,7 @@
       "id": "2026-10-dia-del-estudiante",
       "title": "Día del estudiante",
       "description": "[DESCRIPCIÓN PENDIENTE] Breve relato de la actividad: qué se hizo, quiénes participaron y qué se aprendió.",
-      "date": "2026-10-02",
+      "date": "2026-07-24",
       "category": "Celebraciones",
       "coverImage": null,
       "media": [
@@ -196,9 +196,12 @@
           "url": null,
           "caption": "[FOTO 5 DEL EVENTO]",
           "date": "2026-10-02"
+        },
+        {
+          "type": "image"
         }
       ],
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "id": "2026-09-visita-educativa",
