@@ -21,7 +21,7 @@
   // the control that opened the library so the chosen file goes to that field.
   document.addEventListener("click", function (event) {
     var button = event.target.closest("button");
-    if (!button || button.hasAttribute("data-drive-picker") || button.hasAttribute("data-crop-library") || button.closest("[data-drive-options], .tesla-crop-overlay")) return;
+    if (!button || button.hasAttribute("data-drive-picker") || button.hasAttribute("data-crop-library") || button.closest("[data-drive-options], .tesla-crop-overlay, .tesla-url-overlay")) return;
     var control = button.closest("span");
     var candidate = control && Array.from(control.querySelectorAll("button")).find(function (item) {
       return /url/i.test(item.textContent);

@@ -41,6 +41,7 @@ const html = `<!doctype html>
     <script src="/admin/photo-crop.js"></script>
     <script src="/admin/photo-optimizer.js"></script>
     <script src="/admin/photo-crop-library.js"></script>
+    <script src="/admin/photo-url.js"></script>
     <script src="/admin/tour.js"></script>
     <script src="/admin/es-fixes.js"></script>
     <script src="/admin/mobile.js"></script>

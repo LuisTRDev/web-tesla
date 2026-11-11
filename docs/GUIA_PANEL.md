@@ -92,7 +92,7 @@ Para borrar una noticia, ábrela y pulsa **Eliminar entrada**.
 
 ## Ajustar y recortar fotos
 
-Al subir una imagen JPG, PNG o WebP desde el dispositivo o importarla desde Google Drive, puedes arrastrar y ajustar el marco antes de usarla. Elige una proporción, **Usar recorte** o **Usar imagen completa**; **Cancelar** detiene la subida. Para una foto ya guardada, selecciónala en la biblioteca y pulsa **Recortar imagen seleccionada**: se crea una copia y se conserva el original. Si usas un enlace de Drive sin importar el archivo, la imagen no se puede recortar desde ese enlace; impórtala primero. Los GIF animados y los SVG se mantienen sin recortar.
+Al subir una imagen JPG, PNG o WebP desde el dispositivo o importarla desde Google Drive, puedes arrastrar y ajustar el marco antes de usarla. Elige una proporción, **Usar recorte** o **Usar imagen completa**; **Cancelar** detiene la subida. Para una foto ya guardada, selecciónala en la biblioteca y pulsa **Recortar imagen seleccionada**: se crea una copia y se conserva el original. Al pegar un enlace, puedes insertarlo directamente o elegir **Previsualizar y recortar**, que guarda una copia en la biblioteca. La foto de Drive debe poder compartirse públicamente; otros servidores deben permitir su descarga desde el navegador. Los GIF animados y los SVG se mantienen sin recortar.
 
 ## Monitoreo de errores
 
