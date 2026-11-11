@@ -244,6 +244,13 @@
     // el menú de Decap tarda en aparecer (más en celulares lentos): se espera hasta 3 s en vez de rendirse a los 350 ms
     var tries = 0;
     var timer = setInterval(function () {
+      // Un clic puede disparar la validación o publicar directamente sin abrir menú.
+      // No mostrar un segundo error cuando Decap ya informó el resultado.
+      if (!publishing || !isDirty()) {
+        clearInterval(timer);
+        publishing = false;
+        return;
+      }
       var item = $$("[role=menuitem], li, span, button").filter(function (s) { return /^Publicar ahora$/i.test(norm(s.textContent)) && s.offsetParent !== null; }).pop();
       if (item) { clearInterval(timer); item.click(); }
       else if (++tries > 12) {

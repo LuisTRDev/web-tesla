@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Monitoreo de errores</title>
+  <link rel="stylesheet" href="/admin/tools.css">
+  <style>
+    body { background: #eef0f7; color: #101736; }
+    main { max-width: 1060px; margin: 0 auto; padding: 28px 20px 60px; }
+    .intro { background: #0d1230; color: white; border-radius: 20px; padding: 24px; }
+    .intro h1 { color: white; margin: 0 0 8px; }
+    .intro p { margin: 0; color: #e1e5f2; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 22px 0; }
+    button { border: 1px solid #cbd1df; background: white; color: #101736; border-radius: 10px; padding: 10px 14px; cursor: pointer; font: inherit; font-weight: 600; }
+    button:disabled { opacity: .45; cursor: default; }
+    .danger { color: #a22e2e; }
+    #count { margin-right: auto; font-weight: 700; }
+    .note { background: #fff6db; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+    .entry { background: white; border: 1px solid #dce0eb; border-radius: 14px; padding: 16px 18px; margin: 10px 0; }
+    .entry h2 { font-size: 17px; margin: 0 0 5px; }
+    .entry p { margin: 4px 0; }
+    .meta { color: #59647a; font-size: 14px; }
+    #message { min-height: 1.4em; color: #344866; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="intro"><h1>Monitoreo de errores</h1><p>Historial guardado en este navegador y dispositivo. No se envía automáticamente.</p></div>
+  <div class="toolbar"><span id="count"></span><button id="copy" type="button">Copiar registro</button><button id="download" type="button">Descargar registro</button><button id="clear" class="danger" type="button">Borrar historial</button></div>
+  <p class="note">El registro guarda el tipo de error, la sección y la acción. No guarda mensajes técnicos, enlaces, datos de formularios ni contraseñas. Si borras los datos del navegador, también se borrará este historial.</p>
+  <p id="message" role="status"></p>
+  <div id="entries"></div>
+</main>
+<script src="/admin/monitoreo.js"></script>
+</body>
+</html>

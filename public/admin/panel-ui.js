@@ -21,6 +21,7 @@
     campana: { title: "Campaña y QR", src: "/admin/campana.html" },
     resultados: { title: "Resultados", src: "/admin/resultados.html" },
     plantillas: { title: "Plantillas de textos", src: "/admin/plantillas.html" },
+    monitoreo: { title: "Monitoreo de errores", src: "/admin/monitoreo.html" },
     ayuda: { title: "Ayuda", src: "/admin/ayuda.html" },
   };
   var overlay = null;
@@ -111,6 +112,7 @@
     add("campana", "Campaña y QR", "#/page/campana");
     add("resultados", "Resultados", "#/page/resultados");
     add("plantillas", "Plantillas", "#/page/plantillas");
+    add("monitoreo", "Errores", "#/page/monitoreo");
     add("ayuda", "Ayuda", "#/page/ayuda");
     add("web", "Ver la web", "/", true);
     markNav(pageFromHash());

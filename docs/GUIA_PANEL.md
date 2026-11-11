@@ -90,6 +90,10 @@ Muchas secciones son listas (noticias, equipo, preguntas, actividades, eventos�
 
 Para borrar una noticia, ábrela y pulsa **Eliminar entrada**.
 
+## Monitoreo de errores
+
+En el menú superior, entra a **Errores** para revisar los problemas detectados en este navegador. Puedes copiar o descargar el registro para compartirlo con soporte, o borrar el historial. Se conservan hasta 100 eventos en el dispositivo; borrar los datos del navegador también borra el historial. El registro no incluye enlaces, textos de los formularios, contraseñas ni detalles técnicos completos, y no se envía automáticamente.
+
 ## 7. Galería de fotos y videos
 
 1. Entra a **Galería → Eventos de la galería**.

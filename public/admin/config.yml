@@ -92,11 +92,11 @@ collections:
                     collapsed: true
                     hint: 'Fuera de este horario el botón avisa que se responde después y el mensaje lo aclara. La hora es la de Lima.'
                     fields:
-                      - { label: Usar horario de atención, name: enabled, widget: boolean, default: false }
-                      - { label: Desde, name: from, widget: string, default: '08:00', pattern: ['^([01]\d|2[0-3]):[0-5]\d$', 'Escribe la hora así: 08:00'] }
-                      - { label: Hasta, name: to, widget: string, default: '17:00', pattern: ['^([01]\d|2[0-3]):[0-5]\d$', 'Escribe la hora así: 17:00'] }
-                      - { label: Días, name: days, widget: select, default: lun-vie, options: [{ label: Lunes a viernes, value: lun-vie }, { label: Lunes a sábado, value: lun-sab }, { label: Todos los días, value: todos }] }
-                      - { label: Texto del botón fuera de horario, name: offLabel, widget: string, default: 'Te respondemos en horario de atención' }
+                      - { label: Usar horario de atención, name: enabled, widget: boolean, required: false, default: false }
+                      - { label: Desde, name: from, widget: string, required: false, default: '08:00', pattern: ['^([01]\d|2[0-3]):[0-5]\d$', 'Escribe la hora así: 08:00'] }
+                      - { label: Hasta, name: to, widget: string, required: false, default: '17:00', pattern: ['^([01]\d|2[0-3]):[0-5]\d$', 'Escribe la hora así: 17:00'] }
+                      - { label: Días, name: days, widget: select, required: false, default: lun-vie, options: [{ label: Lunes a viernes, value: lun-vie }, { label: Lunes a sábado, value: lun-sab }, { label: Todos los días, value: todos }] }
+                      - { label: Texto del botón fuera de horario, name: offLabel, widget: string, required: false, default: 'Te respondemos en horario de atención' }
                   - { label: Mensaje general, name: defaultMessage, widget: string, default: 'Hola, quisiera información sobre la I.E.P. Nikola Tesla.', hint: 'Es lo que escribe la familia al tocar el botón. En el texto puedes usar {año} para poner el año de admisión.' }
                   - label: Mensajes según la página
                     name: messages
@@ -144,15 +144,15 @@ collections:
             summary: '{{fields.emailKey}}'
             hint: 'Además de abrir WhatsApp, cada formulario (información y visita) llega al correo del colegio. Gratis con Web3Forms.'
             fields:
-              - { label: Mensaje de gracias al enviar, name: thanks, widget: string, default: '¡Gracias! Te respondemos lo antes posible.', hint: 'Lo ve la familia debajo del formulario después de enviarlo.' }
+              - { label: Mensaje de gracias al enviar, name: thanks, widget: string, required: false, default: '¡Gracias! Te respondemos lo antes posible.', hint: 'Lo ve la familia debajo del formulario después de enviarlo.' }
               - label: Pregunta “¿Cómo nos conociste?”
                 name: source
                 widget: object
                 collapsed: true
                 hint: 'Una pregunta opcional en los formularios para saber qué medio funciona mejor. La respuesta llega en el mensaje de WhatsApp y en el correo.'
                 fields:
-                  - { label: Mostrar la pregunta, name: enabled, widget: boolean, default: false }
-                  - { label: Pregunta, name: question, widget: string, default: '¿Cómo nos conociste?' }
+                  - { label: Mostrar la pregunta, name: enabled, widget: boolean, required: false, default: false }
+                  - { label: Pregunta, name: question, widget: string, required: false, default: '¿Cómo nos conociste?' }
                   - { label: Opciones, name: options, widget: list, field: { label: Opción, name: option, widget: string }, default: [Facebook, Instagram, TikTok, Volante o afiche, Un conocido, Otro] }
               - { label: Clave de acceso de Web3Forms, name: emailKey, widget: string, required: false, hint: 'Entra a web3forms.com, escribe el correo del colegio y te llega una clave. Pégala aquí. Déjala vacía para no enviar correos.' }
           - label: Aviso de privacidad y cookies
@@ -162,11 +162,11 @@ collections:
             summary: '{{fields.enabled}}'
             hint: 'Un aviso que se ve la primera vez que alguien entra. Si lo activas, Google Analytics solo mide a quienes aceptan.'
             fields:
-              - { label: Mostrar el aviso, name: enabled, widget: boolean, default: false }
-              - { label: Texto, name: text, widget: text, default: 'Usamos cookies para medir cuántas familias visitan la web y mejorarla. Puedes aceptarlas o dejar solo lo necesario.' }
-              - { label: Botón de aceptar, name: acceptLabel, widget: string, default: Aceptar }
-              - { label: Botón de rechazar, name: rejectLabel, widget: string, default: Solo lo necesario }
-              - { label: Texto del enlace a la política, name: linkLabel, widget: string, default: Política de privacidad }
+              - { label: Mostrar el aviso, name: enabled, widget: boolean, required: false, default: false }
+              - { label: Texto, name: text, widget: text, required: false, default: 'Usamos cookies para medir cuántas familias visitan la web y mejorarla. Puedes aceptarlas o dejar solo lo necesario.' }
+              - { label: Botón de aceptar, name: acceptLabel, widget: string, required: false, default: Aceptar }
+              - { label: Botón de rechazar, name: rejectLabel, widget: string, required: false, default: Solo lo necesario }
+              - { label: Texto del enlace a la política, name: linkLabel, widget: string, required: false, default: Política de privacidad }
               - { label: Dirección de la política, name: linkHref, widget: string, required: false, hint: 'Una página creada en Páginas nuevas, por ejemplo /p/privacidad. Déjalo vacío para no mostrar enlace.' }
           - label: Agendar visita en calendario
             name: booking
