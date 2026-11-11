@@ -20,6 +20,8 @@ interface SchoolImageProps {
   priority?: boolean;
   /** Ilustración de línea que se muestra en lugar del placeholder mientras no hay foto (ver Illustration.tsx). */
   illustration?: string;
+  /** Permite desactivar el acercamiento en imágenes de fondo animadas. */
+  hoverZoom?: boolean;
 }
 
 /**
@@ -39,6 +41,7 @@ export default function SchoolImage({
   sizes = "(min-width: 1024px) 50vw, 100vw",
   priority = false,
   illustration,
+  hoverZoom = true,
 }: SchoolImageProps) {
   const imageSrc = imageUrl(src ?? null);
   // Las imágenes externas se cargan directamente: Next solo optimiza dominios autorizados.
@@ -48,6 +51,7 @@ export default function SchoolImage({
       className={cn(
         cover ? "absolute inset-0" : "relative",
         "overflow-hidden",
+        hoverZoom && imageSrc && "school-photo",
         tone === "dark" ? "bg-noche-700" : "bg-tiza-300",
         className,
       )}

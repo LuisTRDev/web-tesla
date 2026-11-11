@@ -35,6 +35,7 @@ export default function Hero() {
         <SchoolImage
           cover
           priority
+          hoverZoom={false}
           src={settings.images.hero}
           alt="Estudiantes de la Institución Educativa Privada Nikola Tesla"
           label="Fotografía o video principal: estudiantes del colegio"
