@@ -3,7 +3,7 @@
     {
       "id": "horario",
       "question": "¿Cuál es el horario de clases?",
-      "answer": "[RESPUESTA PENDIENTE] Hora de ingreso y de salida en Primaria y en Secundaria.",
+      "answer": "Hora de ingreso y de salida en Primaria y en Secundaria: \nPRIMARIA\n7:50 a 1:30 pm primaria\nSECUNDARIA\n7:50 a.m. a  2:10 p.m.\n\n",
       "confirmed": false
     },
     {
