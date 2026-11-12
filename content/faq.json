@@ -21,13 +21,13 @@
     {
       "id": "traslado",
       "question": "¿Aceptan estudiantes que vienen de otro colegio a mitad de año?",
-      "answer": "[RESPUESTA PENDIENTE] Condiciones para traslados.",
+      "answer": "Si, las condiciones para traslados pueden ser solicitadas a través de Whatsapp.",
       "confirmed": false
     },
     {
       "id": "uniforme",
       "question": "¿Cómo es el uniforme y dónde se consigue?",
-      "answer": "[RESPUESTA PENDIENTE] Uniforme diario, buzo y lugar de venta.",
+      "answer": "Nuestra institución cuenta con uniforme de gala, uniforme de uso diario y buzo escolar.\n\nEstas prendas pueden adquirirse directamente en el colegio o en establecimientos externos, según la preferencia de cada familia.",
       "confirmed": false
     },
     {
