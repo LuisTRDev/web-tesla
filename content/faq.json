@@ -9,14 +9,8 @@
     {
       "id": "pension",
       "question": "¿Cuánto cuestan la matrícula y la pensión?",
-      "answer": "[RESPUESTA PENDIENTE] Montos o indicación de solicitarlos por WhatsApp.",
-      "confirmed": false
-    },
-    {
-      "id": "vacantes",
-      "question": "¿Hay vacantes para el próximo año?",
-      "answer": "[RESPUESTA PENDIENTE] Grados con vacantes disponibles y cómo reservarlas.",
-      "confirmed": false
+      "answer": "Los montos correspondientes a la matrícula y las pensiones escolares se mantienen sin variaciones respecto al año anterior en el 90 % de los grados de primaria y años de secundaria.\n\nPara obtener información detallada sobre los costos correspondientes a cada grado o año de estudios, agradeceremos comunicarse con nuestra institución a través de WhatsApp.",
+      "confirmed": true
     },
     {
       "id": "requisitos",
@@ -39,14 +33,14 @@
     {
       "id": "talleres",
       "question": "¿Qué talleres o actividades extracurriculares ofrecen?",
-      "answer": "[RESPUESTA PENDIENTE] Talleres deportivos, artísticos o académicos disponibles.",
+      "answer": "Talleres de ajedrez, de cajón peruano, programación, taller de ciencias; exploración de la anatomía, sesiones de reforzamiento y adelanto de cursos de ciencias. Participación de concursos florales por el aniversario del colegio donde se incluyen competencias de baile, declamación, deportes, etc.",
       "confirmed": false
     },
     {
       "id": "visita",
       "question": "¿Puedo visitar el colegio antes de matricular?",
-      "answer": "[RESPUESTA PENDIENTE] Días y horarios para visitas de familias.",
-      "confirmed": false
+      "answer": "Puede coordinar una visita previa con dirección antes de matricular a su hijo(a) según su horario disponible.",
+      "confirmed": true
     }
   ]
 }
