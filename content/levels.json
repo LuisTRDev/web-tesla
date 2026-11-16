@@ -13,15 +13,21 @@
         "5",
         "6"
       ],
-      "image": "/images/niveles/primaria/aula-primaria-01.png",
-      "confirmed": false
+      "image": "/images/generales/imagen-url-mwjeiqkb-recorte-mwjeitlt.jpg",
+      "confirmed": true
     },
     {
       "slug": "secundaria",
       "name": "Secundaria",
       "summary": "Preparados para lo que viene.",
-      "description": "[DESCRIPCIÓN PENDIENTE] Texto breve sobre el nivel Secundaria: preparación académica y proyecto de vida.",
-      "grades": null,
+      "description": "Texto breve sobre el nivel Secundaria: preparación académica y proyecto de vida.",
+      "grades": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
       "image": "/images/niveles/secundaria/aula-secundaria-01.png",
       "confirmed": false
     }
