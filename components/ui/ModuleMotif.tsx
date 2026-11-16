@@ -41,14 +41,16 @@ export default function ModuleMotif({ motif, accent, highlight }: { motif: Motif
     // Nosotros: el escudo oficial, protagonista de la identidad.
     case "escudo":
       return (
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <svg viewBox="0 0 800 800" className="absolute -right-56 top-10 h-[760px] w-[760px] text-noche/[0.07]" fill="none" stroke="currentColor">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10">
+          <svg viewBox="0 0 800 800" className="absolute right-[6%] top-1/2 hidden h-[680px] w-[680px] translate-x-[calc(50%-min(14vw,160px))] -translate-y-1/2 text-noche/[0.09] lg:block" fill="none" stroke="currentColor">
             {[140, 210, 280, 350].map((radius) => (
               <circle key={radius} cx="400" cy="400" r={radius} strokeWidth="1.2" />
             ))}
           </svg>
-          <div className="hero-in absolute right-[6%] top-1/2 hidden w-[min(30vw,380px)] -translate-y-[42%] lg:block" style={{ "--d": "0.45s" } as CSSProperties}>
-            <Image src={escudo} alt="" sizes="380px" priority className="h-auto w-full drop-shadow-[0_24px_40px_rgba(13,18,48,0.18)]" />
+          <div className="pointer-events-auto absolute right-[6%] top-1/2 hidden w-[min(28vw,320px)] -translate-y-1/2 lg:block">
+            <div className="hero-in" style={{ "--d": "0.45s" } as CSSProperties}>
+              <div className="crest-float"><Image src={escudo} alt="" sizes="320px" priority className="h-auto w-full drop-shadow-[0_24px_40px_rgba(13,18,48,0.18)] transition-transform duration-500 ease-out hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100" /></div>
+            </div>
           </div>
         </div>
       );
@@ -108,7 +110,7 @@ export default function ModuleMotif({ motif, accent, highlight }: { motif: Motif
       return (
         <svg aria-hidden="true" viewBox="0 0 1000 560" preserveAspectRatio="xMaxYMid slice" className="pointer-events-none absolute inset-0 -z-10 h-full w-full">
           {sparks.map(([x, y, size, opacity], index) => (
-            <path key={index} d={sparkPath(x, y, size)} fill={index % 3 === 0 ? accent : "#FFFFFF"} opacity={opacity * 0.55} />
+            <path key={index} className="activity-spark" style={{ animationDelay: `${index * -0.55}s` }} d={sparkPath(x, y, size)} fill={index % 3 === 0 ? accent : "#FFFFFF"} opacity={opacity * 0.55} />
           ))}
           <circle cx="850" cy="320" r="170" fill="none" stroke="#FFFFFF" strokeOpacity="0.12" strokeWidth="1.5" />
         </svg>
@@ -153,19 +155,23 @@ export default function ModuleMotif({ motif, accent, highlight }: { motif: Motif
     // Contacto: curvas de nivel y un punto en el mapa.
     case "relieve":
       return (
-        <svg aria-hidden="true" viewBox="0 0 600 500" preserveAspectRatio="xMaxYMid slice" className="pointer-events-none absolute inset-0 -z-10 h-full w-full text-noche/[0.09]" fill="none" stroke="currentColor">
+        <svg aria-hidden="true" viewBox="0 0 600 500" preserveAspectRatio="xMaxYMid slice" className="pointer-events-none absolute inset-0 -z-10 h-full w-full translate-x-16 text-noche/[0.09] md:translate-x-0" fill="none" stroke="currentColor">
           {[0, 1, 2, 3, 4, 5].map((ring) => {
             const k = 40 + ring * 34;
             return (
               <path
                 key={ring}
+                className="map-ring"
+                style={{ animationDelay: `${ring * -0.45}s` }}
                 d={`M${490 - k} 250 C${490 - k} ${200 - k * 0.6}, ${490 + k * 0.9} ${190 - k * 0.7}, ${490 + k} 250 S${490 - k * 0.4} ${310 + k * 0.8}, ${490 - k} 250Z`}
                 strokeWidth="1.3"
               />
             );
           })}
-          <path d="M490 226c-11 0-20 9-20 20 0 15 20 34 20 34s20-19 20-34c0-11-9-20-20-20z" fill={accent} stroke="none" />
-          <circle cx="490" cy="246" r="7" fill="#FFFFFF" stroke="none" />
+          <g className="map-pin">
+            <path d="M490 226c-11 0-20 9-20 20 0 15 20 34 20 34s20-19 20-34c0-11-9-20-20-20z" fill={accent} stroke="none" />
+            <circle cx="490" cy="246" r="7" fill="#FFFFFF" stroke="none" />
+          </g>
         </svg>
       );
   }

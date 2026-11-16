@@ -31,12 +31,12 @@ export default function Philosophy() {
           {philosophy.map((concept, index) => (
             <li key={concept.id} className="border-b border-noche/15">
               <Reveal delay={index * 0.04} y={18}>
-                <div tabIndex={0} className="group grid cursor-default gap-2 py-6 outline-offset-0 md:grid-cols-12 md:items-baseline md:gap-10 md:py-7">
-                  <h3 className="font-display text-[clamp(2.3rem,7.2vw,6rem)] font-extrabold leading-[0.95] tracking-[-0.035em] text-noche/25 transition-colors duration-500 group-hover:text-noche group-focus-visible:text-noche md:col-span-8 max-md:text-noche">
+                <div tabIndex={0} className="group grid cursor-default gap-2 py-6 outline-offset-0 md:grid-cols-12 md:items-center md:gap-10 md:py-7">
+                  <h3 className="font-display text-[clamp(2.3rem,7.2vw,6rem)] font-extrabold leading-[0.95] tracking-[-0.035em] text-noche/25 transition-colors duration-500 group-hover:text-noche group-focus-visible:text-noche md:col-span-7 max-md:text-noche">
                     {concept.title}
                     <span aria-hidden="true" className="ml-3 inline-block h-[0.14em] w-[0.14em] translate-y-[-0.1em] rounded-full bg-filamento opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100 max-md:opacity-100" />
                   </h3>
-                  <p className="max-w-sm text-base leading-relaxed text-niebla transition-colors duration-500 group-hover:text-tinta md:col-span-4 md:text-lg">
+                  <p className="max-w-sm text-base leading-relaxed text-niebla transition-colors duration-500 group-hover:text-tinta md:col-span-5 md:max-w-none md:text-2xl md:font-medium md:leading-snug md:text-tinta">
                     {concept.description}
                   </p>
                 </div>
