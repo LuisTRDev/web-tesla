@@ -52,12 +52,12 @@ export default function Countdown({ tone = "dark", className }: { tone?: "dark" 
         <DraftBadge label="Fecha por confirmar" tone={dark ? "dark" : "light"} className="ml-3 normal-case tracking-normal" />
       </p>
       {!closed && (
-        <div role="timer" aria-label="Tiempo restante de inscripciones" className="mt-4 flex gap-3 md:gap-4">
+        <div role="timer" aria-label="Tiempo restante de inscripciones" className="mt-4 grid max-w-md grid-cols-4 gap-2 sm:gap-3 md:gap-4">
           {UNITS.map(({ key, label }) => (
             <div
               key={key}
               className={cn(
-                "flex min-w-[68px] flex-col items-center rounded-2xl border px-3 py-3 md:min-w-[92px] md:py-4",
+                "flex min-w-0 flex-col items-center rounded-2xl border px-1 py-3 sm:px-3 md:py-4",
                 dark ? "border-white/20 bg-white/10 backdrop-blur-sm" : "border-noche/25 bg-noche/10",
               )}
             >

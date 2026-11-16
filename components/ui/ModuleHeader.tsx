@@ -48,7 +48,7 @@ export default function ModuleHeader({ module, title, intro, kicker, theme = mod
         <h1
           className={cn(
             "hero-in mt-6 text-balance font-display font-extrabold leading-[0.92] tracking-[-0.04em]",
-            compact ? "max-w-[24ch] text-[clamp(2.1rem,5vw,4.4rem)] leading-[1]" : "max-w-[15ch] text-[clamp(2.7rem,8vw,7rem)]",
+            compact ? "max-w-[24ch] text-[clamp(2.1rem,5vw,4.4rem)] leading-[1]" : "max-w-[15ch] text-[clamp(2.1rem,8vw,7rem)] sm:text-[clamp(2.7rem,8vw,7rem)]",
           )}
           style={delay(0.2)}
         >

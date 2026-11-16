@@ -168,9 +168,11 @@ export default function ModuleMotif({ motif, accent, highlight }: { motif: Motif
               />
             );
           })}
-          <g className="map-pin">
+          <g className="max-md:-translate-y-[85px]">
+            <g className="map-pin">
             <path d="M490 226c-11 0-20 9-20 20 0 15 20 34 20 34s20-19 20-34c0-11-9-20-20-20z" fill={accent} stroke="none" />
             <circle cx="490" cy="246" r="7" fill="#FFFFFF" stroke="none" />
+            </g>
           </g>
         </svg>
       );

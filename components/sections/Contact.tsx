@@ -8,7 +8,7 @@ import { cn, formatPhone, whatsappLink } from "@/lib/utils";
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-[110px_1fr] gap-4 border-b border-noche/15 py-4 text-[17px]">
+    <div className="grid gap-1 border-b sm:grid-cols-[110px_minmax(0,1fr)] sm:gap-4 border-noche/15 py-4 text-[17px]">
       <dt className="text-sm font-semibold text-niebla">{label}</dt>
       <dd className="text-noche">{children}</dd>
     </div>
