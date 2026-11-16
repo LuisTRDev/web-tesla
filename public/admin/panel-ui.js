@@ -164,7 +164,7 @@
     return String(text || "").replace(/\s+/g, " ").trim();
   }
   function pane() {
-    return document.querySelector('[class*="ControlPaneContainer"]') || document.body;
+    return document.querySelector('[class*="ControlPaneContainer"]:not([class*="PreviewPaneContainer"])') || document.body;
   }
   /** Etiqueta en minúsculas y sin el sufijo "(opcional)" que Decap añade a los campos no obligatorios. */
   function clean(text) {
@@ -269,21 +269,22 @@
     }
   }
   function goTo(container) {
-    reveal(container, 3).then(function () { flash(container); });
+    reveal(container, 3).then(function () { navigatingToField = true; try { flash(container); } finally { navigatingToField = false; } });
   }
+  var navigatingToField = false;
   function onPreviewClick(event) {
     var target = event.target;
     if (!target || target.nodeType !== 1) return;
     var container = null;
     // 1) el texto del elemento pulsado es exactamente el valor de un campo
-    var exact = matchByText(target.textContent, true);
-    if (exact) container = exact.closest('[class*="ControlContainer"]');
+    var marked = target.closest("[data-field]");
+    if (marked) {
+      try { container = resolvePath(JSON.parse(marked.getAttribute("data-field"))); } catch (e) {}
+    }
     // 2) el elemento (o un ancestro) lleva la ruta de su campo: fotos y textos compuestos
     if (!container) {
-      var marked = target.closest("[data-field]");
-      if (marked) {
-        try { container = resolvePath(JSON.parse(marked.getAttribute("data-field"))); } catch (e) {}
-      }
+      var exact = matchByText(target.textContent, true);
+      if (exact) container = exact.closest('[class*="ControlContainer"]');
     }
     // 3) el texto contiene el valor de un campo (el más largo)
     if (!container) {
@@ -298,6 +299,39 @@
       goTo(container);
     }
   }
+  function onFieldInteraction(event) {
+    if (navigatingToField || !event.target.closest) return;
+    var container = event.target.closest('[class*="ControlContainer"]');
+    if (!container || !pane().contains(container)) return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      var doc;
+      try { doc = frames[i].contentDocument; } catch (e) { continue; }
+      if (!doc || !doc.__teslaClick) continue;
+      var candidates = doc.querySelectorAll("[data-field]");
+      for (var j = 0; j < candidates.length; j++) {
+        var field;
+        try { field = resolvePath(JSON.parse(candidates[j].getAttribute("data-field"))); } catch (e) { continue; }
+        if (field !== container) continue;
+        candidates[j].scrollIntoView({ block: "center", behavior: "smooth" });
+        if (candidates[j].animate) candidates[j].animate([{ outline: "4px solid #FFB627" }, { outline: "4px solid transparent" }], { duration: 1800 });
+        return;
+      }
+      var input = container.querySelector('input[type="text"], input[type="number"], textarea');
+      var value = input && norm(input.value);
+      if (value && value.length >= 2) {
+        var elements = doc.body.querySelectorAll("p, h1, h2, h3, h4, span, li");
+        for (var k = 0; k < elements.length; k++) {
+          if (elements[k].children.length || norm(elements[k].textContent) !== value) continue;
+          elements[k].scrollIntoView({ block: "center", behavior: "smooth" });
+          if (elements[k].animate) elements[k].animate([{ outline: "4px solid #FFB627" }, { outline: "4px solid transparent" }], { duration: 1800 });
+          return;
+        }
+      }
+    }
+  }
+  document.addEventListener("focusin", onFieldInteraction);
+  document.addEventListener("click", onFieldInteraction);
   function hookPreview() {
     var frames = document.querySelectorAll("iframe");
     for (var i = 0; i < frames.length; i++) {

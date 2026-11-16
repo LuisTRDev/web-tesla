@@ -406,7 +406,7 @@
     var video = media.type === "video";
     var path = video ? media.thumbnail : media.url;
     var url = src(props, path);
-    var field = ["Eventos", eventIndex, "Fotos y videos", mediaIndex, video ? "Imagen de vista previa del video" : "Archivo"];
+    var field = ["Eventos", eventIndex, "Fotos y videos", mediaIndex, video && media.thumbnail ? "Imagen de vista previa del video" : "Archivo"];
     var message = video && !path ? "Video sin imagen de vista previa" : path ? "No se pudo cargar la imagen. Revisa el enlace y sus permisos." : "Archivo pendiente";
     return h("div", { key: mediaIndex }, [
       h("div", F(field, { key: "image", className: "relative aspect-[4/3] overflow-hidden rounded-xl bg-noche-700" }), [
@@ -414,7 +414,7 @@
         url ? h("img", { key: "photo", src: url, alt: media.caption || (video ? "Vista previa del video" : "Foto del evento"), className: "absolute inset-0 h-full w-full object-cover", onError: function (event) { event.currentTarget.style.display = "none"; event.currentTarget.previousSibling.style.display = "flex"; }, onLoad: function (event) { event.currentTarget.style.display = ""; event.currentTarget.previousSibling.style.display = "none"; } }) : null,
         video ? h("span", { key: "play", className: "absolute bottom-2 right-2 rounded-full bg-noche-900 px-2 py-1 text-xs text-white", "aria-label": "Video" }, "▶ Video") : null,
       ]),
-      media.caption ? h("p", { key: "caption", className: "mt-1 text-[12px] text-white/75" }, media.caption) : null,
+      media.caption ? h("p", F(["Eventos", eventIndex, "Fotos y videos", mediaIndex, "Descripción breve"], { key: "caption", className: "mt-1 text-[12px] text-white/75" }), media.caption) : null,
     ]);
   }
   CMS.registerPreviewTemplate("gallery", function (props) {
@@ -426,8 +426,8 @@
         var videos = arr(e.media).length - photos;
         return h("li", { key: i }, [
           h("div", { key: "p", className: "aspect-[4/3] overflow-hidden rounded-2xl" }, Photo(props, e.coverImage, e.title, "", true, ["Eventos", i, "Foto de portada"])),
-          h("p", { key: "c", className: "mt-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-filamento" }, t(e.category) + " · " + long(e.date)),
-          h("h3", { key: "t", className: "font-display text-xl font-bold" }, t(e.title)),
+          h("p", { key: "c", className: "mt-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-filamento" }, [h("span", F(["Eventos", i, "Categoría"], { key: "category" }), t(e.category)), " · ", h("span", F(["Eventos", i, "Fecha"], { key: "date" }), long(e.date))]),
+          h("h3", F(["Eventos", i, "Título del evento"], { key: "t", className: "font-display text-xl font-bold" }), t(e.title)),
           h("p", { key: "n", className: "mt-1 text-[13px] text-white/60" }, photos + " fotos" + (videos ? " · " + videos + " videos" : "")),
           e.isPlaceholder ? h("div", { key: "b", className: "mt-2" }, Draft("Evento de ejemplo", true)) : null,
           arr(e.media).length ? h("div", { key: "media", className: "mt-3 grid grid-cols-2 gap-2" }, arr(e.media).map(function (m, j) { return GalleryMedia(props, m || {}, i, j); })) : null,
