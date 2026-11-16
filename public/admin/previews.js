@@ -402,6 +402,21 @@
   });
 
   /* ───────── Galería ───────── */
+  function GalleryMedia(props, media, eventIndex, mediaIndex) {
+    var video = media.type === "video";
+    var path = video ? media.thumbnail : media.url;
+    var url = src(props, path);
+    var field = ["Eventos", eventIndex, "Fotos y videos", mediaIndex, video ? "Imagen de vista previa del video" : "Archivo"];
+    var message = video && !path ? "Video sin imagen de vista previa" : path ? "No se pudo cargar la imagen. Revisa el enlace y sus permisos." : "Archivo pendiente";
+    return h("div", { key: mediaIndex }, [
+      h("div", F(field, { key: "image", className: "relative aspect-[4/3] overflow-hidden rounded-xl bg-noche-700" }), [
+        h("div", { key: "fallback", className: "flex h-full w-full items-center justify-center p-3 text-center text-[11px] text-white/75", style: { display: url ? "none" : "flex" } }, message),
+        url ? h("img", { key: "photo", src: url, alt: media.caption || (video ? "Vista previa del video" : "Foto del evento"), className: "absolute inset-0 h-full w-full object-cover", onError: function (event) { event.currentTarget.style.display = "none"; event.currentTarget.previousSibling.style.display = "flex"; }, onLoad: function (event) { event.currentTarget.style.display = ""; event.currentTarget.previousSibling.style.display = "none"; } }) : null,
+        video ? h("span", { key: "play", className: "absolute bottom-2 right-2 rounded-full bg-noche-900 px-2 py-1 text-xs text-white", "aria-label": "Video" }, "▶ Video") : null,
+      ]),
+      media.caption ? h("p", { key: "caption", className: "mt-1 text-[12px] text-white/75" }, media.caption) : null,
+    ]);
+  }
   CMS.registerPreviewTemplate("gallery", function (props) {
     var d = data(props);
     return Frame([
@@ -415,6 +430,7 @@
           h("h3", { key: "t", className: "font-display text-xl font-bold" }, t(e.title)),
           h("p", { key: "n", className: "mt-1 text-[13px] text-white/60" }, photos + " fotos" + (videos ? " · " + videos + " videos" : "")),
           e.isPlaceholder ? h("div", { key: "b", className: "mt-2" }, Draft("Evento de ejemplo", true)) : null,
+          arr(e.media).length ? h("div", { key: "media", className: "mt-3 grid grid-cols-2 gap-2" }, arr(e.media).map(function (m, j) { return GalleryMedia(props, m || {}, i, j); })) : null,
         ]);
       })),
     ]);
