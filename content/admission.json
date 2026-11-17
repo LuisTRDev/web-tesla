@@ -18,7 +18,7 @@
       "id": "documentos",
       "title": "Presenta los documentos para Pre - matrícula",
       "description": "Lista de requisitos y documentos solicitados.\nComo primer paso se solicita las copias de los DNI del apoderado y del alumno",
-      "confirmed": false
+      "confirmed": true
     },
     {
       "id": "matricula",
